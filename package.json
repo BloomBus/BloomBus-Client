@@ -1,13 +1,11 @@
 {
-  "name": "pwa-experiment",
+  "name": "bloombus-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "antd-mobile": "^2.2.5",
-    "google-maps-react": "^2.0.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-google-maps": "^9.4.5",
     "react-router": "3.0.5",
     "shallowequal": "^1.1.0"
   },
