@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="3.500217mm"
+   height="2.386728mm"
+   viewBox="0 0 3.500217 2.386728"
+   version="1.1"
+   id="svg3722"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="shuttle.svg">
+  <defs
+     id="defs3716" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="63.356767"
+     inkscape:cx="3.4649577"
+     inkscape:cy="6.4162453"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="3440"
+     inkscape:window-height="1361"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3719">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(142.35725,-16.860207)">
+    <g
+       id="use32"
+       transform="matrix(0.07000434,0,0,0.07000434,-142.35725,15.746718)"
+       style="fill:#33a3f4;fill-opacity:1">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4275"
+         d="M 5.875,15.906 C 2.64,16.026 0,18.68 0,21.812 V 42.187 C 0,43.73 1.27,45 2.813,45 h 2.28 c 0.48,2.832 2.938,5 5.907,5 2.97,0 5.426,-2.168 5.906,-5 h 16.188 c 0.48,2.832 2.937,5 5.906,5 2.97,0 5.43,-2.168 5.906,-5 h 0.407 C 47.578,45 50,43.64 50,40.687 v -7.874 c 0,-0.942 -0.2,-2.063 -0.563,-3.157 -0.02,-0.047 -1.73,-4.773 -3.218,-8.343 -1.603,-3.954 -3.92,-5.407 -8.532,-5.407 z M 7.313,21 h 6.375 c 1.3,0 2.312,1.012 2.312,2.313 v 4.375 C 16,28.988 14.988,30 13.687,30 H 7.314 C 6.013,30 5,28.988 5,27.687 V 23.312 C 5,22.012 6.012,21 7.313,21 Z m 15,0 h 7.375 c 1.3,0 2.312,1.012 2.312,2.313 v 4.375 C 32,28.988 30.988,30 29.687,30 H 22.312 C 21.012,30 20,28.988 20,27.687 V 23.312 C 20,22.012 21.012,21 22.313,21 Z m 16,0 h 5.562 c 0.176,0.328 0.34,0.7 0.5,1.094 1.254,3.004 2.66,6.812 3.063,7.906 H 38.312 C 37.013,30 36,28.988 36,27.687 V 23.312 C 36,22.012 37.012,21 38.313,21 Z M 11,40 c 2.207,0 4,1.793 4,4 0,0.348 -0.074,0.68 -0.156,1 C 14.398,46.723 12.859,48 11,48 9.14,48 7.602,46.723 7.156,45 7.074,44.68 7,44.348 7,44 7,41.793 8.793,40 11,40 Z m 28,0 c 2.207,0 4,1.793 4,4 0,0.348 -0.074,0.68 -0.156,1 C 42.398,46.723 40.859,48 39,48 37.14,48 35.602,46.723 35.156,45 35.074,44.68 35,44.348 35,44 c 0,-2.207 1.793,-4 4,-4 z"
+         style="fill:#33a3f4;fill-opacity:1" />
+    </g>
+  </g>
+</svg>

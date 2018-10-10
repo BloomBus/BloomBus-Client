@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2.9401822mm"
+   height="2.9401822mm"
+   viewBox="0 0 2.9401822 2.9401822"
+   version="1.1"
+   id="svg1434"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="bus-stop.svg">
+  <defs
+     id="defs1428" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="31.678384"
+     inkscape:cx="-4.6381645"
+     inkscape:cy="10.877596"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="3440"
+     inkscape:window-height="1361"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata1431">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(21.124853,-83.863242)">
+    <g
+       id="use24"
+       transform="matrix(0.07000434,0,0,0.07000434,-21.40487,83.583225)"
+       style="fill:#33a3f4;fill-opacity:1">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1987"
+         d="M 9,4 C 6.24,4 4,6.24 4,9 v 32 c 0,2.76 2.24,5 5,5 h 32 c 2.76,0 5,-2.24 5,-5 V 9 C 46,6.24 43.76,4 41,4 Z m 16,8 c 4.35,0 7.46,0.66 9.31,1.22 0.79,0.24 1.46,0.74 1.94,1.4 0.47,0.66 0.75,1.48 0.75,2.34 V 22 h 1 v 5 H 37 V 38.52 C 37,39.34 36.35,40 35.54,40 h -0.92 c -0.8,0 -1.45,-0.66 -1.45,-1.48 V 38.07 H 16.83 v 0.45 c 0,0.82 -0.65,1.48 -1.45,1.48 H 14.46 C 13.65,40 13,39.34 13,38.52 V 27 h -1 v -5 h 1 V 16.96 C 13,15.24 14.11,13.7 15.69,13.22 17.54,12.66 20.65,12 25,12 Z m -10,6 v 9 h 9 v -9 z m 11,0 v 9 h 9 V 18 Z M 17.5,31 A 1.5,1.5 0 0 0 16,32.5 1.5,1.5 0 0 0 17.5,34 1.5,1.5 0 0 0 19,32.5 1.5,1.5 0 0 0 17.5,31 Z m 15,0 A 1.5,1.5 0 0 0 31,32.5 1.5,1.5 0 0 0 32.5,34 1.5,1.5 0 0 0 34,32.5 1.5,1.5 0 0 0 32.5,31 Z"
+         style="fill:#33a3f4;fill-opacity:1" />
+    </g>
+  </g>
+</svg>
