@@ -159,7 +159,7 @@ class Home extends Component {
           height: '100%',
         }}>
           <header>
-            BloomBus<img src="./shuttle.svg" alt="Shuttle Icon"></img>
+            <img src="./bloombus-logo.svg" alt="Shuttle Icon"></img>
           </header>
           <StationsDrawer isOpen={this.state.selectedTab === 'stationsTab'} onSelect={this.onStationSelect}/>
           <ShuttlesDrawer shuttles={this.state.shuttles} isOpen={this.state.selectedTab === 'shuttlesTab'} onSelect={this.onShuttleSelect}/>
