@@ -14,7 +14,7 @@ class Home extends Component {
       selectedTab: '',
       shuttleMarkers: {},
       stationMarkers: {},
-      selectedLoopShuttles: {},
+      shuttles: {},
       stations: {},
     };
     this.DATA_TIMEOUT = 15; // seconds
