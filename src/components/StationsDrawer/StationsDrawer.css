@@ -1,0 +1,9 @@
+.stations-drawer__loop {
+  font-weight: bold;
+}
+
+.stations-drawer__station .am-list-content {
+  padding-left: 1em;
+  font-size: 0.9em !important;
+  font-weight: 400;
+}

@@ -1,0 +1,8 @@
+{
+    "extends": "airbnb",
+    "rules": {
+      "linebreak-style": "off",
+      "react/destructuring-assignment": [ false ],
+      "react/prefer-stateless-function": "off"
+    }
+}
