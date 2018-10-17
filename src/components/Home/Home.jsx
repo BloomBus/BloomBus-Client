@@ -63,7 +63,10 @@ class Home extends Component {
               labelOrigin: new google.maps.Point(16, 42),
             },
             title: stationData.properties.name,
-            label: stationData.properties.name,
+            label: {
+              text: stationData.properties.name,
+              fontSize: '12px',
+            },
             map: window.map,
           });
         });
@@ -121,6 +124,13 @@ class Home extends Component {
           shuttleSnapshot,
         );
       }
+      const thisMarker = tempShuttleMarkers[shuttleSnapshot.key];
+
+      const heading = google.maps.geometry.spherical
+        .computeHeading(thisMarker.getPosition(), thisMarker.getPosition());
+      const icon = thisMarker.getIcon();
+      icon.rotation = heading;
+      thisMarker.setIcon(icon);
       tempShuttleMarkers[shuttleSnapshot.key].setVisible(dataIsFresh);
 
       return {

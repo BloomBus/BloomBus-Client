@@ -15,6 +15,7 @@ export default function constructMarker(shuttleSnapshot) {
     label: {
       color: '#333',
       fontWeight: 'bold',
+      fontSize: '12px',
       text: shuttleData.properties.name,
     },
     map: window.map,
