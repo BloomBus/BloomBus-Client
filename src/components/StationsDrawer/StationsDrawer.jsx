@@ -3,27 +3,35 @@ import PropTypes from 'prop-types';
 import { Accordion, Drawer, List } from 'antd-mobile';
 
 import './StationsDrawer.css';
+import { geoJSONFeatureShape } from '../../utils/constants';
 
 class StationsDrawer extends Component {
   render() {
-    const lists = this.props.stations && Object.entries(this.props.stations).map(([loopKey, loopGeoJSON]) => {
-      return (
-        <Accordion key={loopGeoJSON.properties.name}>
-          <Accordion.Panel header={loopGeoJSON.properties.name} className="stations-drawer__loop">
-            <List className="stations-drawer__station">
-              {loopGeoJSON.features.map(loopStation => (
-                <List.Item
-                  key={loopStation.properties.name}
-                  onClick={() => this.props.onSelect(loopKey, loopStation.properties.name)}
-                >
-                  {loopStation.properties.name}
-                </List.Item>
-              ))}
-            </List>
-          </Accordion.Panel>
-        </Accordion>
+    const lists = this.props.stations
+      && Object.entries(this.props.stations).map(
+        ([loopKey, loopGeoJSON]) => (
+          <Accordion key={loopGeoJSON.properties.name}>
+            <Accordion.Panel
+              header={loopGeoJSON.properties.name}
+              className="stations-drawer__loop"
+            >
+              <List className="stations-drawer__station">
+                {loopGeoJSON.features.map(loopStation => (
+                  <List.Item
+                    key={loopStation.properties.name}
+                    onClick={() => this.props.onSelect(
+                      loopKey,
+                      loopStation.properties.name,
+                    )}
+                  >
+                    {loopStation.properties.name}
+                  </List.Item>
+                ))}
+              </List>
+            </Accordion.Panel>
+          </Accordion>
+        ),
       );
-    });
 
     return (
       <Drawer
@@ -36,7 +44,13 @@ class StationsDrawer extends Component {
 }
 
 StationsDrawer.propTypes = {
-  stations: PropTypes.object.isRequired,
+  stations: PropTypes.shape({
+    features: PropTypes.arrayOf(geoJSONFeatureShape),
+    properties: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    type: PropTypes.string,
+  }).isRequired,
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };

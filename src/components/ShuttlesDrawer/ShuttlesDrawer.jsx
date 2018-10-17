@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Drawer, List } from 'antd-mobile';
+import { geoJSONFeatureShape } from '../../utils/constants';
 
 class ShuttlesDrawer extends Component {
   componentDidUpdate() {
@@ -35,17 +36,7 @@ class ShuttlesDrawer extends Component {
 }
 
 ShuttlesDrawer.propTypes = {
-  shuttles: PropTypes.objectOf(
-    PropTypes.shape({
-      geometry: PropTypes.shape({
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-      }),
-      type: PropTypes.string,
-      properties: PropTypes.shape({
-        timestamp: PropTypes.number,
-      }),
-    }),
-  ).isRequired,
+  shuttles: geoJSONFeatureShape.isRequired,
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };
