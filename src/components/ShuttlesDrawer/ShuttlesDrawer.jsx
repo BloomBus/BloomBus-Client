@@ -35,7 +35,17 @@ class ShuttlesDrawer extends Component {
 }
 
 ShuttlesDrawer.propTypes = {
-  shuttles: PropTypes.object.isRequired,
+  shuttles: PropTypes.objectOf(
+    PropTypes.shape({
+      geometry: PropTypes.shape({
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+      }),
+      type: PropTypes.string,
+      properties: PropTypes.shape({
+        timestamp: PropTypes.number,
+      }),
+    }),
+  ).isRequired,
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };
