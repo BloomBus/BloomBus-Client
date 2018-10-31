@@ -15,12 +15,16 @@ class ShuttlesDrawer extends Component {
   }
 
   render() {
-    const listItems = this.props.shuttles
-      && Object.entries(this.props.shuttles).map(([key, shuttle]) => (
-        <List.Item key={key} onClick={() => this.props.onSelect(key)}>
+    const listItems = this.props.shuttles && Object.entries(this.props.shuttles).map(
+      ([shuttleUUID, shuttle]) => (
+        <List.Item
+          key={shuttleUUID}
+          onClick={() => this.props.onSelect(shuttleUUID)}
+        >
           {shuttle.properties.name}
         </List.Item>
-      ));
+      )
+    );
     return (
       <Drawer
         contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: '42px' }}

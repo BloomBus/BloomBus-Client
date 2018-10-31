@@ -1,9 +1,7 @@
-/* global firebase, google, document, moment */
+/* global firebase, google, document */
 
 const busSimple = 'M512 1216q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm1024 0q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm-46-396l-72-384q-5-23-22.5-37.5t-40.5-14.5h-918q-23 0-40.5 14.5t-22.5 37.5l-72 384q-5 30 14 53t49 23h1062q30 0 49-23t14-53zm-226-612q0-20-14-34t-34-14h-640q-20 0-34 14t-14 34 14 34 34 14h640q20 0 34-14t14-34zm400 725v603h-128v128q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5v-128h-768v128q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5v-128h-128v-603q0-112 25-223l103-454q9-78 97.5-137t230-89 312.5-30 312.5 30 230 89 97.5 137l105 454q23 102 23 223z';
 const busTop = 'M260 369.8c-3-12-3.8-34-3.8-56.2 0-22.1.8-44.3 3.7-56.2 2.2-9.3 10.7-13.7 23-13.4h363.2c16.4-.2 31.9-.2 39.1 1 16 2.5 27.2 7.1 29.6 14.8 4.7 14 7 33.9 7 53.8s-2.2 39.8-7 53.9c-2.4 7.6-13.6 12.2-29.6 14.7-7.2 1.2-22.7 1.2-39.1 1H282.9c-12.3.3-20.8-4-23-13.4';
-
-const DATA_TIMEOUT = 15; // seconds
 
 // Initialize Firebase
 const config = {
@@ -16,7 +14,6 @@ const config = {
 };
 firebase.initializeApp(config);
 
-let now;
 let map; // The Google Map
 const markers = {}; // JavaScript Map object, not Google Map
 const shuttleStopMarkers = [];
@@ -45,14 +42,9 @@ function constructMarker(shuttleSnapshot) {
 }
 
 function handleNewValue(shuttleSnapshot) {
-  const shuttleData = shuttleSnapshot.val();
-  if (!shuttleData.properties) return;
-  const shuttleTimestamp = moment(shuttleData.properties.timestamp);
-  const dataIsFresh = shuttleTimestamp.isAfter(now.subtract(DATA_TIMEOUT, 'seconds'));
   if (!markers[shuttleSnapshot.key]) {
     constructMarker(shuttleSnapshot);
   }
-  markers[shuttleSnapshot.key].setVisible(dataIsFresh);
 }
 
 function initShuttleStopsLayer(shuttleStopsData) {
@@ -108,11 +100,9 @@ function initMap() { // Called via callback passed in link to Google Maps API
 
   const shuttlesRef = firebase.database().ref('shuttles');
   shuttlesRef.on('value', (shuttlesSnapshot) => {
-    now = moment();
     shuttlesSnapshot.forEach((shuttleSnapshot) => { handleNewValue(shuttleSnapshot); });
   });
   shuttlesRef.on('child_changed', (shuttlesSnapshot) => {
-    now = moment();
     shuttlesSnapshot.forEach((shuttleSnapshot) => { handleNewValue(shuttleSnapshot); });
   });
 }

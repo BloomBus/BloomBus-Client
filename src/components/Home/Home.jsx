@@ -1,4 +1,4 @@
-/* global document, google, firebase, moment, window */
+/* global document, google, firebase, window */
 import React, { Component } from 'react';
 import { TabBar } from 'antd-mobile';
 import './Home.css';
@@ -104,11 +104,6 @@ class Home extends Component {
 
   handleNewValue(shuttleSnapshot) {
     const shuttleData = shuttleSnapshot.val();
-    if (!shuttleData.properties) return;
-    const shuttleTimestamp = moment(shuttleData.properties.timestamp);
-    const dataIsFresh = shuttleTimestamp.isAfter(
-      moment().subtract(this.DATA_TIMEOUT, 'seconds'),
-    );
 
     this.setState((prevState) => {
       const newShuttles = prevState.shuttles;
@@ -126,12 +121,15 @@ class Home extends Component {
       }
       const thisMarker = tempShuttleMarkers[shuttleSnapshot.key];
 
+      const oldLatLng = new google.maps.LatLng({
+        lat: shuttleData.properties.prevCoordinates[0],
+        lng: shuttleData.properties.prevCoordinates[1],
+      });
       const heading = google.maps.geometry.spherical
-        .computeHeading(thisMarker.getPosition(), thisMarker.getPosition());
+        .computeHeading(oldLatLng, thisMarker.getPosition());
       const icon = thisMarker.getIcon();
       icon.rotation = heading;
       thisMarker.setIcon(icon);
-      tempShuttleMarkers[shuttleSnapshot.key].setVisible(dataIsFresh);
 
       return {
         shuttles: newShuttles,
