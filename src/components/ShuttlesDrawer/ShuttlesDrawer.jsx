@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { Drawer, List } from 'antd-mobile';
 import { geoJSONFeatureShape } from '../../utils/constants';
 
+import './ShuttlesDrawer.css';
+
 class ShuttlesDrawer extends Component {
   componentDidUpdate() {
     /* const formattedCoords = this.props.shuttles
@@ -16,14 +18,17 @@ class ShuttlesDrawer extends Component {
 
   render() {
     const listItems = this.props.shuttles && Object.entries(this.props.shuttles).map(
-      ([shuttleUUID, shuttle]) => (
+      ([shuttleUUID, shuttle], i) => (
         <List.Item
           key={shuttleUUID}
           onClick={() => this.props.onSelect(shuttleUUID)}
         >
-          {shuttle.properties.name}
+          <h6 className="shuttles-drawer__identifier">{`Shuttle #${i + 1}`}</h6>
+          <span className="shuttles-drawer__last-stop-label">
+            {`Last stop: ${shuttle.properties.prevStation || 'None'}`}
+          </span>
         </List.Item>
-      )
+      ),
     );
     return (
       <Drawer
@@ -40,7 +45,7 @@ class ShuttlesDrawer extends Component {
 }
 
 ShuttlesDrawer.propTypes = {
-  shuttles: geoJSONFeatureShape.isRequired,
+  shuttles: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };

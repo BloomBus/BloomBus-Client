@@ -1,0 +1,11 @@
+.shuttles-drawer__identifier {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #343434;
+}
+.shuttles-drawer__last-stop-label {
+  font-family: 'Product Sans', sans-serif;
+  font-style: normal;
+  font-size: 0.8rem;
+  color: #777;
+}

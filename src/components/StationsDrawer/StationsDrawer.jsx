@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Drawer, List } from 'antd-mobile';
+import { geoJSONFeatureShape } from '../../utils/constants';
 
 import './StationsDrawer.css';
-import { geoJSONFeatureShape } from '../../utils/constants';
 
 class StationsDrawer extends Component {
   render() {
