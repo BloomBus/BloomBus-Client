@@ -39,9 +39,12 @@ class Home extends Component {
       });
     });
 
-    shuttlesRef.on('child_changed', (shuttlesSnapshot) => {
-      shuttlesSnapshot.forEach((shuttleSnapshot) => {
-        this.handleNewValue(shuttleSnapshot);
+    shuttlesRef.on('child_removed', (shuttleSnapshot) => {
+      this.state.shuttleMarkers[shuttleSnapshot.key].setMap(null);
+      this.setState((prevState) => {
+        const tempState = prevState;
+        delete tempState.shuttleMarkers[shuttleSnapshot.key];
+        return tempState;
       });
     });
 
@@ -113,6 +116,7 @@ class Home extends Component {
   }
 
   handleNewValue(shuttleSnapshot) {
+    console.log('update')
     const shuttleData = shuttleSnapshot.val();
 
     if (!shuttleData.properties) return;
