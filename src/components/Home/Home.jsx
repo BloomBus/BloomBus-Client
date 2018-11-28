@@ -44,6 +44,7 @@ class Home extends Component {
       this.setState((prevState) => {
         const tempState = prevState;
         delete tempState.shuttleMarkers[shuttleSnapshot.key];
+        delete tempState.shuttles[shuttleSnapshot.key];
         return tempState;
       });
     });
