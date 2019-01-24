@@ -3,6 +3,7 @@
     "rules": {
       "linebreak-style": "off",
       "react/destructuring-assignment": [ false ],
-      "react/prefer-stateless-function": "off"
+      "react/prefer-stateless-function": "off",
+      "no-unused-vars": ["error", { "args": "none" }]
     }
 }

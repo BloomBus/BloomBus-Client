@@ -13,7 +13,7 @@
   -moz-user-select: none;
 }
 #map {
-  height: 100%;
+  flex-grow: 1;
 }
 
 header {

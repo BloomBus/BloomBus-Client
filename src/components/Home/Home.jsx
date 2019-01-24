@@ -1,26 +1,24 @@
 /* global document, google, firebase, window */
 import React, { Component } from 'react';
-import { TabBar } from 'antd-mobile';
+import CarouselWrapper from '../CarouselWrapper/CarouselWrapper';
 import './Home.css';
-import StationsDrawer from '../StationsDrawer/StationsDrawer';
-import ShuttlesDrawer from '../ShuttlesDrawer/ShuttlesDrawer';
-import BottomSheet from '../BottomSheet/BottomSheet';
-import constructMarker from '../../utils/constructMarker';
+import { constructMarker, getBoundsFromLatLngs } from '../../utils/utils';
 import { campusBounds, campusCenter, mapStyles } from '../../utils/constants';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: '',
       shuttleMarkers: {},
       stationMarkers: {},
       shuttles: {},
-      stations: {},
+      stops: {},
+      loops: [],
     };
     this.DATA_TIMEOUT = 15; // seconds
     this.onStationSelect = this.onStationSelect.bind(this);
     this.onShuttleSelect = this.onShuttleSelect.bind(this);
+    this.highlightLoop = this.highlightLoop.bind(this);
   }
 
   componentDidMount() {
@@ -28,8 +26,54 @@ class Home extends Component {
       center: campusCenter,
       zoom: 14,
       styles: mapStyles,
+      disableDefaultUI: true,
     });
-    window.map.fitBounds(campusBounds);
+
+    window.map.data.setStyle((feature) => {
+      let styleOptions;
+      if (feature.getProperty('stops')) { // Is a polyline feature of a shuttle loop
+        styleOptions = {
+          strokeColor: feature.getProperty('color'),
+          strokeWidth: 3,
+        };
+      } else {
+        styleOptions = {
+          label: {
+            text: feature.getProperty('name'),
+            fontSize: '12px',
+          },
+          icon: {
+            url: './bus-stop-filled.svg',
+            anchor: new google.maps.Point(16, 16),
+            scaledSize: new google.maps.Size(32, 32),
+            labelOrigin: new google.maps.Point(16, 42),
+          },
+          visible: true,
+        };
+      }
+      return styleOptions;
+    });
+
+    const stopsRef = firebase.database().ref('stops');
+    stopsRef.once('value', (stopsSnapshot) => {
+      Object.values(stopsSnapshot.val()).forEach((stop) => {
+        window.map.data.addGeoJson(stop);
+      });
+      this.setState({
+        stops: stopsSnapshot.val(),
+      });
+    });
+
+    const loopsRef = firebase.database().ref('loops');
+    loopsRef.once('value', (loopsSnapshot) => {
+      window.map.data.addGeoJson(loopsSnapshot.val(), {
+        idPropertyName: 'name',
+      });
+      window.map.fitBounds(campusBounds);
+      this.setState({
+        loops: loopsSnapshot.val().features,
+      });
+    });
 
     const shuttlesRef = firebase.database().ref('shuttles');
 
@@ -46,48 +90,6 @@ class Home extends Component {
         delete tempState.shuttleMarkers[shuttleSnapshot.key];
         delete tempState.shuttles[shuttleSnapshot.key];
         return tempState;
-      });
-    });
-
-    const stationsRef = firebase.database().ref('bus-stations');
-    stationsRef.once('value', (stationsSnapshot) => {
-      const stations = stationsSnapshot.val();
-      const stationMarkers = {};
-
-      // An array that stores the name of each station. Used to check against duplicate stations
-      // between loops.
-      const createdStationNames = [];
-      Object.entries(stations).map(([loopName, loopGeoJSON]) => {
-        stationMarkers[loopName] = {};
-        loopGeoJSON.features.forEach((stationData) => {
-          if (createdStationNames.includes(stationData.properties.name)) return null;
-          createdStationNames.push(stationData.properties.name);
-          stationMarkers[loopName][stationData.properties.name] = new google.maps.Marker({
-            position: {
-              lat: stationData.geometry.coordinates[0],
-              lng: stationData.geometry.coordinates[1],
-            },
-            icon: {
-              url: './bus-stop-filled.svg',
-              anchor: new google.maps.Point(16, 16),
-              scaledSize: new google.maps.Size(32, 32),
-              labelOrigin: new google.maps.Point(16, 42),
-            },
-            title: stationData.properties.name,
-            label: {
-              text: stationData.properties.name,
-              fontSize: '12px',
-            },
-            map: window.map,
-          });
-          return null;
-        });
-        return null;
-      });
-
-      this.setState({
-        stations,
-        stationMarkers,
       });
     });
   }
@@ -109,7 +111,6 @@ class Home extends Component {
 
   onShuttleSelect(loopKey) {
     this.setState(prevState => ({
-      selectedTab: '',
       selectedShuttle: prevState,
       selectedMarker: prevState.shuttleMarkers[loopKey],
       selectedMarkerType: 'shuttle',
@@ -139,7 +140,7 @@ class Home extends Component {
           shuttleSnapshot,
         );
       }
-      
+
       const thisMarker = tempShuttleMarkers[shuttleSnapshot.key];
       thisMarker.setPosition(latLng);
       const hasPrevCoordinates = !!shuttleData.properties.prevCoordinates;
@@ -150,8 +151,9 @@ class Home extends Component {
           lng: shuttleData.properties.prevCoordinates[1],
         });
       }
-      const heading = google.maps.geometry.spherical
-        .computeHeading(oldLatLng || thisMarker.getPosition(), thisMarker.getPosition()) || Math.floor(Math.random() * 360);
+      const heading = google.maps.geometry.spherical.computeHeading(oldLatLng
+          || thisMarker.getPosition(), thisMarker.getPosition())
+          || Math.floor(Math.random() * 360);
       console.log(heading);
 
       return {
@@ -161,132 +163,24 @@ class Home extends Component {
     });
   }
 
+  highlightLoop(index) {
+    if (!this.state.loops[index]) return;
+    const loop = this.state.loops[index];
+    const loopId = loop.properties.name;
+    const loopLatLngs = window.map.data.getFeatureById(loopId).getGeometry().getArray();
+    const loopBounds = getBoundsFromLatLngs(loopLatLngs);
+    window.map.fitBounds(loopBounds, 30);
+  }
+
   render() {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-        }}
-      >
+      <React.Fragment>
         <header>
           <img src="./bloombus-logo.svg" alt="Shuttle Icon" />
         </header>
-        <StationsDrawer
-          stations={this.state.stations}
-          isOpen={this.state.selectedTab === 'stationsTab'}
-          onSelect={this.onStationSelect}
-        />
-        <ShuttlesDrawer
-          shuttles={Object.values(this.state.shuttles).filter(shuttle => shuttle.properties.loopKey === this.state.selectedLoop)}
-          isOpen={this.state.selectedTab === 'shuttlesTab'}
-          onSelect={this.onShuttleSelect}
-        />
         <div id="map" />
-        {/* <BottomSheet
-          title={this.state.selectedMarkerType === 'shuttle' ? this.state.selectedShuttle.properties.loopDisplayName : 'Station'}
-          statusText="foo"
-          isOpen={!!this.state.selectedMarkerType}
-        /> */}
-        <TabBar
-          unselectedTintColor="#949494"
-          tintColor="#33A3F4"
-          barTintColor="white"
-          tabBarPosition="bottom"
-          style={{ height: '60px' }}
-        >
-          <TabBar.Item
-            title="Stations"
-            key="Stations"
-            icon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./bus-stop-o.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selectedIcon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./bus-stop.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selected={this.state.selectedTab === 'stationsTab'}
-            onPress={() => {
-              this.setState(prevState => (
-                {
-                  selectedTab: prevState.selectedTab === 'stationsTab' ? '' : 'stationsTab',
-                }
-              ));
-            }}
-          />
-          <TabBar.Item
-            title="Shuttles"
-            key="Shuttles"
-            icon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./shuttle-o.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selectedIcon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./shuttle.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selected={this.state.selectedTab === 'shuttlesTab'}
-            onPress={() => {
-              this.setState(prevState => (
-                {
-                  selectedTab: prevState.selectedTab === 'shuttlesTab' ? '' : 'shuttlesTab',
-                }
-              ));
-            }}
-          />
-          <TabBar.Item
-            title="About"
-            key="About"
-            icon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./info-o.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selectedIcon={(
-              <div
-                style={{
-                  width: '22px',
-                  height: '22px',
-                  background: 'url(./info.svg) center center /  21px 21px no-repeat',
-                }}
-              />
-            )}
-            selected={this.state.selectedTab === 'aboutTab'}
-            onPress={() => {
-              this.setState({
-                selectedTab: '',
-              });
-              window.open('http://intranet.bloomu.edu/documents/police/BusSchedule.pdf');
-            }}
-          />
-        </TabBar>
-      </div>
+        <CarouselWrapper loops={this.state.loops || []} stops={this.state.stops || {}} highlightLoop={this.highlightLoop} />
+      </React.Fragment>
     );
   }
 }

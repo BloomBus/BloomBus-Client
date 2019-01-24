@@ -1,5 +1,6 @@
 /* global google, window */
-export default function constructMarker(shuttleSnapshot) {
+
+function constructMarker(shuttleSnapshot) {
   const shuttleData = shuttleSnapshot.val();
   const marker = new google.maps.Marker({
     position: new google.maps.LatLng({
@@ -22,3 +23,14 @@ export default function constructMarker(shuttleSnapshot) {
   });
   return marker;
 }
+
+// Google got rid of this function in Maps api v3
+function getBoundsFromLatLngs(latLngs) {
+  const bounds = new google.maps.LatLngBounds();
+  latLngs.forEach((item, index) => {
+    bounds.extend(new google.maps.LatLng(item.lat(), item.lng()));
+  });
+  return bounds;
+}
+
+export { constructMarker, getBoundsFromLatLngs };
