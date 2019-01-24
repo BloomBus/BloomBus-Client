@@ -27,6 +27,7 @@ class Home extends Component {
       zoom: 14,
       styles: mapStyles,
       disableDefaultUI: true,
+      gestureHandling: 'greedy',
     });
 
     window.map.data.setStyle((feature) => {
