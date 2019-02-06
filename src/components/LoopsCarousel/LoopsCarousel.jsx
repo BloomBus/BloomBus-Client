@@ -15,7 +15,7 @@ class LoopsCarousel extends Component {
         heightMode="max"
         easing="easeQuadOut"
         renderCenterLeftControls={({ previousSlide }) => null}
-        renderCenterRightControls={({ previousSlide }) => null}
+        renderCenterRightControls={({ nextSlide }) => null}
       >
         {
           this.props.loops.map(loop => (
@@ -23,7 +23,7 @@ class LoopsCarousel extends Component {
               key={loop.properties.name}
               className="carousel__card"
               style={{
-                backgroundImage: `linear-gradient(to left, ${loop.properties.color}, ${tinycolor(loop.properties.color).darken(5).toHexString()})`,
+                backgroundImage: `linear-gradient(to right, ${loop.properties.color}, ${tinycolor(loop.properties.color).spin(15).toHexString()})`,
                 filter: 'saturate(80%)',
                 boxShadow: '0 -3px 8px rgba(0,0,0,0.15)',
               }}
