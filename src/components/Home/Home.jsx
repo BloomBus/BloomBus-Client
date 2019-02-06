@@ -121,8 +121,8 @@ class Home extends Component {
   handleNewValue(shuttleSnapshot) {
     const shuttleData = shuttleSnapshot.val();
     const latLng = new google.maps.LatLng({
-      lat: shuttleData.geometry.coordinates[0],
-      lng: shuttleData.geometry.coordinates[1],
+      lat: shuttleData.geometry.coordinates[1],
+      lng: shuttleData.geometry.coordinates[0],
     });
 
     if (!shuttleData.properties) return;
@@ -155,7 +155,7 @@ class Home extends Component {
       const heading = google.maps.geometry.spherical.computeHeading(oldLatLng
           || thisMarker.getPosition(), thisMarker.getPosition())
           || Math.floor(Math.random() * 360);
-      console.log(heading);
+      console.log(`${shuttleData.geometry.coordinates[1]}, ${shuttleData.geometry.coordinates[0]}`);
 
       return {
         shuttles: newShuttles,
@@ -170,7 +170,7 @@ class Home extends Component {
     const loopId = loop.properties.name;
     const loopLatLngs = window.map.data.getFeatureById(loopId).getGeometry().getArray();
     const loopBounds = getBoundsFromLatLngs(loopLatLngs);
-    window.map.fitBounds(loopBounds, 30);
+    window.map.fitBounds(loopBounds);
   }
 
   render() {
