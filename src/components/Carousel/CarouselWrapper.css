@@ -1,9 +1,8 @@
-.carousel-wrapper {
+.loops-carousel {
   position: fixed;
   bottom: 0;
   width: 100%;
-  /* height is controlled inline */
-
+  /* height is controlled inline in the component */
   box-sizing: border-box;
 }
 
@@ -24,32 +23,58 @@
 }
 .carousel__card {
   height: 200px;
-  padding: 1.2rem 1.5rem;
+  display: block;
+  width: 100vw;
+  padding: 1rem 1.4rem;
   box-sizing: border-box;
   border-top-left-radius: 1.4rem;
   border-top-right-radius: 1.4rem;
   color: white;
+  cursor: pointer;
 }
 .carousel__card__name {
   font-weight: 800;
   font-size: 2em;
   font-family: Arial, Helvetica, sans-serif;
+  line-height: 1em;
+}
+.carousel__ctrl {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.2);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel__ctrl > img {
+  width: 100%;
+  height: 100%;
+}
+.carousel__ctrl--left {
+  margin-left: 10px;
+  transform: rotate(90deg);
+}
+.carousel__ctrl--right {
+  margin-right: 10px;
+  transform: rotate(-90deg);
 }
 
 .expand-btn {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  position: absolute;
+  position: relative;
   right: 5px;
-  top: -2.8rem;
+  bottom: 0rem;
   padding: 0;
   background-color: #33A3F4;
-  border: 3px solid rgba(255,255,255,0.6);
+  border: 2px solid rgba(255,255,255,0.6);
   cursor: pointer;
 }
 

@@ -1,6 +1,6 @@
 /* global document, google, firebase, window */
 import React, { Component } from 'react';
-import CarouselWrapper from '../CarouselWrapper/CarouselWrapper';
+import LoopsCarousel from '../LoopsCarousel/LoopsCarousel';
 import './Home.css';
 import { constructMarker, getBoundsFromLatLngs } from '../../utils/utils';
 import { campusBounds, campusCenter, mapStyles } from '../../utils/constants';
@@ -10,15 +10,16 @@ class Home extends Component {
     super(props);
     this.state = {
       shuttleMarkers: {},
-      stationMarkers: {},
+      stopMarkers: {},
       shuttles: {},
       stops: {},
       loops: [],
+      selectedLoopIndex: 0,
     };
     this.DATA_TIMEOUT = 15; // seconds
     this.onStationSelect = this.onStationSelect.bind(this);
     this.onShuttleSelect = this.onShuttleSelect.bind(this);
-    this.highlightLoop = this.highlightLoop.bind(this);
+    this.onSelectedLoopChanged = this.onSelectedLoopChanged.bind(this);
   }
 
   componentDidMount() {
@@ -105,8 +106,8 @@ class Home extends Component {
     this.setState(prevState => ({
       selectedTab: 'shuttlesTab',
       selectedLoop: loopName,
-      selectedStation: prevState.stations[loopName][stationName],
-      selectedMarker: prevState.stationMarkers[loopName][stationName],
+      selectedStop: prevState.stops[loopName][stationName],
+      selectedMarker: prevState.stopMarkers[loopName][stationName],
     }));
   }
 
@@ -116,6 +117,18 @@ class Home extends Component {
       selectedMarker: prevState.shuttleMarkers[loopKey],
       selectedMarkerType: 'shuttle',
     }));
+  }
+
+  onSelectedLoopChanged(index) {
+    if (!this.state.loops[index]) return;
+    const loop = this.state.loops[index];
+    const loopKey = loop.properties.name;
+    const loopLatLngs = window.map.data.getFeatureById(loopKey).getGeometry().getArray();
+    const loopBounds = getBoundsFromLatLngs(loopLatLngs);
+    window.map.fitBounds(loopBounds);
+    this.setState({
+      selectedLoopIndex: index,
+    });
   }
 
   handleNewValue(shuttleSnapshot) {
@@ -155,22 +168,11 @@ class Home extends Component {
       const heading = google.maps.geometry.spherical.computeHeading(oldLatLng
           || thisMarker.getPosition(), thisMarker.getPosition())
           || Math.floor(Math.random() * 360);
-      console.log(`${shuttleData.geometry.coordinates[1]}, ${shuttleData.geometry.coordinates[0]}`);
-
       return {
         shuttles: newShuttles,
         shuttleMarkers: tempShuttleMarkers,
       };
     });
-  }
-
-  highlightLoop(index) {
-    if (!this.state.loops[index]) return;
-    const loop = this.state.loops[index];
-    const loopId = loop.properties.name;
-    const loopLatLngs = window.map.data.getFeatureById(loopId).getGeometry().getArray();
-    const loopBounds = getBoundsFromLatLngs(loopLatLngs);
-    window.map.fitBounds(loopBounds);
   }
 
   render() {
@@ -180,7 +182,14 @@ class Home extends Component {
           <img src="./bloombus-logo.svg" alt="Shuttle Icon" />
         </header>
         <div id="map" />
-        <CarouselWrapper loops={this.state.loops || []} stops={this.state.stops || {}} highlightLoop={this.highlightLoop} />
+        <LoopsCarousel
+          loops={this.state.loops || []}
+          stops={this.state.loops[0] // Only pass stops for the selected loop
+            ? this.state.loops[this.state.selectedLoopIndex].properties.stops.map(stopKey => this.state.stops[stopKey])
+            : []
+          }
+          onSelectedLoopChanged={this.onSelectedLoopChanged}
+        />
       </React.Fragment>
     );
   }
