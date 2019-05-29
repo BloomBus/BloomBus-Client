@@ -57,7 +57,6 @@ class LoopsCarousel extends Component {
   }
 
   onModeButtonClick() {
-    console.log(this.state.mode);
     let newMode;
     switch (this.state.mode) {
       case CarouselMode.Expanded:
