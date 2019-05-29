@@ -14,7 +14,8 @@ class Home extends Component {
       shuttles: {},
       stops: {},
       loops: [],
-      selectedLoopIndex: 0,
+      loopStops: {},
+      loopKey: '',
     };
     this.DATA_TIMEOUT = 15; // seconds
     this.onStationSelect = this.onStationSelect.bind(this);
@@ -72,8 +73,17 @@ class Home extends Component {
         idPropertyName: 'name',
       });
       window.map.fitBounds(campusBounds);
+      const loops = loopsSnapshot.val().features;
       this.setState({
-        loops: loopsSnapshot.val().features,
+        loops,
+        loopKey: loops[0].properties.key,
+      });
+    });
+
+    const loopStopsRef = firebase.database().ref('loop-stops');
+    loopStopsRef.once('value', (loopStopsSnapshot) => {
+      this.setState({
+        loopStops: loopStopsSnapshot.val(),
       });
     });
 
@@ -122,12 +132,12 @@ class Home extends Component {
   onSelectedLoopChanged(index) {
     if (!this.state.loops[index]) return;
     const loop = this.state.loops[index];
-    const loopKey = loop.properties.name;
-    const loopLatLngs = window.map.data.getFeatureById(loopKey).getGeometry().getArray();
+    const { key: loopKey, name: loopName } = loop.properties;
+    const loopLatLngs = window.map.data.getFeatureById(loopName).getGeometry().getArray();
     const loopBounds = getBoundsFromLatLngs(loopLatLngs);
     window.map.fitBounds(loopBounds);
     this.setState({
-      selectedLoopIndex: index,
+      loopKey,
     });
   }
 
@@ -184,8 +194,8 @@ class Home extends Component {
         <div id="map" />
         <LoopsCarousel
           loops={this.state.loops || []}
-          stops={this.state.loops[0] // Only pass stops for the selected loop
-            ? this.state.loops[this.state.selectedLoopIndex].properties.stops.map(stopKey => this.state.stops[stopKey])
+          stops={this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
+            ? this.state.loopStops[this.state.loopKey].map(stopKey => this.state.stops[stopKey])
             : []
           }
           onSelectedLoopChanged={this.onSelectedLoopChanged}
