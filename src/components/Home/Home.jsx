@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import LoopsCarousel from '../LoopsCarousel/LoopsCarousel';
 import './Home.css';
-import { constructMarker, getBoundsFromLatLngs } from '../../utils/utils';
+import { constructMarker, getBoundsFromLatLngs } from '../../utils/functions';
 import { campusBounds, campusCenter, mapStyles } from '../../utils/constants';
 
 class Home extends Component {
