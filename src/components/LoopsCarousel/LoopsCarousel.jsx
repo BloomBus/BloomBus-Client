@@ -120,7 +120,7 @@ class LoopsCarousel extends Component {
                 onKeyDown={this.onLoopClick}
               >
                 <div
-                  className={`carousel__card__head ${this.state.mode === CarouselMode.Expanded ? 'carousel__card__head--expanded' : ''}`}
+                  className={`carousel__card__head ${this.state.mode === CarouselMode.Expanded && 'carousel__card__head--expanded'}`}
                   style={{
                     backgroundImage: `linear-gradient(to right, ${loop.properties.color}, ${tinycolor(loop.properties.color).spin(15).toHexString()})`,
                   }}
