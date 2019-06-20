@@ -7,6 +7,7 @@
     "ajv-keywords": "^3.4.0",
     "antd": "^3.19.6",
     "antd-mobile": "^2.2.14",
+    "calcite-react": "^0.37.0",
     "express-sslify": "^1.2.0",
     "nuka-carousel": "^4.5.8",
     "prop-types": "^15.7.2",
