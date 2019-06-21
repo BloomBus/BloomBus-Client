@@ -94,6 +94,7 @@ class LoopsCarousel extends Component {
             <Carousel
               swiping
               dragging
+              disableEdgeSwiping
               afterSlide={(slideIndex) => { this.props.onSelectedLoopChanged(slideIndex); }}
               className="carousel"
               slideWidth={1.0}
