@@ -5,5 +5,8 @@
       "react/destructuring-assignment": [ false ],
       "react/prefer-stateless-function": "off",
       "no-unused-vars": ["error", { "args": "none" }]
+    },
+    "env": {
+      "browser": true
     }
 }
