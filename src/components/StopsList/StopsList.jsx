@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import posed from 'react-pose';
 import './StopsList.css';
 import { Timeline } from 'antd';
 
