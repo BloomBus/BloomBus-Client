@@ -34,7 +34,8 @@ class Home extends Component {
 
     window.map.data.setStyle((feature) => {
       let styleOptions;
-      if (feature.getProperty('stops')) { // Is a polyline feature of a shuttle loop
+      if (feature.getProperty('stops')) {
+        // Is a polyline feature of a shuttle loop
         styleOptions = {
           strokeColor: feature.getProperty('color'),
           strokeWidth: 3,
@@ -133,7 +134,10 @@ class Home extends Component {
     if (!this.state.loops[index]) return;
     const loop = this.state.loops[index];
     const { key: loopKey, name: loopName } = loop.properties;
-    const loopLatLngs = window.map.data.getFeatureById(loopName).getGeometry().getArray();
+    const loopLatLngs = window.map.data
+      .getFeatureById(loopName)
+      .getGeometry()
+      .getArray();
     const loopBounds = getBoundsFromLatLngs(loopLatLngs);
     window.map.fitBounds(loopBounds);
     this.setState({
@@ -175,9 +179,10 @@ class Home extends Component {
           lng: shuttleData.properties.prevCoordinates[1],
         });
       }
-      const heading = google.maps.geometry.spherical.computeHeading(oldLatLng
-          || thisMarker.getPosition(), thisMarker.getPosition())
-          || Math.floor(Math.random() * 360);
+      const heading =        google.maps.geometry.spherical.computeHeading(
+          oldLatLng || thisMarker.getPosition(),
+          thisMarker.getPosition(),
+        ) || Math.floor(Math.random() * 360);
       return {
         shuttles: newShuttles,
         shuttleMarkers: tempShuttleMarkers,
@@ -194,9 +199,12 @@ class Home extends Component {
         <div id="map" />
         <LoopsCarousel
           loops={this.state.loops || []}
-          stops={this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
-            ? this.state.loopStops[this.state.loopKey].map(stopKey => this.state.stops[stopKey])
-            : []
+          stops={
+            this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
+              ? this.state.loopStops[this.state.loopKey].map(
+                stopKey => this.state.stops[stopKey],
+              )
+              : []
           }
           onSelectedLoopChanged={this.onSelectedLoopChanged}
         />
