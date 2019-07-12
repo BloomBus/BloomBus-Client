@@ -20,7 +20,6 @@ class Home extends Component {
       loops: [],
       loopStops: {},
       loopKey: '',
-      mapStyle: {},
     };
 
     this.DATA_TIMEOUT = 15; // seconds
@@ -31,14 +30,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    fetch(process.env.REACT_APP_MAPSTYLE_URL)
-      .then(res => res.json())
-      .then((mapStyle) => {
-        this.setState({
-          mapStyle,
-        });
-      });
-
     const stopsRef = firebase.database().ref('stops');
     stopsRef.once('value', (stopsSnapshot) => {
       this.setState({
@@ -145,7 +136,6 @@ class Home extends Component {
         {!this.state.loops[0] ? null : (
           <Map
             mapContainerRef={this.mapContainerRef}
-            mapStyle={this.state.mapStyle}
             loops={this.state.loops}
             stops={this.state.stops}
             shuttles={this.state.shuttles}
