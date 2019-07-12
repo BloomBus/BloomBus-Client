@@ -1,3 +1,5 @@
 .stops-list {
+  flex: 1;
+  background-color: #fefefe;
   padding: 2rem;
 }
