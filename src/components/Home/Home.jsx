@@ -1,67 +1,46 @@
-/* global document, google, firebase, window */
 import React, { Component } from 'react';
+import { LinearInterpolator } from 'react-map-gl';
+import WebMercatorViewport from 'viewport-mercator-project';
+import lineString from 'turf-linestring';
+import bbox from '@turf/bbox';
+
 import LoopsCarousel from '../LoopsCarousel/LoopsCarousel';
+import Map from '../Map';
 import './Home.css';
-import { constructMarker, getBoundsFromLatLngs } from '../../utils/functions';
-import { campusBounds, campusCenter, mapStyles } from '../../utils/constants';
 
 class Home extends Component {
   constructor(props) {
     super(props);
+
+    this.mapContainerRef = React.createRef();
+
     this.state = {
-      shuttleMarkers: {},
-      stopMarkers: {},
       shuttles: {},
       stops: {},
       loops: [],
       loopStops: {},
       loopKey: '',
+      mapStyle: {},
     };
+
     this.DATA_TIMEOUT = 15; // seconds
     this.onStationSelect = this.onStationSelect.bind(this);
     this.onShuttleSelect = this.onShuttleSelect.bind(this);
     this.onSelectedLoopChanged = this.onSelectedLoopChanged.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   componentDidMount() {
-    window.map = new google.maps.Map(document.getElementById('map'), {
-      center: campusCenter,
-      zoom: 14,
-      styles: mapStyles,
-      disableDefaultUI: true,
-      gestureHandling: 'greedy',
-    });
-
-    window.map.data.setStyle((feature) => {
-      let styleOptions;
-      if (feature.getProperty('stops')) { // Is a polyline feature of a shuttle loop
-        styleOptions = {
-          strokeColor: feature.getProperty('color'),
-          strokeWidth: 3,
-        };
-      } else {
-        styleOptions = {
-          label: {
-            text: feature.getProperty('name'),
-            fontSize: '12px',
-          },
-          icon: {
-            url: './bus-stop-filled.svg',
-            anchor: new google.maps.Point(16, 16),
-            scaledSize: new google.maps.Size(32, 32),
-            labelOrigin: new google.maps.Point(16, 42),
-          },
-          visible: true,
-        };
-      }
-      return styleOptions;
-    });
+    fetch(process.env.REACT_APP_MAPSTYLE_URL)
+      .then(res => res.json())
+      .then((mapStyle) => {
+        this.setState({
+          mapStyle,
+        });
+      });
 
     const stopsRef = firebase.database().ref('stops');
     stopsRef.once('value', (stopsSnapshot) => {
-      Object.values(stopsSnapshot.val()).forEach((stop) => {
-        window.map.data.addGeoJson(stop);
-      });
       this.setState({
         stops: stopsSnapshot.val(),
       });
@@ -69,10 +48,6 @@ class Home extends Component {
 
     const loopsRef = firebase.database().ref('loops');
     loopsRef.once('value', (loopsSnapshot) => {
-      window.map.data.addGeoJson(loopsSnapshot.val(), {
-        idPropertyName: 'name',
-      });
-      window.map.fitBounds(campusBounds);
       const loops = loopsSnapshot.val().features;
       this.setState({
         loops,
@@ -106,12 +81,6 @@ class Home extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.state.selectedMarker) {
-      window.map.setCenter(this.state.selectedMarker.getPosition());
-    }
-  }
-
   onStationSelect(loopName, stationName) {
     this.setState(prevState => ({
       selectedTab: 'shuttlesTab',
@@ -132,57 +101,39 @@ class Home extends Component {
   onSelectedLoopChanged(index) {
     if (!this.state.loops[index]) return;
     const loop = this.state.loops[index];
-    const { key: loopKey, name: loopName } = loop.properties;
-    const loopLatLngs = window.map.data.getFeatureById(loopName).getGeometry().getArray();
-    const loopBounds = getBoundsFromLatLngs(loopLatLngs);
-    window.map.fitBounds(loopBounds);
-    this.setState({
-      loopKey,
-    });
+    const line = lineString(loop.geometry.coordinates);
+    const [minLng, minLat, maxLng, maxLat] = bbox(line);
+    // construct a viewport instance from the current state
+    const newViewport = new WebMercatorViewport(this.state.viewport);
+    const { longitude, latitude, zoom } = newViewport.fitBounds(
+      [[minLng, minLat], [maxLng, maxLat]],
+      {
+        padding: 40,
+      },
+    );
+
+    this.setState(prevState => ({
+      viewport: {
+        ...prevState.viewport,
+        longitude,
+        latitude,
+        zoom,
+      },
+      loopKey: loop.properties.key,
+    }));
+  }
+
+  onViewportChange(viewport) {
+    this.setState({ viewport });
   }
 
   handleNewValue(shuttleSnapshot) {
-    const shuttleData = shuttleSnapshot.val();
-    const latLng = new google.maps.LatLng({
-      lat: shuttleData.geometry.coordinates[1],
-      lng: shuttleData.geometry.coordinates[0],
-    });
-
-    if (!shuttleData.properties) return;
-
-    this.setState((prevState) => {
-      const newShuttles = prevState.shuttles;
-      newShuttles[shuttleSnapshot.key] = shuttleData;
-
-      const tempShuttleMarkers = prevState.shuttleMarkers;
-      /*
-       * Check to see if this shuttle's marker hasn't been created yet. Possible if there are now
-       * more records under this loop's object than there were previously.
-       */
-      if (!prevState.shuttleMarkers[shuttleSnapshot.key]) {
-        tempShuttleMarkers[shuttleSnapshot.key] = constructMarker(
-          shuttleSnapshot,
-        );
-      }
-
-      const thisMarker = tempShuttleMarkers[shuttleSnapshot.key];
-      thisMarker.setPosition(latLng);
-      const hasPrevCoordinates = !!shuttleData.properties.prevCoordinates;
-      let oldLatLng;
-      if (hasPrevCoordinates) {
-        oldLatLng = new google.maps.LatLng({
-          lat: shuttleData.properties.prevCoordinates[0],
-          lng: shuttleData.properties.prevCoordinates[1],
-        });
-      }
-      const heading = google.maps.geometry.spherical.computeHeading(oldLatLng
-          || thisMarker.getPosition(), thisMarker.getPosition())
-          || Math.floor(Math.random() * 360);
-      return {
-        shuttles: newShuttles,
-        shuttleMarkers: tempShuttleMarkers,
-      };
-    });
+    this.setState(prevState => ({
+      shuttles: {
+        ...prevState.shuttles,
+        [shuttleSnapshot.key]: shuttleSnapshot.val(),
+      },
+    }));
   }
 
   render() {
@@ -191,12 +142,26 @@ class Home extends Component {
         <header>
           <img src="./bloombus-logo.svg" alt="Shuttle Icon" />
         </header>
-        <div id="map" />
+        {!this.state.loops[0] ? null : (
+          <Map
+            mapContainerRef={this.mapContainerRef}
+            mapStyle={this.state.mapStyle}
+            loops={this.state.loops}
+            stops={this.state.stops}
+            shuttles={this.state.shuttles}
+            viewport={this.state.viewport}
+            onViewportChange={this.onViewportChange}
+            updateMapDimensions={this.updateMapDimensions}
+          />
+        )}
         <LoopsCarousel
-          loops={this.state.loops || []}
-          stops={this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
-            ? this.state.loopStops[this.state.loopKey].map(stopKey => this.state.stops[stopKey])
-            : []
+          loops={this.state.loops}
+          stops={
+            this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
+              ? this.state.loopStops[this.state.loopKey].map(
+                stopKey => this.state.stops[stopKey],
+              )
+              : []
           }
           onSelectedLoopChanged={this.onSelectedLoopChanged}
         />
