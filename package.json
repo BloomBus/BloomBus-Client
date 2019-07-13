@@ -9,6 +9,7 @@
     "antd-mobile": "^2.2.14",
     "calcite-react": "^0.37.0",
     "express-sslify": "^1.2.0",
+    "firebase": "^6.3.0",
     "nuka-carousel": "^4.4.4",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
