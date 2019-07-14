@@ -62,10 +62,8 @@ class Home extends Component {
     });
 
     shuttlesRef.on('child_removed', (shuttleSnapshot) => {
-      this.state.shuttleMarkers[shuttleSnapshot.key].setMap(null);
       this.setState((prevState) => {
         const tempState = prevState;
-        delete tempState.shuttleMarkers[shuttleSnapshot.key];
         delete tempState.shuttles[shuttleSnapshot.key];
         return tempState;
       });
@@ -77,14 +75,12 @@ class Home extends Component {
       selectedTab: 'shuttlesTab',
       selectedLoop: loopName,
       selectedStop: prevState.stops[loopName][stationName],
-      selectedMarker: prevState.stopMarkers[loopName][stationName],
     }));
   }
 
   onShuttleSelect(loopKey) {
     this.setState(prevState => ({
       selectedShuttle: prevState,
-      selectedMarker: prevState.shuttleMarkers[loopKey],
       selectedMarkerType: 'shuttle',
     }));
   }
