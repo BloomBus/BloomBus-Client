@@ -4,6 +4,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
 
+import firebase from '../../utils/firebase';
 import LoopsCarousel from '../LoopsCarousel/LoopsCarousel';
 import Map from '../Map';
 import './Home.css';

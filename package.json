@@ -10,6 +10,7 @@
     "antd-mobile": "^2.2.14",
     "calcite-react": "^0.37.0",
     "express-sslify": "^1.2.0",
+    "firebase": "^6.3.0",
     "immutable": "^4.0.0-rc.12",
     "mapbox-gl": "^1.0.0",
     "nuka-carousel": "^4.5.8",
@@ -34,7 +35,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
     "react-scripts": "^3.0.1",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.0-rc"
   },
   "scripts": {
     "start": "react-scripts start",
