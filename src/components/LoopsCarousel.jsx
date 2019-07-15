@@ -1,13 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Carousel from "nuka-carousel";
-import tinycolor from "tinycolor2";
-import posed from "react-pose";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Carousel from 'nuka-carousel';
+import tinycolor from 'tinycolor2';
+import posed from 'react-pose';
 
-import StopsList from "../StopsList/StopsList";
-import CarouselMode from "./CarouselMode.ts";
-import expandPath from "../../images/expand.svg";
-import "./LoopsCarousel.css";
+import StopsList from './StopsList/StopsList';
+import CarouselMode from '../enums/CarouselMode.ts';
+import expandPath from '../images/expand.svg';
 
 // See CarouselMode.ts
 const PosedWrapper = posed.div({
@@ -17,42 +16,42 @@ const PosedWrapper = posed.div({
     delayChildren: 200,
     staggerChildren: 1000,
     transition: {
-      default: { ease: "easeOut", duration: 150 }
-    }
+      default: { ease: 'easeOut', duration: 150 },
+    },
   },
   1: {
     // Expanded
     height: 400,
     transition: {
-      default: { ease: "easeOut", duration: 150 }
-    }
+      default: { ease: 'easeOut', duration: 150 },
+    },
   },
   2: {
     // Hidden
     height: 0,
     transition: {
-      default: { ease: "easeOut", duration: 150 }
-    }
-  }
+      default: { ease: 'easeOut', duration: 150 },
+    },
+  },
 });
 
 const ModeIcon = posed.img({
   0: {
-    rotate: 0
+    rotate: 0,
   },
   1: {
-    rotate: 90
+    rotate: 90,
   },
   2: {
-    rotate: 180
-  }
+    rotate: 180,
+  },
 });
 
 class LoopsCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: CarouselMode.Collapsed
+      mode: CarouselMode.Collapsed,
     };
 
     this.onModeButtonClick = this.onModeButtonClick.bind(this);
@@ -76,14 +75,14 @@ class LoopsCarousel extends Component {
         break;
     }
     this.setState({
-      mode: newMode
+      mode: newMode,
     });
   }
 
   onLoopClick() {
     if (this.state.mode === CarouselMode.Expanded) return;
     this.setState({
-      mode: CarouselMode.Expanded
+      mode: CarouselMode.Expanded,
     });
   }
 
@@ -98,7 +97,7 @@ class LoopsCarousel extends Component {
           className="mode-btn"
           onClick={this.onModeButtonClick}
           aria-label={
-            this.state.mode === CarouselMode.Collapsed ? "Hide" : "Show"
+            this.state.mode === CarouselMode.Collapsed ? 'Hide' : 'Show'
           }
         >
           <ModeIcon src={expandPath} alt="" pose={this.state.mode.toString()} />
@@ -106,7 +105,7 @@ class LoopsCarousel extends Component {
         <Carousel
           swiping
           dragging
-          afterSlide={slideIndex => {
+          afterSlide={(slideIndex) => {
             this.props.onSelectedLoopChanged(slideIndex);
           }}
           className="carousel"
@@ -126,14 +125,14 @@ class LoopsCarousel extends Component {
               onKeyDown={this.onLoopClick}
             >
               <div
-                className={`carousel__card__head ${this.state.mode ===
-                  CarouselMode.Expanded && "carousel__card__head--expanded"}`}
+                className={`carousel__card__head ${this.state.mode
+                  === CarouselMode.Expanded && 'carousel__card__head--expanded'}`}
                 style={{
                   backgroundImage: `linear-gradient(to right, ${
                     loop.properties.color
                   }, ${tinycolor(loop.properties.color)
                     .spin(15)
-                    .toHexString()})`
+                    .toHexString()})`,
                 }}
               >
                 <span className="carousel__card__name">
@@ -154,7 +153,7 @@ class LoopsCarousel extends Component {
 LoopsCarousel.propTypes = {
   loops: PropTypes.arrayOf(PropTypes.object).isRequired,
   stops: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onSelectedLoopChanged: PropTypes.func.isRequired
+  onSelectedLoopChanged: PropTypes.func.isRequired,
 };
 
 export default LoopsCarousel;

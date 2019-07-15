@@ -3,11 +3,14 @@ import { LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
+import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import firebase from '../../utils/firebase';
-import LoopsCarousel from '../LoopsCarousel/LoopsCarousel';
-import Map from '../Map';
-import './Home.css';
+import AppHeader from './AppHeader';
+import LoopsCarousel from './LoopsCarousel';
+import LoopsBottomSheet from './LoopsBottomSheet';
+import Map from './Map';
+
+import firebase from '../utils/firebase';
 
 class Home extends Component {
   constructor(props) {
@@ -127,9 +130,7 @@ class Home extends Component {
   render() {
     return (
       <React.Fragment>
-        <header>
-          <img src="./bloombus-logo.svg" alt="Shuttle Icon" />
-        </header>
+        <AppHeader />
         {!this.state.loops[0] ? null : (
           <Map
             mapContainerRef={this.mapContainerRef}
@@ -141,7 +142,7 @@ class Home extends Component {
             updateMapDimensions={this.updateMapDimensions}
           />
         )}
-        <LoopsCarousel
+        <LoopsBottomSheet
           loops={this.state.loops}
           stops={
             this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
