@@ -3,13 +3,12 @@ import { LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
-import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
 import AppHeader from './AppHeader';
-import LoopsCarousel from './LoopsCarousel';
 import LoopsBottomSheet from './LoopsBottomSheet';
 import Map from './Map';
 
+import { getLoop } from '../utils/functions';
 import firebase from '../utils/firebase';
 
 class Home extends Component {
@@ -24,16 +23,32 @@ class Home extends Component {
       loops: [],
       loopStops: {},
       loopKey: '',
+      viewport: {
+        width: '100%',
+        height: '100%',
+        latitude: 41.007,
+        longitude: -76.451,
+        zoom: 14,
+        pitch: 0,
+        tilt: 0,
+      },
+      openBottomSheet: 'loops',
     };
 
-    this.DATA_TIMEOUT = 15; // seconds
-    this.onStationSelect = this.onStationSelect.bind(this);
+    this.onStopSelect = this.onStopSelect.bind(this);
     this.onShuttleSelect = this.onShuttleSelect.bind(this);
-    this.onSelectedLoopChanged = this.onSelectedLoopChanged.bind(this);
+    this.onLoopSelect = this.onLoopSelect.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
+    this.onMapClick = this.onMapClick.bind(this);
+    this.onBottomSheetChange = this.onBottomSheetChange.bind(this);
   }
 
   componentDidMount() {
+    const constantsRef = firebase.database().ref('constants');
+    constantsRef.once('value', (constantsSnapshot) => {
+      this.constants = constantsSnapshot.val();
+    });
+
     const stopsRef = firebase.database().ref('stops');
     stopsRef.once('value', (stopsSnapshot) => {
       this.setState({
@@ -74,7 +89,7 @@ class Home extends Component {
     });
   }
 
-  onStationSelect(loopName, stationName) {
+  onStopSelect(loopName, stationName) {
     this.setState(prevState => ({
       selectedTab: 'shuttlesTab',
       selectedLoop: loopName,
@@ -82,16 +97,14 @@ class Home extends Component {
     }));
   }
 
-  onShuttleSelect(loopKey) {
-    this.setState(prevState => ({
-      selectedShuttle: prevState,
-      selectedMarkerType: 'shuttle',
-    }));
+  onShuttleSelect(shuttleID) {
+    // skeleton
+    this.setState({});
   }
 
-  onSelectedLoopChanged(index) {
-    if (!this.state.loops[index]) return;
-    const loop = this.state.loops[index];
+  onLoopSelect(loopKey) {
+    const loop = getLoop(loopKey, this.state.loops);
+    if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
     // construct a viewport instance from the current state
@@ -115,7 +128,35 @@ class Home extends Component {
   }
 
   onViewportChange(viewport) {
-    this.setState({ viewport });
+    const newViewport = viewport;
+    const { nwBound, seBound } = this.constants.mapOptions;
+    // Clamp viewport bounds
+    if (viewport.longitude < nwBound.longitude) {
+      newViewport.longitude = nwBound.longitude;
+    } else if (viewport.latitude > nwBound.latitude) {
+      newViewport.latitude = nwBound.latitude;
+    } else if (viewport.longitude > seBound.longitude) {
+      newViewport.longitude = seBound.longitude;
+    } else if (viewport.latitude < seBound.latitude) {
+      newViewport.latitude = seBound.latitude;
+    }
+
+    this.setState({ viewport: newViewport });
+  }
+
+  onMapClick(pointerEvent) {
+    if (!this.state.openBottomSheet) {
+      this.setState({
+        openBottomSheet: 'loops',
+      });
+    }
+  }
+
+  onBottomSheetChange(isOpen) {
+    if (isOpen) return;
+    this.setState({
+      openBottomSheet: '',
+    });
   }
 
   handleNewValue(shuttleSnapshot) {
@@ -137,12 +178,16 @@ class Home extends Component {
             loops={this.state.loops}
             stops={this.state.stops}
             shuttles={this.state.shuttles}
-            viewport={this.state.viewport}
-            onViewportChange={this.onViewportChange}
             updateMapDimensions={this.updateMapDimensions}
+            mapOptions={this.constants.mapOptions}
+            onViewportChange={this.onViewportChange}
+            onMapClick={this.onMapClick}
+            viewport={this.state.viewport}
           />
         )}
         <LoopsBottomSheet
+          open={this.state.openBottomSheet === 'loops'}
+          onBottomSheetChange={this.onBottomSheetChange}
           loops={this.state.loops}
           stops={
             this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
@@ -151,7 +196,7 @@ class Home extends Component {
               )
               : []
           }
-          onSelectedLoopChanged={this.onSelectedLoopChanged}
+          onLoopSelect={this.onLoopSelect}
         />
       </React.Fragment>
     );
