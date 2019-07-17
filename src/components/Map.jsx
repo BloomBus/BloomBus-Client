@@ -1,14 +1,20 @@
 // Framework and third-party non-ui
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { fromJS } from 'immutable';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { fromJS } from "immutable";
 
 // Component specific modules (Component-styled, etc.)
 
 // App components
-import ReactMapGL, { Marker, GeolocateControl } from 'react-map-gl';
-import StopMarker from './StopMarker';
-import ShuttleMarker from './ShuttleMarker';
+import ReactMapGL, {
+  Marker,
+  GeolocateControl,
+  FlyToInterpolator
+} from "react-map-gl";
+import StopMarker from "./StopMarker";
+import ShuttleMarker from "./ShuttleMarker";
+import geoJSONFeatureShape from "../utils/geoJSONFeatureShape";
+import { getLoop } from "../utils/functions";
 
 // Third-party components (buttons, icons, etc.)
 
@@ -21,64 +27,65 @@ class Map extends Component {
     super(props);
 
     this.state = {
-      viewport: {
-        width: '100%',
-        height: '100%',
-        latitude: 41.007,
-        longitude: -76.451,
-        zoom: 14,
-        pitch: 0,
-        tilt: 0,
-      },
-      mapStyle: null,
+      mapStyle: null
     };
   }
 
   componentDidMount() {
     fetch(process.env.REACT_APP_MAPSTYLE_URL)
       .then(res => res.json())
-      .then((json) => {
+      .then(json => {
         const mapStyle = json;
         mapStyle.sources.loops = {
-          type: 'geojson',
+          type: "geojson",
           data: {
-            type: 'FeatureCollection',
-            features: this.props.loops,
-          },
+            type: "FeatureCollection",
+            features: this.props.loops
+          }
         };
         mapStyle.layers.push({
-          id: 'loops',
-          type: 'line',
-          source: 'loops',
+          id: "loops",
+          type: "line",
+          source: "loops",
           layout: {
-            'line-join': 'round',
-            'line-cap': 'round',
+            "line-join": "round",
+            "line-cap": "round"
           },
           paint: {
-            'line-width': 3,
-            'line-color': ['get', 'color'],
-          },
+            "line-width": 3,
+            "line-color": ["get", "color"]
+          }
         });
         this.setState({
-          mapStyle: fromJS(mapStyle),
+          mapStyle: fromJS(mapStyle)
         });
       });
   }
 
   render() {
+    const { maxZoom, minZoom } = this.props.mapOptions;
     return (
       <div ref={this.props.mapContainerRef} style={{ flex: 1 }}>
         <ReactMapGL
-          {...this.state.viewport}
+          {...this.props.viewport}
           mapStyle={this.state.mapStyle}
-          mapboxApiAccessToken="pk.eyJ1IjoiamdpYnNvbjAyIiwiYSI6ImNqeGR1aGYzZDBpNjYzeW1wNzI2YTdjZzAifQ.rTF7d_uy9-6mbk3g270BUQ"
-          onViewportChange={viewport => this.setState({ viewport })}
+          onViewportChange={this.props.onViewportChange}
+          onClick={this.props.onMapClick}
+          minZoom={minZoom}
+          maxZoom={maxZoom}
+          transitionDuration={300}
+          transitionInterpolator={new FlyToInterpolator()}
         >
           <GeolocateControl
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "10px"
+            }}
             positionOptions={{ enableHighAccuracy: true }}
             trackUserLocation
           />
-          {Object.keys(this.props.stops).map((stopKey) => {
+          {Object.keys(this.props.stops).map(stopKey => {
             const [longitude, latitude] = this.props.stops[
               stopKey
             ].geometry.coordinates;
@@ -88,18 +95,14 @@ class Map extends Component {
               </Marker>
             );
           })}
-          {Object.keys(this.props.shuttles).map((shuttleKey) => {
+          {Object.keys(this.props.shuttles).map(shuttleKey => {
             const shuttle = this.props.shuttles[shuttleKey];
-            const [longitude, latitude] = shuttle.geometry.coordinates;
-            const { bearing } = shuttle.properties;
             return (
-              <Marker
+              <ShuttleMarker
+                shuttle={shuttle}
                 key={shuttleKey}
-                longitude={longitude}
-                latitude={latitude}
-              >
-                <ShuttleMarker bearing={bearing} />
-              </Marker>
+                loops={this.props.loops}
+              />
             );
           })}
         </ReactMapGL>
@@ -109,16 +112,39 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-  loops: PropTypes.array.isRequired,
-  stops: PropTypes.object,
-  shuttles: PropTypes.object,
+  loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
+  stops: PropTypes.shape({
+    stopKey: geoJSONFeatureShape
+  }),
+  shuttles: PropTypes.shape({
+    shuttleKey: geoJSONFeatureShape
+  }),
   mapContainerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
     .isRequired,
+  mapOptions: PropTypes.shape({
+    maxZoom: PropTypes.number,
+    minZoom: PropTypes.number,
+    nwBound: PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number
+    }),
+    seBound: PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number
+    })
+  }),
+  viewport: PropTypes.shape({
+    longitude: PropTypes.number,
+    latitude: PropTypes.number,
+    zoom: PropTypes.number
+  }).isRequired,
+  onViewportChange: PropTypes.func.isRequired
 };
 
 Map.defaultProps = {
   stops: {},
   shuttles: {},
+  mapOptions: {}
 };
 
 export default Map;
