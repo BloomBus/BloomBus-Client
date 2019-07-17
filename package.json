@@ -13,7 +13,6 @@
     "firebase": "^6.3.0",
     "immutable": "^4.0.0-rc.12",
     "mapbox-gl": "^1.0.0",
-    "nuka-carousel": "^4.5.8",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-device-detect": "^1.6.2",
