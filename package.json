@@ -6,8 +6,6 @@
     "@turf/bbox": "^6.0.1",
     "ajv": "^6.10.0",
     "ajv-keywords": "^3.4.0",
-    "antd": "^3.19.6",
-    "antd-mobile": "^2.2.14",
     "calcite-react": "^0.37.0",
     "express-sslify": "^1.2.0",
     "firebase": "^6.3.0",
