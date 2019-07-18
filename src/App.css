@@ -1,7 +1,5 @@
-@import '~antd/dist/antd.css';
-
 :root {
-  font-family: 'Product Sans', sans-serif !important;
+  font-family: "Product Sans", sans-serif !important;
 }
 
 #root {
@@ -18,6 +16,10 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
