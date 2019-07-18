@@ -6,11 +6,10 @@ import { fromJS } from 'immutable';
 // Component specific modules (Component-styled, etc.)
 
 // App components
-import ReactMapGL, { Marker, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, { Marker, GeolocateControl } from 'react-map-gl';
 import StopMarker from './StopMarker';
 import ShuttleMarker from './ShuttleMarker';
 import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
-import { getLoop } from '../utils/functions';
 
 // Third-party components (buttons, icons, etc.)
 

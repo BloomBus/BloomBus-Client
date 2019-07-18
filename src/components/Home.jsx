@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LinearInterpolator, FlyToInterpolator } from 'react-map-gl';
+import { FlyToInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
