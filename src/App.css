@@ -23,3 +23,7 @@
     transform: rotate(360deg);
   }
 }
+
+.mapboxgl-marker.shuttle-marker--not-interacting {
+  transition: top 1s linear, left 1s linear;
+}
