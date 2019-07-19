@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Marker } from "react-map-gl";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Marker } from 'react-map-gl';
 
-import { getLoop } from "../utils/functions";
+import { getLoop } from '../utils/functions';
 
 const ShuttleMarkerContainer = styled.div`
   width: 42px;
@@ -15,8 +15,6 @@ const ShuttleMarkerContainer = styled.div`
   align-items: center;
   justify-content: center;
   transform: rotate(${props => `${props.bearing}deg`});
-  transition: left 0.5s linear;
-  transition: top 0.5s linear;
 `;
 
 const StyledShuttleMarker = styled.div`
@@ -45,6 +43,7 @@ class ShuttleMarker extends Component {
         latitude={latitude}
         captureClick
         onClick={this.onClick}
+        className={this.props.isInteracting ? '' : 'shuttle-marker--not-interacting'}
       >
         <ShuttleMarkerContainer bearing={bearing}>
           <StyledShuttleMarker loop={loop} />
@@ -54,8 +53,12 @@ class ShuttleMarker extends Component {
   }
 }
 
-ShuttleMarker.defaultProps = {};
+ShuttleMarker.defaultProps = {
+  isInteracting: false,
+};
 
-ShuttleMarker.propTypes = {};
+ShuttleMarker.propTypes = {
+  isInteracting: PropTypes.bool,
+};
 
 export default ShuttleMarker;
