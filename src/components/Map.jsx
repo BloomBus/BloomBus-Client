@@ -23,7 +23,10 @@ class Map extends Component {
 
     this.state = {
       mapStyle: null,
+      isInteracting: false,
     };
+
+    this.onInteractionStateChange = this.onInteractionStateChange.bind(this);
   }
 
   componentDidMount() {
@@ -57,6 +60,13 @@ class Map extends Component {
       });
   }
 
+  onInteractionStateChange(interactionState) {
+    const { isPanning, isDragging, isZooming } = interactionState;
+    this.setState({
+      isInteracting: isPanning || isDragging || isZooming,
+    });
+  }
+
   render() {
     const { maxZoom, minZoom } = this.props.mapOptions;
     return (
@@ -64,6 +74,7 @@ class Map extends Component {
         <ReactMapGL
           {...this.props.viewport}
           mapStyle={this.state.mapStyle}
+          onInteractionStateChange={this.onInteractionStateChange}
           onViewportChange={this.props.onViewportChange}
           onClick={this.props.onMapClick}
           minZoom={minZoom}
@@ -88,7 +99,14 @@ class Map extends Component {
           })}
           {Object.keys(this.props.shuttles).map((shuttleKey) => {
             const shuttle = this.props.shuttles[shuttleKey];
-            return <ShuttleMarker shuttle={shuttle} key={shuttleKey} loops={this.props.loops} />;
+            return (
+              <ShuttleMarker
+                shuttle={shuttle}
+                key={shuttleKey}
+                loops={this.props.loops}
+                isInteracting={this.state.isInteracting}
+              />
+            );
           })}
         </ReactMapGL>
       </div>
