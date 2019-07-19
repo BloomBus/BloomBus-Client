@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import BusStopSVG from '../images/bus-stop-v2.svg';
+import BusStopSVG from '../images/bus-stop-v3.svg';
 
 const StopMarkerContainer = styled.div`
   width: 42px;
