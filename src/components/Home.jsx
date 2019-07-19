@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LinearInterpolator } from 'react-map-gl';
+import { FlyToInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
@@ -122,6 +122,8 @@ class Home extends Component {
         longitude,
         latitude,
         zoom,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionDuration: 500,
       },
       loopKey: loop.properties.key,
     }));
@@ -191,9 +193,7 @@ class Home extends Component {
           loops={this.state.loops}
           stops={
             this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
-              ? this.state.loopStops[this.state.loopKey].map(
-                stopKey => this.state.stops[stopKey],
-              )
+              ? this.state.loopStops[this.state.loopKey].map(stopKey => this.state.stops[stopKey])
               : []
           }
           onLoopSelect={this.onLoopSelect}
