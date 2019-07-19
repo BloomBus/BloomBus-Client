@@ -1,0 +1,27 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/mars/create-react-app-buildpack"
+    }
+  ],
+  "env": {
+    "REACT_APP_FIREBASE_KEY": {
+      "required": true
+    },
+    "REACT_APP_MAPSTYLE_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "BloomBus-Client",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
