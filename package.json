@@ -15,7 +15,7 @@
     "react": "^16.8.6",
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.8.6",
-    "react-map-gl": "^5.0.3",
+    "react-map-gl": "^5.0.7",
     "react-pose": "^4.0.8",
     "react-router": "^3.2.1",
     "react-swipeable-bottom-sheet": "^1.1.1",
