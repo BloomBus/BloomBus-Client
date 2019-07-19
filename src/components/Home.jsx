@@ -147,11 +147,9 @@ class Home extends Component {
   }
 
   onMapClick(pointerEvent) {
-    if (!this.state.openBottomSheet) {
-      this.setState({
-        openBottomSheet: 'loops',
-      });
-    }
+    this.setState(prevState => ({
+      openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
+    }));
   }
 
   onBottomSheetChange(isOpen) {
