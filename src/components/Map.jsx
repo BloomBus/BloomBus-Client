@@ -21,7 +21,10 @@ const StopMarkerLayer = React.memo(props => Object.keys(props.stops).map((stopKe
   const [longitude, latitude] = props.stops[stopKey].geometry.coordinates;
   return (
     <Marker key={stopKey} longitude={longitude} latitude={latitude}>
-      <StopMarker />
+      <StopMarker
+        selected={props.selectedStop === stopKey}
+        onClick={() => props.onStopSelect(stopKey)}
+      />
     </Marker>
   );
 }));
@@ -98,7 +101,11 @@ class Map extends Component {
             positionOptions={{ enableHighAccuracy: true }}
             trackUserLocation
           />
-          <StopMarkerLayer stops={this.props.stops} />
+          <StopMarkerLayer
+            stops={this.props.stops}
+            selectedStop={this.props.selectedStop}
+            onStopSelect={this.props.onStopSelect}
+          />
           {Object.keys(this.props.shuttles).map((shuttleKey) => {
             const shuttle = this.props.shuttles[shuttleKey];
             return (

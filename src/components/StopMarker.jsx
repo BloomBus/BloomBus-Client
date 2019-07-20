@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StopMarkerContainer = styled.div`
   width: 42px;
@@ -8,12 +8,28 @@ const StopMarkerContainer = styled.div`
   position: relative;
   left: -21px;
   top: -31px;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+  transition-property: width, height, top, left;
+
+  ${props => props.selected
+    && css`
+      width: 50px;
+      height: 50px;
+      left: -25px;
+      top: -37px;
+    `}
+
+  svg circle, svg path {
+    transition: fill 0.1s linear;
+  }
 `;
 
 class StopMarker extends Component {
   render() {
+    const fill = this.props.selected ? '#3cd3ab' : '#33a3f4';
     return (
-      <StopMarkerContainer>
+      <StopMarkerContainer selected={this.props.selected} onClick={this.props.onClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fillRule="evenodd"
@@ -24,9 +40,9 @@ class StopMarker extends Component {
           viewBox="0 0 93 93"
         >
           <ellipse cx="46.08" cy="83.54" fill="url(#_Radial1)" rx="32.32" ry="8.62" />
-          <circle cx="46.05" cy="80.25" r="5.34" fill={this.props.fill} />
-          <path fill={this.props.fill} d="M40.64 24.38h10.75v55.88H40.64z" />
-          <circle cx="46.05" cy="32.39" r="27.57" fill={this.props.fill} />
+          <circle cx="46.05" cy="80.25" r="5.34" fill={fill} />
+          <path fill={fill} d="M40.64 24.38h10.75v55.88H40.64z" />
+          <circle cx="46.05" cy="32.39" r="27.57" fill={fill} />
           <circle cx="46.01" cy="32.39" r="21.89" fill="#fff" />
           <clipPath id="a">
             <path d="M31.46 17.12h29.25v30.54H31.46z" />
@@ -39,7 +55,7 @@ class StopMarker extends Component {
               d="M40.5 41.75a2.42 2.42 0 0 0-4.84 0v2.48a2.42 2.42 0 0 0 4.84 0v-2.48zM56.2 41.75a2.42 2.42 0 0 0-4.85 0v2.48a2.42 2.42 0 0 0 4.84 0v-2.48z"
             />
             <path
-              fill={this.props.fill}
+              fill={fill}
               d="M58.3 22.25c0-1.3-1.06-2.35-2.36-2.35H35.88a2.36 2.36 0 0 0-2.35 2.35V41.1c0 1.3 1.05 2.36 2.35 2.36h20.06c1.3 0 2.36-1.06 2.36-2.36V22.25z"
             />
             <ellipse
@@ -52,7 +68,7 @@ class StopMarker extends Component {
               ry="4.07"
             />
             <path
-              fill={this.props.fill}
+              fill={fill}
               d="M60.44 25.73c0-1.23-1-2.23-2.23-2.23H33.69c-1.23 0-2.23 1-2.23 2.23v4.47c0 1.23 1 2.23 2.23 2.23H58.2c1.23 0 2.23-1 2.23-2.23v-4.47z"
             />
             <path
@@ -94,11 +110,11 @@ class StopMarker extends Component {
 }
 
 StopMarker.defaultProps = {
-  fill: '#33a3f4',
+  selected: false,
 };
 
 StopMarker.propTypes = {
-  fill: PropTypes.string,
+  selected: PropTypes.bool,
 };
 
 export default StopMarker;

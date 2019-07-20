@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlyToInterpolator } from 'react-map-gl';
+import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
@@ -89,11 +89,18 @@ class Home extends Component {
     });
   }
 
-  onStopSelect(loopName, stationName) {
+  onStopSelect(stopKey) {
+    const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
     this.setState(prevState => ({
-      selectedTab: 'shuttlesTab',
-      selectedLoop: loopName,
-      selectedStop: prevState.stops[loopName][stationName],
+      selectedStop: stopKey,
+      viewport: {
+        ...prevState.viewport,
+        longitude,
+        latitude,
+        zoom: 16,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 200,
+      },
     }));
   }
 
@@ -178,10 +185,12 @@ class Home extends Component {
             loops={this.state.loops}
             stops={this.state.stops}
             shuttles={this.state.shuttles}
+            selectedStop={this.state.selectedStop}
             updateMapDimensions={this.updateMapDimensions}
             mapOptions={this.constants.mapOptions}
             onViewportChange={this.onViewportChange}
             onMapClick={this.onMapClick}
+            onStopSelect={this.onStopSelect}
             viewport={this.state.viewport}
           />
         )}
