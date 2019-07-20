@@ -18,14 +18,14 @@ import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 // CSS
 
 const StopMarkerLayer = React.memo(props => Object.keys(props.stops).map((stopKey) => {
-  const [longitude, latitude] = props.stops[stopKey].geometry.coordinates;
+  const selected = props.selectedStop === stopKey;
   return (
-    <Marker key={stopKey} longitude={longitude} latitude={latitude}>
-      <StopMarker
-        selected={props.selectedStop === stopKey}
-        onClick={() => props.onStopSelect(stopKey)}
-      />
-    </Marker>
+    <StopMarker
+      key={stopKey}
+      stop={props.stops[stopKey]}
+      selected={selected}
+      onStopSelect={props.onStopSelect}
+    />
   );
 }));
 
@@ -131,6 +131,7 @@ Map.propTypes = {
   shuttles: PropTypes.shape({
     shuttleKey: geoJSONFeatureShape,
   }),
+  selectedStop: PropTypes.string.isRequired,
   mapContainerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
   mapOptions: PropTypes.shape({
     maxZoom: PropTypes.number,

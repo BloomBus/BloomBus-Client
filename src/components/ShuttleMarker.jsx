@@ -8,9 +8,6 @@ import { getLoop } from '../utils/functions';
 const ShuttleMarkerContainer = styled.div`
   width: 42px;
   height: 42px;
-  position: relative;
-  left: -21px;
-  top: -21px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,6 +41,8 @@ class ShuttleMarker extends Component {
         captureClick
         onClick={this.onClick}
         className={this.props.isInteracting ? '' : 'shuttle-marker--not-interacting'}
+        offsetTop={-21}
+        offsetLeft={-21}
       >
         <ShuttleMarkerContainer bearing={bearing}>
           <StyledShuttleMarker loop={loop} />
