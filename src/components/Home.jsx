@@ -6,6 +6,7 @@ import bbox from '@turf/bbox';
 
 import AppHeader from './AppHeader';
 import LoopsBottomSheet from './LoopsBottomSheet';
+import StopBottomSheet from './StopBottomSheet';
 import Map from './Map';
 
 import { getLoop } from '../utils/functions';
@@ -93,6 +94,7 @@ class Home extends Component {
     const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedStop: stopKey,
+      openBottomSheet: 'stop',
       viewport: {
         ...prevState.viewport,
         longitude,
@@ -156,6 +158,7 @@ class Home extends Component {
   onMapClick(pointerEvent) {
     this.setState(prevState => ({
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
+      selectedStop: null,
     }));
   }
 
@@ -204,6 +207,11 @@ class Home extends Component {
               : []
           }
           onLoopSelect={this.onLoopSelect}
+        />
+        <StopBottomSheet
+          open={this.state.openBottomSheet === 'stop'}
+          onBottomSheetChange={this.onBottomSheetChange}
+          stop={this.state.stops[this.state.selectedStop]}
         />
       </React.Fragment>
     );

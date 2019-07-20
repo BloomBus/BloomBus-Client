@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
-const LoopsBottomSheetContainer = styled.div`
+const StopBottomSheetContainer = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -24,21 +24,7 @@ const LoopsBottomSheetContainer = styled.div`
   }
 `;
 
-const LoopListItem = styled.button`
-  display: block;
-  width: 100%;
-  height: 4em;
-
-  background-color: #ffffff;
-  outline: none;
-  border: none;
-  border-top: 2px solid #f1f1f1;
-  padding: 0.85em;
-  text-align: left;
-  font-family: 'Product Sans';
-`;
-
-const LoopsBottomSheetTitle = styled.div`
+const StopBottomSheetTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,8 +35,9 @@ const LoopsBottomSheetTitle = styled.div`
   font-weight: 600;
 `;
 
-class LoopsBottomSheet extends Component {
+class StopBottomSheet extends Component {
   render() {
+    const { name } = this.props.stop.properties;
     return (
       <SwipeableBottomSheet
         open={this.props.open}
@@ -64,32 +51,27 @@ class LoopsBottomSheet extends Component {
           boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
         }}
       >
-        <LoopsBottomSheetContainer>
-          <LoopsBottomSheetTitle>Shuttle Loops</LoopsBottomSheetTitle>
-          {this.props.loops.map(loop => (
-            <LoopListItem
-              key={loop.properties.name}
-              tabIndex="0"
-              onClick={() => this.props.onLoopSelect(loop.properties.key)}
-            >
-              {loop.properties.name}
-            </LoopListItem>
-          ))}
-        </LoopsBottomSheetContainer>
+        <StopBottomSheetContainer>
+          <StopBottomSheetTitle>{name}</StopBottomSheetTitle>
+        </StopBottomSheetContainer>
       </SwipeableBottomSheet>
     );
   }
 }
 
-LoopsBottomSheet.defaultProps = {
-  open: true,
+StopBottomSheet.defaultProps = {
+  open: false,
+  stop: {
+    properties: {
+      name: '',
+    },
+  },
 };
 
-LoopsBottomSheet.propTypes = {
+StopBottomSheet.propTypes = {
+  stop: PropTypes.shape(geoJSONFeatureShape),
   open: PropTypes.bool,
-  loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
-  onLoopSelect: PropTypes.func.isRequired,
   onBottomSheetChange: PropTypes.func.isRequired,
 };
 
-export default LoopsBottomSheet;
+export default StopBottomSheet;
