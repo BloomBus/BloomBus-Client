@@ -4,16 +4,16 @@
   "private": true,
   "dependencies": {
     "@turf/bbox": "^6.0.1",
-    "ajv": "^6.10.0",
+    "ajv": "^6.10.2",
     "ajv-keywords": "^3.4.0",
     "calcite-react": "^0.37.0",
     "express-sslify": "^1.2.0",
-    "firebase": "^6.3.0",
+    "firebase": "^6.3.1",
     "immutable": "^4.0.0-rc.12",
-    "mapbox-gl": "^1.0.0",
+    "mapbox-gl": "^1.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-device-detect": "^1.6.2",
+    "react-device-detect": "^1.6.5",
     "react-dom": "^16.8.6",
     "react-map-gl": "^5.0.7",
     "react-pose": "^4.0.8",
@@ -27,12 +27,12 @@
   },
   "devDependencies": {
     "@types/react-map-gl": "^5.0.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.17.3",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
     "react-scripts": "^3.0.1",
-    "typescript": "^3.5.0-rc"
+    "typescript": "^3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
