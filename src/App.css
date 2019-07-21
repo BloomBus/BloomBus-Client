@@ -24,6 +24,10 @@
   }
 }
 
+.mapboxgl-marker.stop-marker {
+  transition: top 0.1s ease-out, left 0.1s ease-out;
+}
+
 .mapboxgl-marker.shuttle-marker--not-interacting {
   transition: top 1s linear, left 1s linear;
 }

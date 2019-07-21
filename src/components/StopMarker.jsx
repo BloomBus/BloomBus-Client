@@ -12,8 +12,8 @@ const StopMarkerContainer = styled.div`
 
   ${props => props.selected
     && css`
-      width: 50px;
-      height: 50px;
+      width: 66px;
+      height: 66px;
     `}
 
   svg circle, svg path {
@@ -30,8 +30,9 @@ class StopMarker extends Component {
       <Marker
         longitude={longitude}
         latitude={latitude}
-        offsetLeft={selected ? -25 : -21}
-        offsetTop={selected ? -37 : -31}
+        offsetLeft={selected ? -33 : -21}
+        offsetTop={selected ? -51 : -31}
+        className="stop-marker"
       >
         <StopMarkerContainer
           selected={selected}
