@@ -38,6 +38,10 @@ const LoopListItem = styled.button`
   border-top: 2px solid #f1f1f1;
   padding: 0.85em;
   font-family: 'Product Sans';
+
+  &:active {
+    background-color: #f1f1f1;
+  }
 `;
 
 const LoopsBottomSheetTitle = styled.div`
