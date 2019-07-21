@@ -44,6 +44,12 @@ const LoopListItem = styled.button`
   }
 `;
 
+const LoopName = styled.span`
+  font-size: 1.3em;
+  font-weight: 600;
+  color: ${props => props.color || 'inherit'};
+`;
+
 const LoopsBottomSheetTitle = styled.div`
   display: flex;
   align-items: center;
@@ -78,7 +84,7 @@ class LoopsBottomSheet extends Component {
               tabIndex="0"
               onClick={() => this.props.onLoopSelect(loop.properties.key)}
             >
-              {loop.properties.name}
+              <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
               <ETALabel number={3} />
             </LoopListItem>
           ))}

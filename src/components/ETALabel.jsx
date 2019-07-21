@@ -19,8 +19,8 @@ const ETALabelNumber = styled.span`
     left: 0.5em;
     top: 0.1em;
     border-top-right-radius: 100%;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
+    border-top: 0.05em solid currentColor;
+    border-right: 0.05em solid currentColor;
     content: '';
     animation: pulse 2s linear infinite;
   }
@@ -32,8 +32,8 @@ const ETALabelNumber = styled.span`
     left: 0.5em;
     top: -0.05em;
     border-top-right-radius: 100%;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
+    border-top: 0.05em solid currentColor;
+    border-right: 0.05em solid currentColor;
     content: '';
     animation: pulse 2s linear 0.75s infinite;
   }
