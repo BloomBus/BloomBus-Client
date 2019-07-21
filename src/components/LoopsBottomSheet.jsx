@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
+import ETALabel from './ETALabel';
+
 const LoopsBottomSheetContainer = styled.div`
   height: 100%;
   width: 100%;
@@ -25,16 +27,16 @@ const LoopsBottomSheetContainer = styled.div`
 `;
 
 const LoopListItem = styled.button`
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
-  height: 4em;
 
   background-color: #ffffff;
   outline: none;
   border: none;
   border-top: 2px solid #f1f1f1;
   padding: 0.85em;
-  text-align: left;
   font-family: 'Product Sans';
 `;
 
@@ -73,6 +75,7 @@ class LoopsBottomSheet extends Component {
               onClick={() => this.props.onLoopSelect(loop.properties.key)}
             >
               {loop.properties.name}
+              <ETALabel number={3} />
             </LoopListItem>
           ))}
         </LoopsBottomSheetContainer>

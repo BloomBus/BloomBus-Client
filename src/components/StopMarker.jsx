@@ -24,7 +24,6 @@ const StopMarkerContainer = styled.div`
 class StopMarker extends Component {
   render() {
     const { stop, selected, onStopSelect } = this.props;
-    console.log(stop);
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
@@ -124,6 +123,7 @@ StopMarker.defaultProps = {
 
 StopMarker.propTypes = {
   selected: PropTypes.bool,
+  onStopSelect: PropTypes.func.isRequired,
 };
 
 export default StopMarker;
