@@ -25,6 +25,7 @@ const StopMarkerLayer = React.memo(props => Object.keys(props.stops).map((stopKe
       stop={props.stops[stopKey]}
       selected={selected}
       onStopSelect={props.onStopSelect}
+      isInteracting={props.isInteracting}
     />
   );
 }));
@@ -105,6 +106,7 @@ class Map extends Component {
             stops={this.props.stops}
             selectedStop={this.props.selectedStop}
             onStopSelect={this.props.onStopSelect}
+            isInteracting={this.state.isInteracting}
           />
           {Object.keys(this.props.shuttles).map((shuttleKey) => {
             const shuttle = this.props.shuttles[shuttleKey];

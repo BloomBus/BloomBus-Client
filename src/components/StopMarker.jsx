@@ -23,7 +23,9 @@ const StopMarkerContainer = styled.div`
 
 class StopMarker extends Component {
   render() {
-    const { stop, selected, onStopSelect } = this.props;
+    const {
+      stop, selected, onStopSelect, isInteracting,
+    } = this.props;
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
@@ -32,7 +34,7 @@ class StopMarker extends Component {
         latitude={latitude}
         offsetLeft={selected ? -33 : -21}
         offsetTop={selected ? -51 : -31}
-        className="stop-marker"
+        className={isInteracting ? '' : 'stop-marker--not-interacting'}
       >
         <StopMarkerContainer
           selected={selected}
@@ -120,11 +122,13 @@ class StopMarker extends Component {
 
 StopMarker.defaultProps = {
   selected: false,
+  isInteracting: false,
 };
 
 StopMarker.propTypes = {
   selected: PropTypes.bool,
   onStopSelect: PropTypes.func.isRequired,
+  isInteracting: PropTypes.bool,
 };
 
 export default StopMarker;

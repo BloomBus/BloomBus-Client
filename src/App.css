@@ -24,7 +24,7 @@
   }
 }
 
-.mapboxgl-marker.stop-marker {
+.mapboxgl-marker.stop-marker--not-interacting {
   transition: top 0.1s ease-out, left 0.1s ease-out;
 }
 
