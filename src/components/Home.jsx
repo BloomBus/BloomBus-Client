@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
@@ -20,9 +20,9 @@ class Home extends Component {
 
     this.state = {
       shuttles: {},
-      stops: {},
-      loops: [],
-      loopStops: {},
+      stops: undefined,
+      loops: undefined,
+      loopStops: undefined,
       loopKey: '',
       viewport: {
         width: '100%',
@@ -182,37 +182,36 @@ class Home extends Component {
     return (
       <React.Fragment>
         <AppHeader />
-        {!this.state.loops[0] ? null : (
-          <Map
-            mapContainerRef={this.mapContainerRef}
-            loops={this.state.loops}
-            stops={this.state.stops}
-            shuttles={this.state.shuttles}
-            selectedStop={this.state.selectedStop}
-            updateMapDimensions={this.updateMapDimensions}
-            mapOptions={this.constants.mapOptions}
-            onViewportChange={this.onViewportChange}
-            onMapClick={this.onMapClick}
-            onStopSelect={this.onStopSelect}
-            viewport={this.state.viewport}
-          />
-        )}
-        <LoopsBottomSheet
-          open={this.state.openBottomSheet === 'loops'}
-          onBottomSheetChange={this.onBottomSheetChange}
-          loops={this.state.loops}
-          stops={
-            this.state.loops[0] && this.state.loopStops[this.state.loopKey] // Only pass stops for the selected loop
-              ? this.state.loopStops[this.state.loopKey].map(stopKey => this.state.stops[stopKey])
-              : []
-          }
-          onLoopSelect={this.onLoopSelect}
-        />
-        <StopBottomSheet
-          open={this.state.openBottomSheet === 'stop'}
-          onBottomSheetChange={this.onBottomSheetChange}
-          stop={this.state.stops[this.state.selectedStop]}
-        />
+        {this.state.loops && this.state.loopStops && this.state.stops ? (
+          <Fragment>
+            <Map
+              mapContainerRef={this.mapContainerRef}
+              loops={this.state.loops}
+              stops={this.state.stops}
+              shuttles={this.state.shuttles}
+              selectedStop={this.state.selectedStop}
+              updateMapDimensions={this.updateMapDimensions}
+              mapOptions={this.constants.mapOptions}
+              onViewportChange={this.onViewportChange}
+              onMapClick={this.onMapClick}
+              onStopSelect={this.onStopSelect}
+              viewport={this.state.viewport}
+            />
+            <LoopsBottomSheet
+              open={this.state.openBottomSheet === 'loops'}
+              onBottomSheetChange={this.onBottomSheetChange}
+              loops={this.state.loops}
+              stops={this.state.stops}
+              loopStops={this.state.loopStops}
+              onLoopSelect={this.onLoopSelect}
+            />
+            <StopBottomSheet
+              open={this.state.openBottomSheet === 'stop'}
+              onBottomSheetChange={this.onBottomSheetChange}
+              stop={this.state.stops[this.state.selectedStop]}
+            />
+          </Fragment>
+        ) : null}
       </React.Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
@@ -15,12 +15,12 @@ const LoopsBottomSheetContainer = styled.div`
   justify-content: center;
 
   &::after {
-    width: 26px;
+    width: 50px;
     height: 4px;
     border-radius: 2px;
     position: absolute;
-    left: calc(50% - 13px);
-    top: 5px;
+    left: calc(50% - 25px);
+    top: 8px;
     background-color: #dbdbdb;
     content: '';
   }
@@ -44,10 +44,27 @@ const LoopListItem = styled.button`
   }
 `;
 
+const LoopListItemLeftSide = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
 const LoopName = styled.span`
   font-size: 1.3em;
   font-weight: 600;
+  align-self: flex-start;
+  color: #ffffff;
   color: ${props => props.color || 'inherit'};
+`;
+
+const LoopNextStop = styled.span`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 0.9em;
+  color: rgba(#b5b5b6);
+  margin-top: 0.1em;
 `;
 
 const LoopsBottomSheetTitle = styled.div`
@@ -61,7 +78,39 @@ const LoopsBottomSheetTitle = styled.div`
   font-weight: 600;
 `;
 
-class LoopsBottomSheet extends Component {
+const NextStopSVG = styled.svg`
+  height: 1em;
+  margin-right: 0.2em;
+`;
+
+const NextStopIcon = () => (
+  <NextStopSVG viewBox="0 0 30 20">
+    <path
+      fillRule="evenodd"
+      strokeLinejoin="round"
+      strokeMiterlimit="2"
+      clipRule="evenodd"
+      fill="#777b8e"
+      d="M9.89 10.84h7.31v4.07l6-5.24-6-5.2v4.1H9.88v2.24H0V8.57h9.88a9.7 9.7 0 1 1 0 2.27z"
+    />
+  </NextStopSVG>
+);
+
+class LoopsBottomSheet extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.getRandomStopName = this.getRandomStopName.bind(this);
+  }
+
+  getRandomStopName(loop) {
+    if (!this.props.loopStops) return '';
+    const { key } = loop.properties;
+    const loopStops = this.props.loopStops[key];
+    const stopKey = loopStops[Math.floor(Math.random() * loopStops.length)];
+    return this.props.stops[stopKey].properties.name;
+  }
+
   render() {
     return (
       <SwipeableBottomSheet
@@ -84,7 +133,13 @@ class LoopsBottomSheet extends Component {
               tabIndex="0"
               onClick={() => this.props.onLoopSelect(loop.properties.key)}
             >
-              <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
+              <LoopListItemLeftSide>
+                <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
+                <LoopNextStop>
+                  <NextStopIcon />
+                  {this.getRandomStopName(loop)}
+                </LoopNextStop>
+              </LoopListItemLeftSide>
               <ETALabel number={3} />
             </LoopListItem>
           ))}
@@ -96,11 +151,13 @@ class LoopsBottomSheet extends Component {
 
 LoopsBottomSheet.defaultProps = {
   open: true,
+  loopStops: undefined,
 };
 
 LoopsBottomSheet.propTypes = {
   open: PropTypes.bool,
   loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
+  loopStops: PropTypes.objectOf(PropTypes.string),
   onLoopSelect: PropTypes.func.isRequired,
   onBottomSheetChange: PropTypes.func.isRequired,
 };
