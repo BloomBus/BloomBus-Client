@@ -3,6 +3,7 @@ import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 import AppHeader from './AppHeader';
 import LoopsBottomSheet from './LoopsBottomSheet';
@@ -11,7 +12,6 @@ import Map from './Map';
 
 import { getLoop } from '../utils/functions';
 import firebase from '../utils/firebase';
-import {BrowserView, MobileView} from 'react-device-detect';
 
 class Home extends Component {
   constructor(props) {
@@ -32,9 +32,9 @@ class Home extends Component {
         longitude: -76.451,
         zoom: 14,
         pitch: 0,
-        tilt: 0,
+        tilt: 0
       },
-      openBottomSheet: 'loops',
+      openBottomSheet: 'loops'
     };
 
     this.onStopSelect = this.onStopSelect.bind(this);
@@ -47,43 +47,43 @@ class Home extends Component {
 
   componentDidMount() {
     const constantsRef = firebase.database().ref('constants');
-    constantsRef.once('value', (constantsSnapshot) => {
+    constantsRef.once('value', constantsSnapshot => {
       this.constants = constantsSnapshot.val();
     });
 
     const stopsRef = firebase.database().ref('stops');
-    stopsRef.once('value', (stopsSnapshot) => {
+    stopsRef.once('value', stopsSnapshot => {
       this.setState({
-        stops: stopsSnapshot.val(),
+        stops: stopsSnapshot.val()
       });
     });
 
     const loopsRef = firebase.database().ref('loops');
-    loopsRef.once('value', (loopsSnapshot) => {
+    loopsRef.once('value', loopsSnapshot => {
       const loops = loopsSnapshot.val().features;
       this.setState({
         loops,
-        loopKey: loops[0].properties.key,
+        loopKey: loops[0].properties.key
       });
     });
 
     const loopStopsRef = firebase.database().ref('loop-stops');
-    loopStopsRef.once('value', (loopStopsSnapshot) => {
+    loopStopsRef.once('value', loopStopsSnapshot => {
       this.setState({
-        loopStops: loopStopsSnapshot.val(),
+        loopStops: loopStopsSnapshot.val()
       });
     });
 
     const shuttlesRef = firebase.database().ref('shuttles');
 
-    shuttlesRef.on('value', (shuttlesSnapshot) => {
-      shuttlesSnapshot.forEach((shuttleSnapshot) => {
+    shuttlesRef.on('value', shuttlesSnapshot => {
+      shuttlesSnapshot.forEach(shuttleSnapshot => {
         this.handleNewValue(shuttleSnapshot);
       });
     });
 
-    shuttlesRef.on('child_removed', (shuttleSnapshot) => {
-      this.setState((prevState) => {
+    shuttlesRef.on('child_removed', shuttleSnapshot => {
+      this.setState(prevState => {
         const tempState = prevState;
         delete tempState.shuttles[shuttleSnapshot.key];
         return tempState;
@@ -102,8 +102,8 @@ class Home extends Component {
         latitude,
         zoom: 16,
         transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200,
-      },
+        transitionDuration: 200
+      }
     }));
   }
 
@@ -119,12 +119,9 @@ class Home extends Component {
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
     // construct a viewport instance from the current state
     const newViewport = new WebMercatorViewport(this.state.viewport);
-    const { longitude, latitude, zoom } = newViewport.fitBounds(
-      [[minLng, minLat], [maxLng, maxLat]],
-      {
-        padding: 40,
-      },
-    );
+    const { longitude, latitude, zoom } = newViewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
+      padding: 40
+    });
 
     this.setState(prevState => ({
       viewport: {
@@ -133,9 +130,9 @@ class Home extends Component {
         latitude,
         zoom,
         transitionInterpolator: new FlyToInterpolator(),
-        transitionDuration: 500,
+        transitionDuration: 500
       },
-      loopKey: loop.properties.key,
+      loopKey: loop.properties.key
     }));
   }
 
@@ -159,14 +156,14 @@ class Home extends Component {
   onMapClick(pointerEvent) {
     this.setState(prevState => ({
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
-      selectedStop: null,
+      selectedStop: null
     }));
   }
 
   onBottomSheetChange(isOpen) {
     if (isOpen) return;
     this.setState({
-      openBottomSheet: '',
+      openBottomSheet: ''
     });
   }
 
@@ -174,8 +171,8 @@ class Home extends Component {
     this.setState(prevState => ({
       shuttles: {
         ...prevState.shuttles,
-        [shuttleSnapshot.key]: shuttleSnapshot.val(),
-      },
+        [shuttleSnapshot.key]: shuttleSnapshot.val()
+      }
     }));
   }
 
@@ -198,6 +195,7 @@ class Home extends Component {
               onStopSelect={this.onStopSelect}
               viewport={this.state.viewport}
             />
+            <BrowserView />
             <MobileView>
               <LoopsBottomSheet
                 open={this.state.openBottomSheet === 'loops'}

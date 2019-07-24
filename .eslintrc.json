@@ -1,12 +1,14 @@
 {
-    "extends": "airbnb",
-    "rules": {
-      "linebreak-style": "off",
-      "react/destructuring-assignment": [ false ],
-      "react/prefer-stateless-function": "off",
-      "no-unused-vars": ["error", { "args": "none" }]
-    },
-    "env": {
-      "browser": true
-    }
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "linebreak-style": "off",
+    "react/destructuring-assignment": [0],
+    "react/prefer-stateless-function": "off",
+    "no-unused-vars": ["error", { "args": "none" }]
+  },
+  "env": {
+    "browser": true
+  }
 }
