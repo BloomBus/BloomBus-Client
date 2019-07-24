@@ -8,7 +8,7 @@ const config = {
   projectId: 'bloombus-163620',
   storageBucket: 'bloombus-163620.appspot.com',
   messagingSenderId: '740651108770',
-  appId: '1:740651108770:web:9b1a0ebb417c9e1f',
+  appId: '1:740651108770:web:9b1a0ebb417c9e1f'
 };
 firebase.initializeApp(config);
 
