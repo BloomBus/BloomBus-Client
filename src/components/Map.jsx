@@ -96,7 +96,7 @@ class Map extends Component {
           <GeolocateControl
             style={{
               position: 'absolute',
-              left: '10px',
+              right: '10px',
               top: '10px',
             }}
             positionOptions={{ enableHighAccuracy: true }}
