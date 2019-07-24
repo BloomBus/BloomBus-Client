@@ -11,6 +11,7 @@ import Map from './Map';
 
 import { getLoop } from '../utils/functions';
 import firebase from '../utils/firebase';
+import {BrowserView, MobileView} from 'react-device-detect';
 
 class Home extends Component {
   constructor(props) {
@@ -197,19 +198,21 @@ class Home extends Component {
               onStopSelect={this.onStopSelect}
               viewport={this.state.viewport}
             />
-            <LoopsBottomSheet
-              open={this.state.openBottomSheet === 'loops'}
-              onBottomSheetChange={this.onBottomSheetChange}
-              loops={this.state.loops}
-              stops={this.state.stops}
-              loopStops={this.state.loopStops}
-              onLoopSelect={this.onLoopSelect}
-            />
-            <StopBottomSheet
-              open={this.state.openBottomSheet === 'stop'}
-              onBottomSheetChange={this.onBottomSheetChange}
-              stop={this.state.stops[this.state.selectedStop]}
-            />
+            <MobileView>
+              <LoopsBottomSheet
+                open={this.state.openBottomSheet === 'loops'}
+                onBottomSheetChange={this.onBottomSheetChange}
+                loops={this.state.loops}
+                stops={this.state.stops}
+                loopStops={this.state.loopStops}
+                onLoopSelect={this.onLoopSelect}
+              />
+              <StopBottomSheet
+                open={this.state.openBottomSheet === 'stop'}
+                onBottomSheetChange={this.onBottomSheetChange}
+                stop={this.state.stops[this.state.selectedStop]}
+              />
+            </MobileView>
           </Fragment>
         ) : null}
       </React.Fragment>
