@@ -3,6 +3,7 @@ import { FlyToInterpolator, LinearInterpolator } from "react-map-gl";
 import WebMercatorViewport from "viewport-mercator-project";
 import lineString from "turf-linestring";
 import bbox from "@turf/bbox";
+import { BrowserView, MobileView } from "react-device-detect";
 
 import AppHeader from "./AppHeader";
 import LoopsBottomSheet from "./LoopsBottomSheet";
@@ -12,7 +13,6 @@ import Sidebar from "./Sidebar";
 
 import { getLoop } from "../utils/functions";
 import firebase from "../utils/firebase";
-import { BrowserView, MobileView } from "react-device-detect";
 
 class Home extends Component {
   constructor(props) {
