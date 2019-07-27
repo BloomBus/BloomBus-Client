@@ -1,10 +1,10 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
-import geoJSONFeatureShape from "../utils/geoJSONFeatureShape";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
+import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
-import ETALabel from "./ETALabel";
+import ETALabel from './ETALabel';
 
 const LoopsBottomSheetContainer = styled.div`
   height: 100%;
@@ -22,7 +22,7 @@ const LoopsBottomSheetContainer = styled.div`
     left: calc(50% - 25px);
     top: 8px;
     background-color: #dbdbdb;
-    content: "";
+    content: '';
   }
 `;
 
@@ -37,7 +37,7 @@ const LoopListItem = styled.button`
   border: none;
   border-top: 2px solid #f1f1f1;
   padding: 0.85em;
-  font-family: "Product Sans";
+  font-family: 'Product Sans';
 
   &:active {
     background-color: #f1f1f1;
@@ -55,7 +55,7 @@ const LoopName = styled.span`
   font-weight: 600;
   align-self: flex-start;
   color: #ffffff;
-  color: ${props => props.color || "inherit"};
+  color: ${props => props.color || 'inherit'};
 `;
 
 const LoopNextStop = styled.span`
@@ -74,7 +74,7 @@ const LoopsBottomSheetTitle = styled.div`
   height: 2.4em;
   margin-top: 1em;
   text-transform: uppercase;
-  font-family: "Product Sans";
+  font-family: 'Product Sans';
   font-weight: 600;
 `;
 
@@ -104,7 +104,7 @@ class LoopsBottomSheet extends PureComponent {
   }
 
   getRandomStopName(loop) {
-    if (!this.props.loopStops) return "";
+    if (!this.props.loopStops) return '';
     const { key } = loop.properties;
     const loopStops = this.props.loopStops[key];
     const stopKey = loopStops[Math.floor(Math.random() * loopStops.length)];
@@ -120,11 +120,9 @@ class LoopsBottomSheet extends PureComponent {
         topShadow={false}
         shadowTip={false}
         bodyStyle={{
-          borderTopLeftRadius: "1.5rem",
-          borderTopRightRadius: "1.5rem",
-          boxShadow: this.props.open
-            ? "rgba(0, 0, 0, 0.157) 0px -4px 5px"
-            : "none"
+          borderTopLeftRadius: '1.5rem',
+          borderTopRightRadius: '1.5rem',
+          boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
         }}
       >
         <LoopsBottomSheetContainer>
@@ -136,9 +134,7 @@ class LoopsBottomSheet extends PureComponent {
               onClick={() => this.props.onLoopSelect(loop.properties.key)}
             >
               <LoopListItemLeftSide>
-                <LoopName color={loop.properties.color}>
-                  {loop.properties.name}
-                </LoopName>
+                <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
                 <LoopNextStop>
                   <NextStopIcon />
                   {this.getRandomStopName(loop)}
@@ -155,7 +151,7 @@ class LoopsBottomSheet extends PureComponent {
 
 LoopsBottomSheet.defaultProps = {
   open: true,
-  loopStops: undefined
+  loopStops: undefined,
 };
 
 LoopsBottomSheet.propTypes = {
@@ -163,7 +159,7 @@ LoopsBottomSheet.propTypes = {
   loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
   loopStops: PropTypes.objectOf(PropTypes.string),
   onLoopSelect: PropTypes.func.isRequired,
-  onBottomSheetChange: PropTypes.func.isRequired
+  onBottomSheetChange: PropTypes.func.isRequired,
 };
 
 export default LoopsBottomSheet;
