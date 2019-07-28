@@ -12,6 +12,7 @@ const StyledHeader = styled.header`
   line-height: 1.7em;
   font-weight: bold;
   font-family: 'Product Sans';
+  color: #000;
 
   & > svg {
     position: relative;
@@ -49,15 +50,7 @@ const AppHeader = props => (
           fill="#33a3f4"
           d="M28.88 5.74c0-1.28-1.14-2.33-2.54-2.33H4.74c-1.4 0-2.54 1.05-2.54 2.33v18.6c0 1.27 1.14 2.31 2.54 2.31h21.6c1.4 0 2.54-1.04 2.54-2.32V5.73z"
         />
-        <ellipse
-          cx="15.58"
-          cy="5.75"
-          fill="#fff"
-          stroke="#33a3f4"
-          strokeWidth="2.22"
-          rx="12.15"
-          ry="4.01"
-        />
+        <ellipse cx="15.58" cy="5.75" fill="#fff" stroke="#33a3f4" strokeWidth="2.22" rx="12.15" ry="4.01" />
         <path
           fill="#33a3f4"
           d="M31.19 9.17c0-1.21-1.08-2.2-2.4-2.2H2.37c-1.33 0-2.4.99-2.4 2.2v4.4c0 1.22 1.07 2.21 2.4 2.21h26.4c1.33 0 2.4-.99 2.4-2.2v-4.4z"
