@@ -7,16 +7,37 @@ const SidebarContainer = styled.div`
   box-sizing: border-box;
   height: 100%;
   width: 15vw;
-  position: fixed;
   z-index: 1;
-  top: 5%;
+  top: 51px;
   left: 0;
   background-color: #fff;
   border-right: 1px solid #ddd;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  position: absolute;
+  float: left;
 `;
 
-const SidebarItem = styled.div``;
+const SidebarTitle = styled.h1`
+  font-family: 'Product Sans';
+  margin-top: 1rem;
+  font-weight: 800;
+  align-self: center;
+`;
+
+const SidebarItem = styled.button`
+  background-color: #ffffff;
+  outline: none;
+  border: none;
+  border-top: 2px solid #f1f1f1;
+  font-family: 'Product Sans';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${props => props.color || 'inherit'};
+`;
 
 const SidebarHead = styled.div`
   height: 110px;
@@ -27,28 +48,19 @@ const SidebarHead = styled.div`
   transition: color 0.5s;
 `;
 
-const SidebarNotch = styled.div`
-  --notch-height: 0.3rem;
-  --notch-width: 1.7rem;
-  width: var(--notch-width);
-  height: var(--notch-height);
-  background-color: #fff;
-  border-radius: calc(var(--notch-height) / 2);
-  position: relative;
-  left: calc(50vw - calc(var(--notch-width) / 2));
-  top: 0.55rem;
-  z-index: 900;
-`;
-
 const SidebarName = styled.span`
-  display: inline-block;
-  margin-left: 1.4rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 1rem;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-weight: 800;
   font-size: 2em;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Product Sans';
+  color: #000;
   line-height: 1em;
+  color: ${props => props.color || 'inherit'};
 `;
 
 class Sidebar extends Component {
@@ -59,20 +71,13 @@ class Sidebar extends Component {
   render() {
     return (
       <SidebarContainer>
+        <SidebarTitle>Shuttle Loops</SidebarTitle>
         {this.props.loops.map(loop => (
-          <SidebarItem
-            key={loop.properties.name}
-            className="sidebar__card"
-            role="button"
-            tabIndex="0"
-            onClick={this.onLoopClick}
-            onKeyDown={this.onLoopClick}
-          >
+          <SidebarItem key={loop.properties.name} onClick={() => this.props.onLoopSelect(loop.properties.key)}>
             {/*  */}
             <SidebarHead>
-              <SidebarNotch />
               {/* List Header */}
-              <SidebarName>{loop.properties.name}</SidebarName>
+              <SidebarName color={loop.properties.color}>{loop.properties.name}</SidebarName>
             </SidebarHead>
             {/* List Item of Stops */}
           </SidebarItem>
