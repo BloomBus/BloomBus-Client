@@ -11,13 +11,12 @@ const SidebarContainer = styled.div`
   width: 15vw;
   z-index: 1;
   top: 51px;
-  left: 0;
+
   background-color: #fff;
   border-right: 1px solid #ddd;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: left;
   position: absolute;
   float: left;
 `;
@@ -30,19 +29,25 @@ const SidebarTitle = styled.h1`
 `;
 
 const SidebarItem = styled.button`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.85em;
+  margin-bottom: 1rem;
+
   background-color: #ffffff;
   outline: none;
   border: none;
   border-top: 2px solid #f1f1f1;
   font-family: 'Product Sans';
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: ${props => props.color || 'inherit'};
+
+  &:active {
+    background-color: #f1f1f1;
+  }
 `;
 
 const SidebarHead = styled.div`
-  height: 110px;
+  height: 5em;
   box-sizing: border-box;
   overflow: hidden;
   filter: saturate(90%) brightness(100%);
@@ -50,18 +55,17 @@ const SidebarHead = styled.div`
   transition: color 0.5s;
 `;
 
-const SidebarName = styled.span`
+const SidebarLoopNames = styled.span`
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin-left: 1rem;
+
   margin-top: 1rem;
   margin-bottom: 0.5rem;
+
+  line-height: 1em;
   font-weight: 800;
   font-size: 2em;
   font-family: 'Product Sans';
-  color: #000;
-  line-height: 1em;
   color: ${props => props.color || 'inherit'};
 `;
 
@@ -69,7 +73,7 @@ const LoopNextStop = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 0.9em;
+  font-size: 1em;
   color: rgba(#b5b5b6);
   margin-top: 0.1em;
 `;
@@ -93,10 +97,7 @@ const NextStopIcon = () => (
 );
 
 class Sidebar extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
+  // Grabs a random stop name. Created by John Gibson
   getRandomStopName(loop) {
     if (!this.props.loopStops) return '';
     const { key } = loop.properties;
@@ -108,20 +109,24 @@ class Sidebar extends PureComponent {
   render() {
     return (
       <SidebarContainer>
+        {/* Title above the loops */}
         <SidebarTitle>Shuttle Loops</SidebarTitle>
         {this.props.loops.map(loop => (
-          <SidebarItem key={loop.properties.name} onClick={() => this.props.onLoopSelect(loop.properties.key)}>
-            {/*  */}
+          <SidebarItem
+            key={loop.properties.name}
+            tabIndex="0"
+            onClick={() => this.props.onLoopSelect(loop.properties.key)}
+          >
             <SidebarHead>
-              {/* List Header */}
-              <SidebarName color={loop.properties.color}>{loop.properties.name}</SidebarName>
+              <SidebarLoopNames color={loop.properties.color}>{loop.properties.name}</SidebarLoopNames>
             </SidebarHead>
-            {/* List Item of Stops */}
             <LoopNextStop>
               <NextStopIcon />
               {this.getRandomStopName(loop)}
+              {/* Adding a "Tab" */}
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <ETALabel number={3} />
             </LoopNextStop>
-            <ETALabel number={3} />
           </SidebarItem>
         ))}
       </SidebarContainer>
