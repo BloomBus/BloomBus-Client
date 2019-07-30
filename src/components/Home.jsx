@@ -143,14 +143,12 @@ class Home extends Component {
     // Clamp viewport bounds
     if (viewport.longitude < nwBound.longitude) {
       newViewport.longitude = nwBound.longitude;
+    } else if (viewport.longitude > seBound.longitude) {
+      newViewport.longitude = seBound.longitude;
     }
     if (viewport.latitude > nwBound.latitude) {
       newViewport.latitude = nwBound.latitude;
-    }
-    if (viewport.longitude > seBound.longitude) {
-      newViewport.longitude = seBound.longitude;
-    }
-    if (viewport.latitude < seBound.latitude) {
+    } else if (viewport.latitude < seBound.latitude) {
       newViewport.latitude = seBound.latitude;
     }
 
