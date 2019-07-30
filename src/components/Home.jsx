@@ -3,15 +3,16 @@ import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 import AppHeader from './AppHeader';
 import LoopsBottomSheet from './LoopsBottomSheet';
 import StopBottomSheet from './StopBottomSheet';
 import Map from './Map';
+import Sidebar from './Sidebar';
 
 import { getLoop } from '../utils/functions';
 import firebase from '../utils/firebase';
-import {BrowserView, MobileView} from 'react-device-detect';
 
 class Home extends Component {
   constructor(props) {
@@ -119,12 +120,9 @@ class Home extends Component {
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
     // construct a viewport instance from the current state
     const newViewport = new WebMercatorViewport(this.state.viewport);
-    const { longitude, latitude, zoom } = newViewport.fitBounds(
-      [[minLng, minLat], [maxLng, maxLat]],
-      {
-        padding: 40,
-      },
-    );
+    const { longitude, latitude, zoom } = newViewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
+      padding: 40,
+    });
 
     this.setState(prevState => ({
       viewport: {
@@ -145,10 +143,11 @@ class Home extends Component {
     // Clamp viewport bounds
     if (viewport.longitude < nwBound.longitude) {
       newViewport.longitude = nwBound.longitude;
-    } else if (viewport.latitude > nwBound.latitude) {
-      newViewport.latitude = nwBound.latitude;
     } else if (viewport.longitude > seBound.longitude) {
       newViewport.longitude = seBound.longitude;
+    }
+    if (viewport.latitude > nwBound.latitude) {
+      newViewport.latitude = nwBound.latitude;
     } else if (viewport.latitude < seBound.latitude) {
       newViewport.latitude = seBound.latitude;
     }
@@ -198,6 +197,14 @@ class Home extends Component {
               onStopSelect={this.onStopSelect}
               viewport={this.state.viewport}
             />
+            <BrowserView>
+              <Sidebar
+                loops={this.state.loops}
+                stops={this.state.stops}
+                loopStops={this.state.loopStops}
+                onLoopSelect={this.onLoopSelect}
+              />
+            </BrowserView>
             <MobileView>
               <LoopsBottomSheet
                 open={this.state.openBottomSheet === 'loops'}
