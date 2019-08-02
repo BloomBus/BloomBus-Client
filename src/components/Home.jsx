@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
@@ -180,7 +180,7 @@ class Home extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <AppHeader />
         {this.state.loops && this.state.loopStops && this.state.stops ? (
           <Fragment>
@@ -222,7 +222,7 @@ class Home extends Component {
             </MobileView>
           </Fragment>
         ) : null}
-      </React.Fragment>
+      </>
     );
   }
 }
