@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
 import ETALabel from './ETALabel';
 
@@ -136,12 +134,6 @@ class Sidebar extends PureComponent {
 
 Sidebar.defaultProps = {
   loopStops: undefined,
-};
-
-Sidebar.propTypes = {
-  loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
-  loopStops: PropTypes.objectOf(PropTypes.string),
-  onLoopSelect: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

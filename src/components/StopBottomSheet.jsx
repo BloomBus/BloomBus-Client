@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
-import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
 const StopBottomSheetContainer = styled.div`
   height: 100%;
@@ -66,12 +64,6 @@ StopBottomSheet.defaultProps = {
       name: '',
     },
   },
-};
-
-StopBottomSheet.propTypes = {
-  stop: PropTypes.shape(geoJSONFeatureShape),
-  open: PropTypes.bool,
-  onBottomSheetChange: PropTypes.func.isRequired,
 };
 
 export default StopBottomSheet;

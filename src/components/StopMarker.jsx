@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 
@@ -109,12 +109,6 @@ class StopMarker extends PureComponent {
 StopMarker.defaultProps = {
   selected: false,
   isInteracting: false,
-};
-
-StopMarker.propTypes = {
-  selected: PropTypes.bool,
-  onStopSelect: PropTypes.func.isRequired,
-  isInteracting: PropTypes.bool,
 };
 
 export default StopMarker;
