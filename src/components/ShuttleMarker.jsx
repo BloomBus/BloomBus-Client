@@ -5,16 +5,23 @@ import { Marker } from 'react-map-gl';
 
 import { getLoop } from '../utils/functions';
 
-const ShuttleMarkerContainer = styled.div`
+const ShuttleMarkerContainer = styled.div.attrs(props => ({
+  style: {
+    transform: `rotate(${props.bearing}deg)`,
+  },
+}))`
   width: 42px;
   height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(${props => `${props.bearing}deg`});
 `;
 
-const StyledShuttleMarker = styled.div`
+const StyledShuttleMarker = styled.div.attrs(props => ({
+  style: {
+    backgroundColor: props.loop.properties.color,
+  },
+}))`
   width: 10px;
   height: 20px;
   border-radius: 3px;
@@ -22,7 +29,6 @@ const StyledShuttleMarker = styled.div`
   border-bottom: 1.5px solid #232323;
   border-left: 1.5px solid #232323;
   border-right: 1.5px solid #232323;
-  background-color: ${props => props.loop.properties.color};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5);
 `;
 
