@@ -1,5 +1,5 @@
 :root {
-  font-family: "Product Sans", sans-serif !important;
+  font-family: 'Product Sans', sans-serif !important;
 }
 
 #root {
@@ -22,10 +22,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.mapboxgl-marker.stop-marker--not-interacting {
-  transition: top 0.1s ease-out, left 0.1s ease-out;
 }
 
 .mapboxgl-marker.shuttle-marker--not-interacting {
