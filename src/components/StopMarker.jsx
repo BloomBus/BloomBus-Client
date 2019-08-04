@@ -25,7 +25,11 @@ class StopMarker extends PureComponent {
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
-      <Marker longitude={longitude} latitude={latitude}>
+      <Marker
+        longitude={longitude}
+        latitude={latitude}
+        className={`stop-marker ${selected ? 'stop-marker--selected' : ''}`}
+      >
         <StopMarkerContainer selected={selected} onClick={() => onStopSelect(stop.properties.stopKey)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

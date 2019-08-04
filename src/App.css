@@ -24,6 +24,13 @@
   }
 }
 
+.mapboxgl-marker.stop-marker {
+  z-index: 0;
+}
+.mapboxgl-marker.stop-marker.stop-marker--selected {
+  z-index: 100;
+}
+
 .mapboxgl-marker.shuttle-marker--not-interacting {
   transition: top 1s linear, left 1s linear;
 }
