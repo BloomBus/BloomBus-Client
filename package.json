@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ctrl/tinycolor": "^2.5.3",
     "@turf/bbox": "^6.0.1",
     "ajv": "^6.10.2",
     "ajv-keywords": "^3.4.0",
@@ -22,7 +23,6 @@
     "react-swipeable-bottom-sheet": "^1.1.1",
     "shallowequal": "^1.1.0",
     "styled-components": "^5.0.0-beta.8",
-    "tinycolor2": "^1.4.1",
     "turf-linestring": "^1.0.2",
     "viewport-mercator-project": "^6.1.1"
   },
