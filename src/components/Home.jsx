@@ -178,50 +178,46 @@ class Home extends Component {
   }
 
   render() {
-    return (
+    return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
-        {this.state.loops && this.state.loopStops && this.state.stops ? (
-          <Fragment>
-            <Map
-              mapContainerRef={this.mapContainerRef}
-              loops={this.state.loops}
-              stops={this.state.stops}
-              shuttles={this.state.shuttles}
-              selectedStop={this.state.selectedStop}
-              updateMapDimensions={this.updateMapDimensions}
-              mapOptions={this.constants.mapOptions}
-              onViewportChange={this.onViewportChange}
-              onMapClick={this.onMapClick}
-              onStopSelect={this.onStopSelect}
-              viewport={this.state.viewport}
-            />
-            <BrowserView>
-              <Sidebar
-                loops={this.state.loops}
-                stops={this.state.stops}
-                loopStops={this.state.loopStops}
-                onLoopSelect={this.onLoopSelect}
-              />
-            </BrowserView>
-            <MobileView>
-              <LoopsBottomSheet
-                open={this.state.openBottomSheet === 'loops'}
-                onBottomSheetChange={this.onBottomSheetChange}
-                loops={this.state.loops}
-                stops={this.state.stops}
-                loopStops={this.state.loopStops}
-                onLoopSelect={this.onLoopSelect}
-              />
-              <StopBottomSheet
-                open={this.state.openBottomSheet === 'stop'}
-                onBottomSheetChange={this.onBottomSheetChange}
-                stop={this.state.stops[this.state.selectedStop]}
-              />
-            </MobileView>
-          </>
-        ) : null}
+        <Map
+          mapContainerRef={this.mapContainerRef}
+          loops={this.state.loops}
+          stops={this.state.stops}
+          shuttles={this.state.shuttles}
+          selectedStop={this.state.selectedStop}
+          updateMapDimensions={this.updateMapDimensions}
+          mapOptions={this.constants.mapOptions}
+          onViewportChange={this.onViewportChange}
+          onMapClick={this.onMapClick}
+          onStopSelect={this.onStopSelect}
+          viewport={this.state.viewport}
+        />
+        <BrowserView>
+          <Sidebar
+            loops={this.state.loops}
+            stops={this.state.stops}
+            loopStops={this.state.loopStops}
+            onLoopSelect={this.onLoopSelect}
+          />
+        </BrowserView>
+        <MobileView>
+          <LoopsBottomSheet
+            open={this.state.openBottomSheet === 'loops'}
+            onBottomSheetChange={this.onBottomSheetChange}
+            loops={this.state.loops}
+            stops={this.state.stops}
+            loopStops={this.state.loopStops}
+            onLoopSelect={this.onLoopSelect}
+          />
+          <StopBottomSheet
+            open={this.state.openBottomSheet === 'stop'}
+            onBottomSheetChange={this.onBottomSheetChange}
+            stop={this.state.stops[this.state.selectedStop]}
+          />
+        </MobileView>
       </>
-    );
+    ) : null;
   }
 }
 
