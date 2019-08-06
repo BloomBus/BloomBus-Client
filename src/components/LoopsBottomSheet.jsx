@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
-import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
 import ETALabel from './ETALabel';
 
@@ -152,14 +150,6 @@ class LoopsBottomSheet extends PureComponent {
 LoopsBottomSheet.defaultProps = {
   open: true,
   loopStops: undefined,
-};
-
-LoopsBottomSheet.propTypes = {
-  open: PropTypes.bool,
-  loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
-  loopStops: PropTypes.objectOf(PropTypes.string),
-  onLoopSelect: PropTypes.func.isRequired,
-  onBottomSheetChange: PropTypes.func.isRequired,
 };
 
 export default LoopsBottomSheet;

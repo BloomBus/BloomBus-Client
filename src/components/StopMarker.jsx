@@ -1,45 +1,36 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import React, { PureComponent } from 'react';
+import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 
-const StopMarkerContainer = styled.div`
-  width: 42px;
-  height: 42px;
+const StopMarkerContainer = styled.div.attrs(props => ({
+  style: {
+    width: props.selected ? '66px' : '42px',
+    height: props.selected ? '66px' : '42px',
+  },
+}))`
+  transform: translate(-50%, -70%);
   transition-duration: 0.1s;
   transition-timing-function: ease-out;
   transition-property: width, height, top, left;
 
-  ${props => props.selected
-    && css`
-      width: 66px;
-      height: 66px;
-    `}
-
-  svg circle, svg path {
+  svg circle,
+  svg path {
     transition: fill 0.1s linear;
   }
 `;
 
-class StopMarker extends Component {
+class StopMarker extends PureComponent {
   render() {
-    const {
-      stop, selected, onStopSelect, isInteracting,
-    } = this.props;
+    const { stop, selected, onStopSelect } = this.props;
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
       <Marker
         longitude={longitude}
         latitude={latitude}
-        offsetLeft={selected ? -33 : -21}
-        offsetTop={selected ? -51 : -31}
-        className={isInteracting ? '' : 'stop-marker--not-interacting'}
+        className={`stop-marker ${selected ? 'stop-marker--selected' : ''}`}
       >
-        <StopMarkerContainer
-          selected={selected}
-          onClick={() => onStopSelect(stop.properties.stopKey)}
-        >
+        <StopMarkerContainer selected={selected} onClick={() => onStopSelect(stop.properties.stopKey)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fillRule="evenodd"
@@ -60,7 +51,7 @@ class StopMarker extends Component {
             <g clipPath="url(#a)">
               <path
                 fill="#fff"
-                stroke="#33a3f4"
+                stroke={fill}
                 strokeWidth="1.72"
                 d="M40.5 41.75a2.42 2.42 0 0 0-4.84 0v2.48a2.42 2.42 0 0 0 4.84 0v-2.48zM56.2 41.75a2.42 2.42 0 0 0-4.85 0v2.48a2.42 2.42 0 0 0 4.84 0v-2.48z"
               />
@@ -68,15 +59,7 @@ class StopMarker extends Component {
                 fill={fill}
                 d="M58.3 22.25c0-1.3-1.06-2.35-2.36-2.35H35.88a2.36 2.36 0 0 0-2.35 2.35V41.1c0 1.3 1.05 2.36 2.35 2.36h20.06c1.3 0 2.36-1.06 2.36-2.36V22.25z"
               />
-              <ellipse
-                cx="45.95"
-                cy="22.27"
-                fill="#fff"
-                stroke="#33a3f4"
-                strokeWidth="2.15"
-                rx="11.28"
-                ry="4.07"
-              />
+              <ellipse cx="45.95" cy="22.27" fill="#fff" stroke={fill} strokeWidth="2.15" rx="11.28" ry="4.07" />
               <path
                 fill={fill}
                 d="M60.44 25.73c0-1.23-1-2.23-2.23-2.23H33.69c-1.23 0-2.23 1-2.23 2.23v4.47c0 1.23 1 2.23 2.23 2.23H58.2c1.23 0 2.23-1 2.23-2.23v-4.47z"
@@ -91,7 +74,7 @@ class StopMarker extends Component {
               />
               <path
                 fill="none"
-                stroke="#33a3f4"
+                stroke={fill}
                 strokeWidth="1.72"
                 d="M53.15 26.25a2.75 2.75 0 0 0-2.74-2.75h-8.74a2.75 2.75 0 0 0-2.75 2.75v2.82a2.75 2.75 0 0 0 2.75 2.75h8.74a2.74 2.74 0 0 0 2.74-2.75v-2.82z"
               />
@@ -123,12 +106,6 @@ class StopMarker extends Component {
 StopMarker.defaultProps = {
   selected: false,
   isInteracting: false,
-};
-
-StopMarker.propTypes = {
-  selected: PropTypes.bool,
-  onStopSelect: PropTypes.func.isRequired,
-  isInteracting: PropTypes.bool,
 };
 
 export default StopMarker;

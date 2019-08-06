@@ -1,6 +1,5 @@
 // Framework and third-party non-ui
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
@@ -9,7 +8,6 @@ import { fromJS } from 'immutable';
 import ReactMapGL, { GeolocateControl } from 'react-map-gl';
 import StopMarker from './StopMarker';
 import ShuttleMarker from './ShuttleMarker';
-import geoJSONFeatureShape from '../utils/geoJSONFeatureShape';
 
 // Third-party components (buttons, icons, etc.)
 
@@ -124,36 +122,6 @@ class Map extends Component {
     );
   }
 }
-
-Map.propTypes = {
-  loops: PropTypes.arrayOf(geoJSONFeatureShape).isRequired,
-  stops: PropTypes.shape({
-    stopKey: geoJSONFeatureShape,
-  }),
-  shuttles: PropTypes.shape({
-    shuttleKey: geoJSONFeatureShape,
-  }),
-  selectedStop: PropTypes.string.isRequired,
-  mapContainerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
-  mapOptions: PropTypes.shape({
-    maxZoom: PropTypes.number,
-    minZoom: PropTypes.number,
-    nwBound: PropTypes.shape({
-      latitude: PropTypes.number,
-      longitude: PropTypes.number,
-    }),
-    seBound: PropTypes.shape({
-      latitude: PropTypes.number,
-      longitude: PropTypes.number,
-    }),
-  }),
-  viewport: PropTypes.shape({
-    longitude: PropTypes.number,
-    latitude: PropTypes.number,
-    zoom: PropTypes.number,
-  }).isRequired,
-  onViewportChange: PropTypes.func.isRequired,
-};
 
 Map.defaultProps = {
   stops: {},

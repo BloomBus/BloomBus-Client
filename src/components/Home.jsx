@@ -5,7 +5,6 @@ import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-import AppHeader from './AppHeader';
 import LoopsBottomSheet from './LoopsBottomSheet';
 import StopBottomSheet from './StopBottomSheet';
 import Map from './Map';
@@ -181,7 +180,6 @@ class Home extends Component {
   render() {
     return (
       <>
-        <AppHeader />
         {this.state.loops && this.state.loopStops && this.state.stops ? (
           <Fragment>
             <Map
@@ -220,7 +218,7 @@ class Home extends Component {
                 stop={this.state.stops[this.state.selectedStop]}
               />
             </MobileView>
-          </Fragment>
+          </>
         ) : null}
       </>
     );

@@ -1,5 +1,5 @@
 :root {
-  font-family: "Product Sans", sans-serif !important;
+  font-family: 'Product Sans', sans-serif !important;
 }
 
 #root {
@@ -24,8 +24,11 @@
   }
 }
 
-.mapboxgl-marker.stop-marker--not-interacting {
-  transition: top 0.1s ease-out, left 0.1s ease-out;
+.mapboxgl-marker.stop-marker {
+  z-index: 0;
+}
+.mapboxgl-marker.stop-marker.stop-marker--selected {
+  z-index: 100;
 }
 
 .mapboxgl-marker.shuttle-marker--not-interacting {
