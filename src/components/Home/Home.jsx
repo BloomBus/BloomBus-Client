@@ -5,13 +5,17 @@ import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-import LoopsBottomSheet from './LoopsBottomSheet';
-import StopBottomSheet from './StopBottomSheet';
-import Map from './Map';
-import Sidebar from './Sidebar';
+import LoopsBottomSheet from '../LoopsBottomSheet';
+import StopBottomSheet from '../StopBottomSheet';
+import Map from '../Map';
+import Sidebar from '../Sidebar';
+import AppHeader from '../AppHeader';
 
-import { getLoop } from '../utils/functions';
-import firebase from '../utils/firebase';
+import { StyledHeaderLabel } from './Home-styled';
+import LogoBusIcon from './LogoBusIcon';
+
+import { getLoop } from '../../utils/functions';
+import firebase from '../../utils/firebase';
 
 class Home extends Component {
   constructor(props) {
@@ -180,6 +184,10 @@ class Home extends Component {
   render() {
     return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
+        <AppHeader>
+          <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
+          <LogoBusIcon />
+        </AppHeader>
         <Map
           mapContainerRef={this.mapContainerRef}
           loops={this.state.loops}
