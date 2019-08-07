@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import AppHeader from './AppHeader';
 
 class About extends Component {
   render() {
-    return <div>About</div>;
+    return <AppHeader>About</AppHeader>;
   }
 }
 

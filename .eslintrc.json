@@ -5,7 +5,8 @@
     "react/destructuring-assignment": [false],
     "react/prefer-stateless-function": "off",
     "react/prop-types": "off",
-    "no-unused-vars": ["error", { "args": "none" }]
+    "no-unused-vars": ["error", { "args": "none" }],
+    "import/prefer-default-export": "off"
   },
   "env": {
     "browser": true

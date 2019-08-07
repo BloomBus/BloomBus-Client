@@ -6,7 +6,6 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';
 
-import AppHeader from './components/AppHeader';
 import Home from './components/Home';
 import About from './components/About';
 
@@ -20,16 +19,13 @@ class App extends Component {
 
   render() {
     return (
-      <>
-        <AppHeader />
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/about" component={About} />
-            <Redirect to="/" />
-          </Switch>
-        </BrowserRouter>
-      </>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Redirect to="/" />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
