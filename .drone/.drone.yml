@@ -1,0 +1,28 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: docker  
+    image: plugins/docker
+    settings:
+      repo: BloomBus/BloomBus-Client
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      branch:
+      - master
+
+  - name: deploy
+    image: docker
+    commands:
+      = docker run --rm jgibson02/bloombus-client
+      - docker rmi jgibson02/bloombus-client
+
+  discord:
+    image: appleboy/drone-discord
+    secrets: [ discord_webhook_id, discord_webhook_token ]
+    when:
+      status: [ success, failure ]
