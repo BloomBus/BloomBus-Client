@@ -5,7 +5,7 @@ steps:
   - name: docker
     image: plugins/docker
     settings:
-      repo: BloomBus/BloomBus-Client
+      repo: jgibson02/bloombus-client
       auto_tag: true
       username:
         from_secret: docker_username
