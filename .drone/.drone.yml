@@ -12,19 +12,13 @@ steps:
       password:
         from_secret: docker_password
     when:
+      event:
+        - push
       branch:
         - master
 
   - name: deploy
-    image: docker
-    commands:
-      - docker -v
-      - docker run --rm jgibson02/bloombus-client
-      - docker rmi jgibson02/bloombus-client
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker:/root/.docker
-    privileged: true
+    image: jgibson02/bloombus-client
     when:
       event:
         - push
@@ -35,6 +29,8 @@ steps:
     image: appleboy/drone-discord
     secrets: [discord_webhook_id, discord_webhook_token]
     when:
+      event:
+        - push
       branch:
         - master
       status: [success, failure]
