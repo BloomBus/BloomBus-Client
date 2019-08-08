@@ -18,7 +18,7 @@ steps:
   - name: deploy
     image: docker
     commands:
-      = docker run --rm jgibson02/bloombus-client
+      - docker run --rm jgibson02/bloombus-client
       - docker rmi jgibson02/bloombus-client
 
   discord:
