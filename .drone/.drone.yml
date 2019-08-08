@@ -18,9 +18,16 @@ steps:
   - name: deploy
     image: docker
     commands:
+      - docker -v
       - docker run --rm jgibson02/bloombus-client
       - docker rmi jgibson02/bloombus-client
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker:/root/.docker
+    privileged: true
     when:
+      event:
+        - push
       branch:
         - master
 
