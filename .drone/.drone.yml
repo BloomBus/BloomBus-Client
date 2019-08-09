@@ -22,7 +22,8 @@ steps:
     commands:
       - docker pull jgibson02/bloombus-client
       - docker stop client
-      - docker run -d --name client jgibson02/bloombus-client
+      - docker rm client
+      - docker run -d --name client -p 3000:80 -l traefik.frontend.rule=Host:client.conchita.xyz -l traefik.docker.network=web -l traefik.port=3000 jgibson02/bloombus-client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
