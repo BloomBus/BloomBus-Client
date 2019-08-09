@@ -43,6 +43,12 @@ steps:
         build {{ build.number }} failed. Fix me please.
       {{ /success }}
 
+trigger:
+  event:
+    - push
+    - pull_request
+    - tag
+
 volumes:
   - name: dockersock
     host:
