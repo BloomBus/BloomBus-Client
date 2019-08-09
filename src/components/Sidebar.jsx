@@ -24,6 +24,7 @@ const SidebarTitle = styled.h1`
   margin-top: 1rem;
   font-weight: 800;
   align-self: center;
+  color: #000;
 `;
 
 const SidebarItem = styled.button`
