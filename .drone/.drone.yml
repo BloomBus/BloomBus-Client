@@ -22,7 +22,7 @@ steps:
     commands:
       - docker pull jgibson02/bloombus-client
       - docker stop bloombus-client
-      - docker run  -d --name client jgibson02/bloombus-client
+      - docker run -d --name client jgibson02/bloombus-client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
@@ -41,12 +41,6 @@ steps:
       {{ else }}
         build {{ build.number }} failed. Fix me please.
       {{ /success }}
-    when:
-      event:
-        - push
-      branch:
-        - master
-      status: [success, failure]
 
 volumes:
   - name: dockersock
