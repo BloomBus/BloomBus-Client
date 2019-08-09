@@ -21,7 +21,7 @@ steps:
     image: docker
     commands:
       - docker pull jgibson02/bloombus-client
-      - docker stop bloombus-client
+      - docker stop client
       - docker run -d --name client jgibson02/bloombus-client
     volumes:
       - name: dockersock
