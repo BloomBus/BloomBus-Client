@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
@@ -13,27 +12,11 @@ import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
 import Overflow from '../Overflow';
 
-import { StyledHeaderLabel } from './Home-styled';
+import { StyledHeaderLabel, LeftHeader, CenterHeader, RightHeader } from './Home-styled';
 import LogoBusIcon from './LogoBusIcon';
 
 import { getLoop } from '../../utils/functions';
 import firebase from '../../utils/firebase';
-
-const LeftHeader = styled.div`
-  display: flex;
-  flex: 1;
-`;
-
-const CenterHeader = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-`;
-
-const RightHeader = styled.div`
-  display: flex;
-  flex: 1;
-`;
 
 class Home extends Component {
   constructor(props) {
