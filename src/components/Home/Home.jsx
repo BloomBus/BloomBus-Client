@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
@@ -17,6 +18,22 @@ import LogoBusIcon from './LogoBusIcon';
 
 import { getLoop } from '../../utils/functions';
 import firebase from '../../utils/firebase';
+
+const LeftHeader = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+const CenterHeader = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+`;
+
+const RightHeader = styled.div`
+  display: flex;
+  flex: 1;
+`;
 
 class Home extends Component {
   constructor(props) {
@@ -186,9 +203,14 @@ class Home extends Component {
     return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
         <AppHeader>
-          <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
-          <LogoBusIcon />
-          <Overflow />
+          <LeftHeader />
+          <CenterHeader>
+            <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
+            <LogoBusIcon />
+          </CenterHeader>
+          <RightHeader>
+            <Overflow />
+          </RightHeader>
         </AppHeader>
         <Map
           mapContainerRef={this.mapContainerRef}

@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import CalciteThemeProvider from 'calcite-react/CalciteThemeProvider';
-import Menu, { MenuTitle, MenuItem } from 'calcite-react/Menu';
+import Menu, { MenuItem } from 'calcite-react/Menu';
 import Popover from 'calcite-react/Popover';
 import HandleVerticalIcon from 'calcite-ui-icons-react/HandleVerticalIcon';
 
 const OverflowContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: self-start;
-  justify-content: center;
-
-  position: relative;
+  margin-left: auto;
 `;
 
 class Overflow extends Component {
@@ -45,13 +42,14 @@ class Overflow extends Component {
           targetEl={<HandleVerticalIcon className="button" onClick={this.showOverflow} />}
           open={this.state.open}
           onRequestClose={this.closeOverflow}
+          placement=""
         >
           <CalciteThemeProvider>
             <Menu style={{ maxWidth: '280px' }}>
               <MenuItem>Shuttle Schedule</MenuItem>
               <MenuItem>Status Alerts</MenuItem>
               <MenuItem>Feedback</MenuItem>
-              <MenuTitle>Report an Issue</MenuTitle>
+              <MenuItem>Report an Issue</MenuItem>
               <MenuItem>About</MenuItem>
             </Menu>
           </CalciteThemeProvider>
