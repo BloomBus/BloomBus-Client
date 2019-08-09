@@ -10,6 +10,7 @@ import StopBottomSheet from '../StopBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
+import Overflow from '../Overflow';
 
 import { StyledHeaderLabel } from './Home-styled';
 import LogoBusIcon from './LogoBusIcon';
@@ -187,6 +188,7 @@ class Home extends Component {
         <AppHeader>
           <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
           <LogoBusIcon />
+          <Overflow />
         </AppHeader>
         <Map
           mapContainerRef={this.mapContainerRef}
