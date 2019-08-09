@@ -1,5 +1,5 @@
 kind: pipeline
-name: default
+name: client
 
 steps:
   - name: docker
@@ -18,8 +18,14 @@ steps:
         - master
 
   - name: deploy
-    image: jgibson02/bloombus-client
-    detach: true
+    image: docker
+    commands:
+      - docker pull jgibson02/bloombus-client
+      - docker stop bloombus-client
+      - docker run  -d --name client jgibson02/bloombus-client
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
     when:
       event:
         - push
@@ -35,3 +41,8 @@ steps:
       branch:
         - master
       status: [success, failure]
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
