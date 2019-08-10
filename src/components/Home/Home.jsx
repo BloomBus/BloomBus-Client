@@ -1,22 +1,34 @@
+// Framework and third-party non-ui
 import React, { Component } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
 import { BrowserView, MobileView } from 'react-device-detect';
+import { withRouter } from 'react-router-dom';
 
+// Local helpers/utils/modules
+import { getLoop } from '../../utils/functions';
+import firebase from '../../utils/firebase';
+
+// Component specific modules (Component-styled, etc.)
+import { StyledHeaderLogoLabel } from './Home-styled';
+
+// App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
 import StopBottomSheet from '../StopBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
-import Overflow from '../Overflow';
+import OverflowMenu from '../OverflowMenu';
 
-import { StyledHeaderLabel, LeftHeader, CenterHeader, RightHeader } from './Home-styled';
+// Third-party components (buttons, icons, etc.)
+import { LeftHeader, CenterHeader, RightHeader } from '../AppHeader/AppHeader-styled';
 import LogoBusIcon from './LogoBusIcon';
 
-import { getLoop } from '../../utils/functions';
-import firebase from '../../utils/firebase';
+// JSON
+
+// CSS
 
 class Home extends Component {
   constructor(props) {
@@ -188,11 +200,11 @@ class Home extends Component {
         <AppHeader>
           <LeftHeader />
           <CenterHeader>
-            <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
+            <StyledHeaderLogoLabel>BloomBus</StyledHeaderLogoLabel>
             <LogoBusIcon />
           </CenterHeader>
           <RightHeader>
-            <Overflow />
+            <OverflowMenu />
           </RightHeader>
         </AppHeader>
         <Map
@@ -236,4 +248,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default withRouter(Home);
