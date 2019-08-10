@@ -10,8 +10,9 @@ import StopBottomSheet from '../StopBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
+import Overflow from '../Overflow';
 
-import { StyledHeaderLabel } from './Home-styled';
+import { StyledHeaderLabel, LeftHeader, CenterHeader, RightHeader } from './Home-styled';
 import LogoBusIcon from './LogoBusIcon';
 
 import { getLoop } from '../../utils/functions';
@@ -185,8 +186,14 @@ class Home extends Component {
     return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
         <AppHeader>
-          <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
-          <LogoBusIcon />
+          <LeftHeader />
+          <CenterHeader>
+            <StyledHeaderLabel>BloomBus</StyledHeaderLabel>
+            <LogoBusIcon />
+          </CenterHeader>
+          <RightHeader>
+            <Overflow />
+          </RightHeader>
         </AppHeader>
         <Map
           mapContainerRef={this.mapContainerRef}
