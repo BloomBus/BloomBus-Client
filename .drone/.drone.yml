@@ -23,7 +23,7 @@ steps:
       - docker pull jgibson02/bloombus-client
       - docker stop client
       - docker rm client
-      - docker run -d --name client -p 3000:80 -l traefik.frontend.rule=Host:client.conchita.xyz -l traefik.docker.network=web -l traefik.port=3000 nginxdemos/hello
+      - docker run -d --name client -p 3000:80 -l traefik.frontend.rule=Host:client.conchita.xyz -l traefik.docker.network=web -l traefik.port=3000 jgibson02/bloombus-client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
@@ -35,13 +35,17 @@ steps:
 
   - name: discord
     image: appleboy/drone-discord
-    secrets: [discord_webhook_id, discord_webhook_token]
-    message: |
-      {{ #success build.status }}
-        build {{ build.number }} succeeded. Good job.
-      {{ else }}
-        build {{ build.number }} failed. Fix me please.
-      {{ /success }}
+    settings:
+      webhook_id:
+        from_secret: discord_webhook_id
+      webhook_token:
+        from_secret: discord_webhook_token
+      message: |
+        {{ #success build.status }}
+          build {{ build.number }} succeeded. Good job.
+        {{ else }}
+          build {{ build.number }} failed. Fix me please.
+        {{ /success }}
 
 trigger:
   event:
