@@ -43,9 +43,8 @@ steps:
       message: >
         {{ success build.status }}
           build {{ build.number }} succeeded. Good job.
-        {{ else }}
+        {{ failure build.status }}
           build {{ build.number }} failed. Fix me please.
-        {{ /success }}
 
 trigger:
   event:
