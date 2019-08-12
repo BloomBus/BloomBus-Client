@@ -2,6 +2,7 @@
 FROM node:10.16.1-alpine as build-deps
 WORKDIR /usr/src/app
 COPY package.json ./
+COPY ~/.env.production.local ./
 RUN npm install
 COPY . ./
 RUN npm run build
