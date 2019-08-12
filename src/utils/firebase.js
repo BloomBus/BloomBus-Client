@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 
 const config = {
-  apiKey: process.env.REACT_APP_FIREBASE_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'bloombus-163620.firebaseapp.com',
   databaseURL: 'https://bloombus-163620.firebaseio.com',
   projectId: 'bloombus-163620',

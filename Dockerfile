@@ -2,10 +2,9 @@
 FROM node:10.16.1-alpine as build-deps
 WORKDIR /usr/src/app
 COPY package.json ./
-COPY ~/.env.production.local ./
 RUN npm install
 COPY . ./
-RUN npm run build
+RUN REACT_APP_FIREBASE_API_KEY=AIzaSyBZqS6DYdrw0ryNXF1KgdPe22wVXYwq2b8 REACT_APP_MAPSTYLE_URL=https://tileservergl.anhalt.xyz/styles/tweaked-bright/style.json npm run build
 
 # Stage 2 - the production environment
 FROM nginx:1.12-alpine
