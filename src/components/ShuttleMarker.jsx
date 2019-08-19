@@ -15,6 +15,10 @@ const ShuttleMarkerContainer = styled.div.attrs(props => ({
   display: flex;
   align-items: center;
   justify-content: center;
+
+  svg {
+    filter: drop-shadow(1px -1px 4px rgba(0, 0, 0, 0.7));
+  }
 `;
 
 class ShuttleMarker extends Component {
