@@ -1,37 +1,8 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-const StopBottomSheetContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  &::after {
-    width: 26px;
-    height: 4px;
-    border-radius: 2px;
-    position: absolute;
-    left: calc(50% - 13px);
-    top: 5px;
-    background-color: #dbdbdb;
-    content: '';
-  }
-`;
-
-const StopBottomSheetTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.4em;
-  margin-top: 1em;
-  text-transform: uppercase;
-  font-family: 'Product Sans';
-  font-weight: 600;
-`;
+import { BottomSheetTitle } from '../../utils/commonElements';
+import { StopBottomSheetContainer } from './StopBottomSheet-styled';
 
 class StopBottomSheet extends Component {
   render() {
@@ -50,7 +21,7 @@ class StopBottomSheet extends Component {
         }}
       >
         <StopBottomSheetContainer>
-          <StopBottomSheetTitle>{name}</StopBottomSheetTitle>
+          <BottomSheetTitle>{name}</BottomSheetTitle>
         </StopBottomSheetContainer>
       </SwipeableBottomSheet>
     );

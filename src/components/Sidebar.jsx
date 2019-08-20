@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
-import ETALabel from './ETALabel';
+import ETALabel from './ETALabel/ETALabel';
 
 const SidebarContainer = styled.div`
   box-sizing: border-box;

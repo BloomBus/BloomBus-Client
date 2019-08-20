@@ -16,7 +16,8 @@ import { StyledHeaderLogoLabel } from './Home-styled';
 
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
-import StopBottomSheet from '../StopBottomSheet';
+import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
+import StopBottomSheet from '../StopBottomSheet/StopBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
@@ -31,36 +32,26 @@ import LogoBusIcon from './LogoBusIcon';
 // CSS
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    shuttles: {},
+    stops: undefined,
+    selectedStop: '',
+    loops: undefined,
+    loopStops: undefined,
+    selectedLoop: '',
+    viewport: {
+      width: '100%',
+      height: '100%',
+      latitude: 41.007,
+      longitude: -76.451,
+      zoom: 14,
+      pitch: 0,
+      tilt: 0,
+    },
+    openBottomSheet: 'loops',
+  };
 
-    this.mapContainerRef = React.createRef();
-
-    this.state = {
-      shuttles: {},
-      stops: undefined,
-      loops: undefined,
-      loopStops: undefined,
-      loopKey: '',
-      viewport: {
-        width: '100%',
-        height: '100%',
-        latitude: 41.007,
-        longitude: -76.451,
-        zoom: 14,
-        pitch: 0,
-        tilt: 0,
-      },
-      openBottomSheet: 'loops',
-    };
-
-    this.onStopSelect = this.onStopSelect.bind(this);
-    this.onShuttleSelect = this.onShuttleSelect.bind(this);
-    this.onLoopSelect = this.onLoopSelect.bind(this);
-    this.onViewportChange = this.onViewportChange.bind(this);
-    this.onMapClick = this.onMapClick.bind(this);
-    this.onBottomSheetChange = this.onBottomSheetChange.bind(this);
-  }
+  mapContainerRef = React.createRef();
 
   componentDidMount() {
     const constantsRef = firebase.database().ref('constants');
@@ -80,7 +71,6 @@ class Home extends Component {
       const loops = loopsSnapshot.val().features;
       this.setState({
         loops,
-        loopKey: loops[0].properties.key,
       });
     });
 
@@ -108,7 +98,7 @@ class Home extends Component {
     });
   }
 
-  onStopSelect(stopKey) {
+  onStopSelect = (stopKey) => {
     const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedStop: stopKey,
@@ -122,14 +112,14 @@ class Home extends Component {
         transitionDuration: 200,
       },
     }));
-  }
+  };
 
-  onShuttleSelect(shuttleID) {
+  onShuttleSelect = (shuttleID) => {
     // skeleton
     this.setState({});
-  }
+  };
 
-  onLoopSelect(loopKey) {
+  onLoopSelect = (loopKey) => {
     const loop = getLoop(loopKey, this.state.loops);
     if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
@@ -149,11 +139,13 @@ class Home extends Component {
         transitionInterpolator: new FlyToInterpolator(),
         transitionDuration: 500,
       },
-      loopKey: loop.properties.key,
+      selectedLoop: loop,
+      selectedLoopStops: prevState.loopStops[loop.properties.key],
+      openBottomSheet: 'loop-stops',
     }));
-  }
+  };
 
-  onViewportChange(viewport) {
+  onViewportChange = (viewport) => {
     const newViewport = viewport;
     const { nwBound, seBound } = this.constants.mapOptions;
     // Clamp viewport bounds
@@ -169,30 +161,30 @@ class Home extends Component {
     }
 
     this.setState({ viewport: newViewport });
-  }
+  };
 
-  onMapClick(pointerEvent) {
+  onMapClick = (pointerEvent) => {
     this.setState(prevState => ({
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
       selectedStop: null,
     }));
-  }
+  };
 
-  onBottomSheetChange(isOpen) {
+  onBottomSheetChange = (isOpen) => {
     if (isOpen) return;
     this.setState({
       openBottomSheet: '',
     });
-  }
+  };
 
-  handleNewValue(shuttleSnapshot) {
+  handleNewValue = (shuttleSnapshot) => {
     this.setState(prevState => ({
       shuttles: {
         ...prevState.shuttles,
         [shuttleSnapshot.key]: shuttleSnapshot.val(),
       },
     }));
-  }
+  };
 
   render() {
     return this.state.loops && this.state.loopStops && this.state.stops ? (
@@ -234,8 +226,15 @@ class Home extends Component {
             onBottomSheetChange={this.onBottomSheetChange}
             loops={this.state.loops}
             stops={this.state.stops}
-            loopStops={this.state.loopStops}
             onLoopSelect={this.onLoopSelect}
+          />
+          <LoopStopsBottomSheet
+            open={this.state.openBottomSheet === 'loop-stops'}
+            onBottomSheetChange={this.onBottomSheetChange}
+            selectedLoop={this.state.selectedLoop}
+            selectedLoopStops={this.state.selectedLoopStops}
+            stops={this.state.stops}
+            onStopSelect={this.onStopSelect}
           />
           <StopBottomSheet
             open={this.state.openBottomSheet === 'stop'}

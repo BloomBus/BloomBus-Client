@@ -1,33 +1,15 @@
 import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import ETALabel from '../ETALabel';
-
 import {
   LoopsBottomSheetContainer,
   LoopListItem,
   LoopListItemLeftSide,
   LoopName,
-  LoopNextStop,
   LoopsBottomSheetTitle,
 } from './LoopsBottomSheet-styled';
-import NextStopIcon from './NextStopIcon';
 
 class LoopsBottomSheet extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.getRandomStopName = this.getRandomStopName.bind(this);
-  }
-
-  getRandomStopName(loop) {
-    if (!this.props.loopStops) return '';
-    const { key } = loop.properties;
-    const loopStops = this.props.loopStops[key];
-    const stopKey = loopStops[Math.floor(Math.random() * loopStops.length)];
-    return this.props.stops[stopKey].properties.name;
-  }
-
   render() {
     return (
       <SwipeableBottomSheet
@@ -52,12 +34,7 @@ class LoopsBottomSheet extends PureComponent {
             >
               <LoopListItemLeftSide>
                 <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
-                <LoopNextStop>
-                  <NextStopIcon />
-                  {this.getRandomStopName(loop)}
-                </LoopNextStop>
               </LoopListItemLeftSide>
-              <ETALabel number={3} />
             </LoopListItem>
           ))}
         </LoopsBottomSheetContainer>
@@ -68,7 +45,6 @@ class LoopsBottomSheet extends PureComponent {
 
 LoopsBottomSheet.defaultProps = {
   open: true,
-  loopStops: undefined,
 };
 
 export default LoopsBottomSheet;

@@ -1,11 +1,12 @@
 {
-  "extends": "airbnb",
+  "extends": ["react-app", "airbnb"],
   "rules": {
+    "max-len": ["warn", { "code": 120 }],
     "linebreak-style": "off",
     "react/destructuring-assignment": [false],
     "react/prefer-stateless-function": "off",
     "react/prop-types": "off",
-    "no-unused-vars": ["error", { "args": "none" }],
+    "no-unused-vars": ["warn", { "args": "none" }],
     "import/prefer-default-export": "off",
     "import/order": "off"
   },
