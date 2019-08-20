@@ -10,7 +10,7 @@ import NextStopIcon from '../NextStopIcon/NextStopIcon';
 class LoopsBottomSheet extends PureComponent {
   render() {
     const {
-      open, selectedLoopStops, stops, onStopSelect, onBottomSheetChange,
+      open, selectedLoop, selectedLoopStops, stops, onStopSelect, onBottomSheetChange,
     } = this.props;
     let eta = 1;
     return (
@@ -27,7 +27,7 @@ class LoopsBottomSheet extends PureComponent {
         }}
       >
         <BottomSheetContainer>
-          <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>
+          <BottomSheetTitle>{selectedLoop.properties && selectedLoop.properties.name}</BottomSheetTitle>
           {selectedLoopStops.map((stopKey) => {
             const stop = stops[stopKey];
             eta += Math.ceil(Math.random() * 3);

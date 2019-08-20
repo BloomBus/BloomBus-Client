@@ -36,7 +36,7 @@ svg {
 }
 
 .mapboxgl-marker.shuttle-marker {
-  z-index: 200;
+  z-index: 0;
 }
 .mapboxgl-marker.shuttle-marker--not-interacting {
   transition: top 1s linear, left 1s linear;

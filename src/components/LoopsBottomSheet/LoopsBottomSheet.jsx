@@ -1,13 +1,8 @@
 import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import {
-  LoopsBottomSheetContainer,
-  LoopListItem,
-  LoopListItemLeftSide,
-  LoopName,
-  LoopsBottomSheetTitle,
-} from './LoopsBottomSheet-styled';
+import { LoopListItem, LoopListItemLeftSide, LoopName } from './LoopsBottomSheet-styled';
+import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
 
 class LoopsBottomSheet extends PureComponent {
   render() {
@@ -24,8 +19,8 @@ class LoopsBottomSheet extends PureComponent {
           boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
         }}
       >
-        <LoopsBottomSheetContainer>
-          <LoopsBottomSheetTitle>Shuttle Loops</LoopsBottomSheetTitle>
+        <BottomSheetContainer>
+          <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>
           {this.props.loops.map(loop => (
             <LoopListItem
               key={loop.properties.name}
@@ -37,7 +32,7 @@ class LoopsBottomSheet extends PureComponent {
               </LoopListItemLeftSide>
             </LoopListItem>
           ))}
-        </LoopsBottomSheetContainer>
+        </BottomSheetContainer>
       </SwipeableBottomSheet>
     );
   }
