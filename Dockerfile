@@ -10,4 +10,5 @@ RUN REACT_APP_FIREBASE_API_KEY=AIzaSyBZqS6DYdrw0ryNXF1KgdPe22wVXYwq2b8 REACT_APP
 FROM nginx:1.12-alpine
 COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
+EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
