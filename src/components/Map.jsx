@@ -90,6 +90,8 @@ class Map extends Component {
           onClick={this.props.onMapClick}
           minZoom={minZoom}
           maxZoom={maxZoom}
+          width="100%"
+          height="100%"
         >
           <GeolocateControl
             style={{
