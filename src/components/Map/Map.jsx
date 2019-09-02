@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
+import CustomMapController from './CustomMapController';
 
 // App components
 import ReactMapGL, { GeolocateControl } from 'react-map-gl';
-import StopMarker from './StopMarker';
-import ShuttleMarker from './ShuttleMarker';
+import StopMarker from '../StopMarker';
+import ShuttleMarker from '../ShuttleMarker';
 
 // Third-party components (buttons, icons, etc.)
 
@@ -85,6 +86,7 @@ class Map extends Component {
         <ReactMapGL
           {...this.props.viewport}
           mapStyle={this.state.mapStyle}
+          controller={new CustomMapController()}
           onInteractionStateChange={this.onInteractionStateChange}
           onViewportChange={this.props.onViewportChange}
           onClick={this.props.onMapClick}
