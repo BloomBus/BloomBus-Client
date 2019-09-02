@@ -15,33 +15,27 @@ import HandleVerticalIcon from 'calcite-ui-icons-react/HandleVerticalIcon';
 // JSON
 
 class OverflowMenu extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    open: false,
+  };
 
-    this.state = {
-      open: false,
-    };
-    this.showMenu = this.showMenu.bind(this);
-    this.closeMenu = this.closeMenu.bind(this);
-  }
-
-  showMenu() {
+  toggleMenu = () => {
     this.setState(prevState => ({
       open: !prevState.open,
     }));
-  }
+  };
 
-  closeMenu() {
+  closeMenu = () => {
     this.setState({
       open: false,
     });
-  }
+  };
 
   render() {
     return (
       <OverflowMenuContainer>
         <Popover
-          targetEl={<HandleVerticalIcon onClick={this.showMenu} />}
+          targetEl={<HandleVerticalIcon onClick={this.toggleMenu} />}
           open={this.state.open}
           onRequestClose={this.closeMenu}
           targetContainerStyles={{
