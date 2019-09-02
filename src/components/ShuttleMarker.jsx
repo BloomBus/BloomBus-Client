@@ -22,24 +22,21 @@ const ShuttleMarkerContainer = styled.div.attrs(props => ({
 `;
 
 class ShuttleMarker extends Component {
-  onClick(pointerEvent) {}
-
   render() {
-    const { shuttle, loops } = this.props;
+    const {
+      shuttleKey, shuttle, loops, isInteracting, onShuttleSelect,
+    } = this.props;
     const [longitude, latitude] = shuttle.geometry.coordinates;
-    const { bearing } = shuttle.properties;
-    const fill = TinyColor(getLoop(shuttle.properties.loopKey, loops).properties.color);
+    const { bearing, loopKey } = shuttle.properties;
+    const fill = TinyColor(getLoop(loopKey, loops).properties.color);
     const darker = fill.darken(30);
-
     return (
       <Marker
         longitude={longitude}
         latitude={latitude}
-        captureClick
-        onClick={this.onClick}
-        className={`shuttle-marker ${this.props.isInteracting ? '' : 'shuttle-marker--not-interacting'}`}
+        className={`shuttle-marker ${isInteracting ? '' : 'shuttle-marker--not-interacting'}`}
       >
-        <ShuttleMarkerContainer bearing={bearing}>
+        <ShuttleMarkerContainer bearing={bearing} onClick={() => onShuttleSelect(shuttleKey)}>
           <svg viewBox="0 0 42 42" height="40" width="40">
             <path
               fill={fill.toHex8String()}

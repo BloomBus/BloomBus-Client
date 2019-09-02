@@ -30,16 +30,10 @@ const StopMarkerLayer = React.memo(props => Object.keys(props.stops).map((stopKe
 }));
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      mapStyle: null,
-      isInteracting: false,
-    };
-
-    this.onInteractionStateChange = this.onInteractionStateChange.bind(this);
-  }
+  state = {
+    mapStyle: null,
+    isInteracting: false,
+  };
 
   componentDidMount() {
     fetch(process.env.REACT_APP_MAPSTYLE_URL)
@@ -72,12 +66,12 @@ class Map extends Component {
       });
   }
 
-  onInteractionStateChange(interactionState) {
+  onInteractionStateChange = (interactionState) => {
     const { isPanning, isDragging, isZooming } = interactionState;
     this.setState({
       isInteracting: isPanning || isDragging || isZooming,
     });
-  }
+  };
 
   render() {
     const { maxZoom, minZoom } = this.props.mapOptions;
@@ -116,8 +110,10 @@ class Map extends Component {
               <ShuttleMarker
                 shuttle={shuttle}
                 key={shuttleKey}
+                shuttleKey={shuttleKey} // must explicitly pass as separate prop
                 loops={this.props.loops}
                 isInteracting={this.state.isInteracting}
+                onShuttleSelect={this.props.onShuttleSelect}
               />
             );
           })}

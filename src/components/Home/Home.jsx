@@ -17,7 +17,8 @@ import { StyledHeaderLogoLabel } from './Home-styled';
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
 import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
-import StopBottomSheet from '../StopBottomSheet/StopBottomSheet';
+import StopBottomSheet from '../StopBottomSheet';
+import ShuttleBottomSheet from '../ShuttleBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
 import AppHeader from '../AppHeader';
@@ -114,9 +115,37 @@ class Home extends Component {
     }));
   };
 
-  onShuttleSelect = (shuttleID) => {
-    // skeleton
-    this.setState({});
+  onStopSelect = (stopKey) => {
+    const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
+    this.setState(prevState => ({
+      selectedStop: stopKey,
+      openBottomSheet: 'stop',
+      viewport: {
+        ...prevState.viewport,
+        longitude,
+        latitude,
+        zoom: 16,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 200,
+      },
+    }));
+  };
+
+  onShuttleSelect = (shuttleKey) => {
+    console.log(shuttleKey);
+    const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
+    this.setState(prevState => ({
+      selectedShuttle: shuttleKey,
+      openBottomSheet: 'shuttle',
+      viewport: {
+        ...prevState.viewport,
+        longitude,
+        latitude,
+        zoom: 16,
+        transitionInterpolator: new LinearInterpolator(),
+        transitionDuration: 200,
+      },
+    }));
   };
 
   onLoopSelect = (loopKey) => {
@@ -210,6 +239,7 @@ class Home extends Component {
           onViewportChange={this.onViewportChange}
           onMapClick={this.onMapClick}
           onStopSelect={this.onStopSelect}
+          onShuttleSelect={this.onShuttleSelect}
           viewport={this.state.viewport}
         />
         <BrowserView>
@@ -240,6 +270,11 @@ class Home extends Component {
             open={this.state.openBottomSheet === 'stop'}
             onBottomSheetChange={this.onBottomSheetChange}
             stop={this.state.stops[this.state.selectedStop]}
+          />
+          <ShuttleBottomSheet
+            open={this.state.openBottomSheet === 'shuttle'}
+            onBottomSheetChange={this.onBottomSheetChange}
+            shuttle={this.state.shuttles[this.state.selectedShuttle]}
           />
         </MobileView>
       </>
