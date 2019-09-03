@@ -46,9 +46,15 @@ class OverflowMenu extends Component {
             <MenuItem onClick={() => window.open('https://intranet.bloomu.edu/documents/police/BusSchedule.pdf')}>
               Shuttle Schedule
             </MenuItem>
-            <MenuItem onClick={() => this.props.history.push('/alerts')}>Status Alerts</MenuItem>
-            <MenuItem onClick={() => this.props.history.push('/feedback')}>Feedback</MenuItem>
-            <MenuItem onClick={() => this.props.history.push('/issue')}>Report an Issue</MenuItem>
+            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/alerts')}>
+              Status Alerts
+            </MenuItem>
+            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/feedback')}>
+              Feedback
+            </MenuItem>
+            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/issue')}>
+              Report an Issue
+            </MenuItem>
             <MenuItem onClick={() => this.props.history.push('/about')}>About</MenuItem>
           </StyledMenu>
         </Popover>

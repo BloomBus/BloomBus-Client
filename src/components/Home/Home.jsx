@@ -34,12 +34,13 @@ import LogoBusIcon from './LogoBusIcon';
 
 class Home extends Component {
   state = {
-    shuttles: {},
-    stops: undefined,
-    selectedStop: '',
     loops: undefined,
+    stops: undefined,
+    shuttles: undefined,
     loopStops: undefined,
     selectedLoop: '',
+    selectedStop: '',
+    selectedShuttle: '',
     viewport: {
       width: '100%',
       height: '100%',
@@ -132,7 +133,6 @@ class Home extends Component {
   };
 
   onShuttleSelect = (shuttleKey) => {
-    console.log(shuttleKey);
     const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedShuttle: shuttleKey,
@@ -216,7 +216,7 @@ class Home extends Component {
   };
 
   render() {
-    return this.state.loops && this.state.loopStops && this.state.stops ? (
+    return this.state.loops && this.state.loopStops && this.state.stops && this.state.shuttles ? (
       <>
         <AppHeader>
           <LeftHeader />

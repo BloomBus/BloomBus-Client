@@ -20,15 +20,15 @@ class App extends Component {
 
   render() {
     return (
-      <CalciteThemeProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <CalciteThemeProvider>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
             <Redirect to="/" />
           </Switch>
-        </BrowserRouter>
-      </CalciteThemeProvider>
+        </CalciteThemeProvider>
+      </BrowserRouter>
     );
   }
 }
