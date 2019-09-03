@@ -195,7 +195,9 @@ class Home extends Component {
   onMapClick = (pointerEvent) => {
     this.setState(prevState => ({
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
-      selectedStop: null,
+      selectedStop: '',
+      selectedLoop: '',
+      selectedShuttle: '',
     }));
   };
 
@@ -207,12 +209,23 @@ class Home extends Component {
   };
 
   handleNewValue = (shuttleSnapshot) => {
+    const shuttle = shuttleSnapshot.val();
     this.setState(prevState => ({
       shuttles: {
         ...prevState.shuttles,
-        [shuttleSnapshot.key]: shuttleSnapshot.val(),
+        [shuttleSnapshot.key]: shuttle,
       },
     }));
+    // Track selected shuttle
+    if (this.state.selectedShuttle) {
+      this.setState((prevState) => {
+        const newViewport = prevState.viewport;
+        const [longitude, latitude] = shuttle.geometry.coordinates;
+        newViewport.longitude = longitude;
+        newViewport.latitude = latitude;
+        return { viewport: newViewport };
+      });
+    }
   };
 
   render() {
