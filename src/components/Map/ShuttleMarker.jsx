@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 import TinyColor from '@ctrl/tinycolor';
 
-import { getLoop } from '../utils/functions';
+import { getLoop } from '../../utils/functions';
 
 const ShuttleMarkerContainer = styled.div.attrs(props => ({
   style: {

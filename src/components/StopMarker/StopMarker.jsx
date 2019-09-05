@@ -1,27 +1,13 @@
 import React, { PureComponent } from 'react';
-import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 
-const StopMarkerContainer = styled.div.attrs(props => ({
-  style: {
-    width: props.selected ? '66px' : '42px',
-    height: props.selected ? '66px' : '42px',
-  },
-}))`
-  transform: translate(-50%, -70%);
-  transition-duration: 0.1s;
-  transition-timing-function: ease-out;
-  transition-property: width, height, top, left;
-
-  svg circle,
-  svg path {
-    transition: fill 0.1s linear;
-  }
-`;
+import { StopMarkerContainer } from './StopMarker-styled';
 
 class StopMarker extends PureComponent {
   render() {
-    const { stop, selected, onStopSelect } = this.props;
+    const {
+      stop, selected, disabled, onStopSelect,
+    } = this.props;
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
@@ -30,7 +16,7 @@ class StopMarker extends PureComponent {
         latitude={latitude}
         className={`stop-marker ${selected ? 'stop-marker--selected' : ''}`}
       >
-        <StopMarkerContainer selected={selected} onClick={() => onStopSelect(stop.properties.stopKey)}>
+        <StopMarkerContainer selected={selected} onClick={() => !disabled && onStopSelect(stop.properties.stopKey)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fillRule="evenodd"
@@ -39,6 +25,7 @@ class StopMarker extends PureComponent {
             strokeMiterlimit="1.5"
             clipRule="evenodd"
             viewBox="0 0 93 93"
+            style={disabled ? { filter: 'opacity(0.3) saturate(0.75)' } : null}
           >
             <ellipse cx="46.08" cy="83.54" fill="url(#_Radial1)" rx="32.32" ry="8.62" />
             <circle cx="46.05" cy="80.25" r="5.34" fill={fill} />
