@@ -40,6 +40,7 @@ class Home extends Component {
     loopStops: undefined,
     selectedLoop: '',
     selectedStop: '',
+    selectedLoopStops: [],
     selectedShuttle: '',
     viewport: {
       width: '100%',
@@ -168,8 +169,8 @@ class Home extends Component {
         transitionInterpolator: new FlyToInterpolator(),
         transitionDuration: 500,
       },
-      selectedLoop: loop,
-      selectedLoopStops: prevState.loopStops[loop.properties.key],
+      selectedLoop: loopKey,
+      selectedLoopStops: prevState.loopStops[loopKey],
       openBottomSheet: 'loop-stops',
     }));
   };
@@ -197,6 +198,7 @@ class Home extends Component {
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
       selectedStop: '',
       selectedLoop: '',
+      selectedLoopStops: [],
       selectedShuttle: '',
     }));
   };
@@ -247,6 +249,7 @@ class Home extends Component {
           stops={this.state.stops}
           shuttles={this.state.shuttles}
           selectedStop={this.state.selectedStop}
+          selectedLoopStops={this.state.selectedLoopStops}
           updateMapDimensions={this.updateMapDimensions}
           mapOptions={this.constants.mapOptions}
           onViewportChange={this.onViewportChange}

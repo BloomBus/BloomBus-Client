@@ -6,23 +6,26 @@ import { fromJS } from 'immutable';
 import CustomMapController from './CustomMapController';
 
 // App components
-import ReactMapGL, { GeolocateControl } from 'react-map-gl';
 import StopMarker from '../StopMarker';
-import ShuttleMarker from '../ShuttleMarker';
+import ShuttleMarker from './ShuttleMarker';
 
 // Third-party components (buttons, icons, etc.)
+import ReactMapGL, { GeolocateControl } from 'react-map-gl';
 
 // JSON
 
 // CSS
 
 const StopMarkerLayer = React.memo(props => Object.keys(props.stops).map((stopKey) => {
+  const stop = props.stops[stopKey];
   const selected = props.selectedStop === stopKey;
+  const disabled = props.selectedLoopStops.length > 0 && !props.selectedLoopStops.includes(stopKey);
   return (
     <StopMarker
       key={stopKey}
-      stop={props.stops[stopKey]}
+      stop={stop}
       selected={selected}
+      disabled={disabled}
       onStopSelect={props.onStopSelect}
       isInteracting={props.isInteracting}
     />
@@ -101,6 +104,7 @@ class Map extends Component {
           <StopMarkerLayer
             stops={this.props.stops}
             selectedStop={this.props.selectedStop}
+            selectedLoopStops={this.props.selectedLoopStops}
             onStopSelect={this.props.onStopSelect}
             isInteracting={this.state.isInteracting}
           />
