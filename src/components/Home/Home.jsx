@@ -231,7 +231,7 @@ class Home extends Component {
   };
 
   render() {
-    return this.state.loops && this.state.loopStops && this.state.stops && this.state.shuttles ? (
+    return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
         <AppHeader>
           <LeftHeader />
