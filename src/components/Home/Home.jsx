@@ -231,7 +231,7 @@ class Home extends Component {
   };
 
   render() {
-    return this.state.loops && this.state.loopStops && this.state.stops && this.state.shuttles ? (
+    return this.state.loops && this.state.loopStops && this.state.stops ? (
       <>
         <AppHeader>
           <LeftHeader />
@@ -287,11 +287,13 @@ class Home extends Component {
             onBottomSheetChange={this.onBottomSheetChange}
             stop={this.state.stops[this.state.selectedStop]}
           />
-          <ShuttleBottomSheet
-            open={this.state.openBottomSheet === 'shuttle'}
-            onBottomSheetChange={this.onBottomSheetChange}
-            shuttle={this.state.shuttles[this.state.selectedShuttle]}
-          />
+          {this.state.selectedShuttle && (
+            <ShuttleBottomSheet
+              open={this.state.openBottomSheet === 'shuttle'}
+              onBottomSheetChange={this.onBottomSheetChange}
+              shuttle={this.state.shuttles[this.state.selectedShuttle]}
+            />
+          )}
         </MobileView>
       </>
     ) : null;
