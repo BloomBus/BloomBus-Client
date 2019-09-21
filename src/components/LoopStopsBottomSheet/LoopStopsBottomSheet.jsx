@@ -1,8 +1,5 @@
 import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
-
-import ETALabel from '../ETALabel/ETALabel';
-
 import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
 import { LoopStopsListItem, LoopStopsListItemLeftSide, LoopStopsName } from './LoopStopsBottomSheet-styled';
 import NextStopIcon from '../NextStopIcon/NextStopIcon';
@@ -37,6 +34,7 @@ class LoopsBottomSheet extends PureComponent {
                   <NextStopIcon />
                   <LoopStopsName color={stop.properties.color}>{stop.properties.name}</LoopStopsName>
                 </LoopStopsListItemLeftSide>
+                {/* need to readd import ETALabel from '../ETALabel/ETALabel'; */}
                 {/* <ETALabel number={eta} /> */}
               </LoopStopsListItem>
             );
