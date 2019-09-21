@@ -37,7 +37,7 @@ class LoopsBottomSheet extends PureComponent {
                   <NextStopIcon />
                   <LoopStopsName color={stop.properties.color}>{stop.properties.name}</LoopStopsName>
                 </LoopStopsListItemLeftSide>
-                <ETALabel number={eta} />
+                {/* <ETALabel number={eta} /> */}
               </LoopStopsListItem>
             );
           })}
