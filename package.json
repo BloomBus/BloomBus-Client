@@ -16,7 +16,7 @@
     "logrocket-react": "^3.0.0",
     "mapbox-gl": "^1.1.1",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
+    "react": "^16.10.2",
     "react-device-detect": "^1.6.5",
     "react-dom": "^16.8.6",
     "react-map-gl": "^5.0.10",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@types/react-map-gl": "^5.0.0",
     "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",

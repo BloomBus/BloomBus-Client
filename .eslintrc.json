@@ -1,5 +1,5 @@
 {
-  "extends": ["react-app", "airbnb"],
+  "extends": ["react-app", "prettier"],
   "rules": {
     "max-len": ["warn", { "code": 120 }],
     "linebreak-style": "off",

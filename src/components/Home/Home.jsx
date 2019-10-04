@@ -49,51 +49,51 @@ class Home extends Component {
       longitude: -76.451,
       zoom: 14,
       pitch: 0,
-      tilt: 0,
+      tilt: 0
     },
-    openBottomSheet: 'loops',
+    openBottomSheet: 'loops'
   };
 
   mapContainerRef = React.createRef();
 
   componentDidMount() {
     const constantsRef = firebase.database().ref('constants');
-    constantsRef.once('value', (constantsSnapshot) => {
+    constantsRef.once('value', constantsSnapshot => {
       this.constants = constantsSnapshot.val();
     });
 
     const stopsRef = firebase.database().ref('stops');
-    stopsRef.once('value', (stopsSnapshot) => {
+    stopsRef.once('value', stopsSnapshot => {
       this.setState({
-        stops: stopsSnapshot.val(),
+        stops: stopsSnapshot.val()
       });
     });
 
     const loopsRef = firebase.database().ref('loops');
-    loopsRef.once('value', (loopsSnapshot) => {
+    loopsRef.once('value', loopsSnapshot => {
       const loops = loopsSnapshot.val().features;
       this.setState({
-        loops,
+        loops
       });
     });
 
     const loopStopsRef = firebase.database().ref('loop-stops');
-    loopStopsRef.once('value', (loopStopsSnapshot) => {
+    loopStopsRef.once('value', loopStopsSnapshot => {
       this.setState({
-        loopStops: loopStopsSnapshot.val(),
+        loopStops: loopStopsSnapshot.val()
       });
     });
 
     const shuttlesRef = firebase.database().ref('shuttles');
 
-    shuttlesRef.on('value', (shuttlesSnapshot) => {
-      shuttlesSnapshot.forEach((shuttleSnapshot) => {
+    shuttlesRef.on('value', shuttlesSnapshot => {
+      shuttlesSnapshot.forEach(shuttleSnapshot => {
         this.handleNewValue(shuttleSnapshot);
       });
     });
 
-    shuttlesRef.on('child_removed', (shuttleSnapshot) => {
-      this.setState((prevState) => {
+    shuttlesRef.on('child_removed', shuttleSnapshot => {
+      this.setState(prevState => {
         const tempState = prevState;
         delete tempState.shuttles[shuttleSnapshot.key];
         return tempState;
@@ -101,7 +101,7 @@ class Home extends Component {
     });
   }
 
-  onStopSelect = (stopKey) => {
+  onStopSelect = stopKey => {
     const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedStop: stopKey,
@@ -112,28 +112,13 @@ class Home extends Component {
         latitude,
         zoom: 16,
         transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200,
-      },
+        transitionDuration: 200
+      }
     }));
   };
 
-  onStopSelect = (stopKey) => {
-    const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
-    this.setState(prevState => ({
-      selectedStop: stopKey,
-      openBottomSheet: 'stop',
-      viewport: {
-        ...prevState.viewport,
-        longitude,
-        latitude,
-        zoom: 16,
-        transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200,
-      },
-    }));
-  };
-
-  onShuttleSelect = (shuttleKey) => {
+  onShuttleSelect = shuttleKey => {
+    debugger;
     const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedShuttle: shuttleKey,
@@ -144,12 +129,12 @@ class Home extends Component {
         latitude,
         zoom: 16,
         transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200,
-      },
+        transitionDuration: 200
+      }
     }));
   };
 
-  onLoopSelect = (loopKey) => {
+  onLoopSelect = loopKey => {
     const loop = getLoop(loopKey, this.state.loops);
     if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
@@ -157,7 +142,7 @@ class Home extends Component {
     // construct a viewport instance from the current state
     const newViewport = new WebMercatorViewport(this.state.viewport);
     const { longitude, latitude, zoom } = newViewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
-      padding: 40,
+      padding: 40
     });
 
     this.setState(prevState => ({
@@ -167,15 +152,15 @@ class Home extends Component {
         latitude,
         zoom,
         transitionInterpolator: new FlyToInterpolator(),
-        transitionDuration: 500,
+        transitionDuration: 500
       },
       selectedLoop: loopKey,
       selectedLoopStops: prevState.loopStops[loopKey],
-      openBottomSheet: 'loop-stops',
+      openBottomSheet: 'loop-stops'
     }));
   };
 
-  onViewportChange = (viewport) => {
+  onViewportChange = viewport => {
     const newViewport = viewport;
     const { nwBound, seBound } = this.constants.mapOptions;
     // Clamp viewport bounds
@@ -193,38 +178,44 @@ class Home extends Component {
     this.setState({ viewport: newViewport });
   };
 
-  onMapClick = (pointerEvent) => {
+  onMapClick = pointerEvent => {
     this.setState(prevState => ({
       openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
       selectedStop: '',
       selectedLoop: '',
       selectedLoopStops: [],
-      selectedShuttle: '',
+      selectedShuttle: ''
     }));
   };
 
-  onBottomSheetChange = (isOpen) => {
+  onBottomSheetChange = isOpen => {
     if (isOpen) return;
     this.setState({
-      openBottomSheet: '',
+      openBottomSheet: ''
     });
   };
 
-  handleNewValue = (shuttleSnapshot) => {
+  handleNewValue = shuttleSnapshot => {
     const shuttle = shuttleSnapshot.val();
     this.setState(prevState => ({
       shuttles: {
         ...prevState.shuttles,
-        [shuttleSnapshot.key]: shuttle,
-      },
+        [shuttleSnapshot.key]: shuttle
+      }
     }));
     // Track selected shuttle
     if (this.state.selectedShuttle) {
-      this.setState((prevState) => {
-        const newViewport = prevState.viewport;
-        const [longitude, latitude] = shuttle.geometry.coordinates;
-        newViewport.longitude = longitude;
-        newViewport.latitude = latitude;
+      // Get selected shuttle by its UUID
+      const selectedShuttle = this.state.shuttles[this.state.selectedShuttle];
+      this.setState(prevState => {
+        const [longitude, latitude] = selectedShuttle.geometry.coordinates;
+        const newViewport = {
+          ...prevState.viewport,
+          longitude,
+          latitude,
+          transitionDuration: 1000,
+          transitionInterpolator: new LinearInterpolator()
+        };
         return { viewport: newViewport };
       });
     }
