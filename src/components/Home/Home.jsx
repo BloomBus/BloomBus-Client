@@ -263,6 +263,7 @@ class Home extends Component {
             onBottomSheetChange={this.onBottomSheetChange}
             loops={this.state.loops}
             stops={this.state.stops}
+            shuttles={this.state.shuttles}
             onLoopSelect={this.onLoopSelect}
           />
           <LoopStopsBottomSheet

@@ -1,37 +1,43 @@
 import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import { LoopListItem, LoopListItemLeftSide, LoopName } from './LoopsBottomSheet-styled';
+import { LoopListItem, LoopListItemLeftSide, LoopListItemRightSide, LoopName } from './LoopsBottomSheet-styled';
 import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+
+import OfflineIcon from 'calcite-ui-icons-react/OfflineIcon';
 
 class LoopsBottomSheet extends PureComponent {
   render() {
+    const { open, loops, shuttles, onBottomSheetChange, onLoopSelect } = this.props;
     return (
       <SwipeableBottomSheet
-        open={this.props.open}
-        onChange={this.props.onBottomSheetChange}
+        open={open}
+        onChange={onBottomSheetChange}
         overlay={false}
         topShadow={false}
         shadowTip={false}
         bodyStyle={{
           borderTopLeftRadius: '1.5rem',
           borderTopRightRadius: '1.5rem',
-          boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
+          boxShadow: open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none'
         }}
       >
         <BottomSheetContainer>
           <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>
-          {this.props.loops.map(loop => (
-            <LoopListItem
-              key={loop.properties.name}
-              tabIndex="0"
-              onClick={() => this.props.onLoopSelect(loop.properties.key)}
-            >
-              <LoopListItemLeftSide>
-                <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
-              </LoopListItemLeftSide>
-            </LoopListItem>
-          ))}
+          {loops.map(loop => {
+            const noShuttlesAvailable =
+              shuttles &&
+              Object.values(shuttles).filter(shuttle => shuttle.properties.loopKey === loop.properties.key).length ===
+                0;
+            return (
+              <LoopListItem key={loop.properties.name} tabIndex="0" onClick={() => onLoopSelect(loop.properties.key)}>
+                <LoopListItemLeftSide>
+                  <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
+                </LoopListItemLeftSide>
+                <LoopListItemRightSide>{noShuttlesAvailable ? <OfflineIcon size={20} /> : null}</LoopListItemRightSide>
+              </LoopListItem>
+            );
+          })}
         </BottomSheetContainer>
       </SwipeableBottomSheet>
     );
@@ -39,7 +45,7 @@ class LoopsBottomSheet extends PureComponent {
 }
 
 LoopsBottomSheet.defaultProps = {
-  open: true,
+  open: true
 };
 
 export default LoopsBottomSheet;

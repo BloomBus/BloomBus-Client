@@ -8,6 +8,7 @@ export const BottomSheetContainer = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 500;
+  font-family: ${props => props.theme.type.avenirFamily};
 
   &::after {
     width: 50px;
@@ -28,6 +29,6 @@ export const BottomSheetTitle = styled.div`
   height: 2.4em;
   margin-top: 1em;
   text-transform: uppercase;
-  font-family: 'Product Sans';
+  font-family: ${props => props.theme.type.avenirFamily};
   font-weight: 600;
 `;

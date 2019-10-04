@@ -41,3 +41,18 @@ svg {
 .mapboxgl-marker.shuttle-marker--not-interacting {
   transition: top 1s linear, left 1s linear;
 }
+
+@font-face {
+  font-family: 'Gangster Grotesk Regular';
+  src: local('Gangster Grotesk Regular'), url(./fonts/GangsterGrotesk-Regular.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gangster Grotesk Light';
+  src: local('Gangster Grotesk Light'), url(./fonts/GangsterGrotesk-Light.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gangster Grotesk Bold';
+  src: local('Gangster Grotesk Bold'), url(./fonts/GangsterGrotesk-Bold.otf) format('opentype');
+}

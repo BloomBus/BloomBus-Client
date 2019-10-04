@@ -4,11 +4,9 @@ import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElemen
 import { LoopStopsListItem, LoopStopsListItemLeftSide, LoopStopsName } from './LoopStopsBottomSheet-styled';
 import NextStopIcon from '../NextStopIcon/NextStopIcon';
 
-class LoopsBottomSheet extends PureComponent {
+class LoopStopsBottomSheet extends PureComponent {
   render() {
-    const {
-      open, selectedLoop, selectedLoopStops, stops, onStopSelect, onBottomSheetChange,
-    } = this.props;
+    const { open, selectedLoop, selectedLoopStops, stops, onStopSelect, onBottomSheetChange } = this.props;
     let eta = 1;
     return (
       <SwipeableBottomSheet
@@ -20,12 +18,12 @@ class LoopsBottomSheet extends PureComponent {
         bodyStyle={{
           borderTopLeftRadius: '1.5rem',
           borderTopRightRadius: '1.5rem',
-          boxShadow: open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
+          boxShadow: open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none'
         }}
       >
         <BottomSheetContainer>
-          <BottomSheetTitle>{selectedLoop.properties && selectedLoop.properties.name}</BottomSheetTitle>
-          {selectedLoopStops.map((stopKey) => {
+          <BottomSheetTitle>{selectedLoop}</BottomSheetTitle>
+          {selectedLoopStops.map(stopKey => {
             const stop = stops[stopKey];
             eta += Math.ceil(Math.random() * 3);
             return (
@@ -45,9 +43,9 @@ class LoopsBottomSheet extends PureComponent {
   }
 }
 
-LoopsBottomSheet.defaultProps = {
+LoopStopsBottomSheet.defaultProps = {
   open: true,
-  selectedLoopStops: [],
+  selectedLoopStops: []
 };
 
-export default LoopsBottomSheet;
+export default LoopStopsBottomSheet;

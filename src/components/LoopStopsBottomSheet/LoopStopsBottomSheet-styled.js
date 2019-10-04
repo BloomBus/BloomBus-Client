@@ -25,6 +25,7 @@ export const LoopStopsListItemLeftSide = styled.div`
 `;
 
 export const LoopStopsName = styled.span`
+  font-family: ${props => props.theme.type.avenirFamily};
   font-size: 1.3em;
   font-weight: 600;
   align-self: flex-start;

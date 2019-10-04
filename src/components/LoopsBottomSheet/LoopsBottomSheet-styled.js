@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const LoopsBottomSheetContainer = styled.div`
+export const LoopsBottomSheetContainer = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -20,31 +20,39 @@ const LoopsBottomSheetContainer = styled.div`
   }
 `;
 
-const LoopListItem = styled.button`
+export const LoopListItem = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
 
+  font-family: ${props => props.theme.type.avenirFamily};
+  
   background-color: #ffffff;
   outline: none;
   border: none;
   border-top: 2px solid #f1f1f1;
   padding: 0.85em;
-  font-family: 'Product Sans';
 
   &:active {
     background-color: #f1f1f1;
   }
 `;
 
-const LoopListItemLeftSide = styled.div`
+export const LoopListItemLeftSide = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
 
-const LoopName = styled.span`
+export const LoopListItemRightSide = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+`;
+
+export const LoopName = styled.span`
   font-size: 1.3em;
   font-weight: 600;
   align-self: flex-start;
@@ -52,7 +60,7 @@ const LoopName = styled.span`
   color: ${props => props.color || 'inherit'};
 `;
 
-const LoopNextStop = styled.span`
+export const LoopNextStop = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -61,28 +69,17 @@ const LoopNextStop = styled.span`
   margin-top: 0.1em;
 `;
 
-const LoopsBottomSheetTitle = styled.div`
+export const LoopsBottomSheetTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 2.4em;
   margin-top: 1em;
   text-transform: uppercase;
-  font-family: 'Product Sans';
   font-weight: 600;
 `;
 
-const NextStopSVG = styled.svg`
+export const NextStopSVG = styled.svg`
   height: 1em;
   margin-right: 0.2em;
 `;
-
-export {
-  LoopsBottomSheetContainer,
-  LoopListItem,
-  LoopListItemLeftSide,
-  LoopName,
-  LoopNextStop,
-  LoopsBottomSheetTitle,
-  NextStopSVG,
-};
