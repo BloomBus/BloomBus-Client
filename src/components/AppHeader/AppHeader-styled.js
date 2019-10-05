@@ -9,13 +9,10 @@ export const StyledHeader = styled.header`
   height: 50px;
   font-size: 1.3em;
   line-height: 1.7em;
-  font-weight: bold;
-  font-family: 'Product Sans';
-  color: #000;
+  font-weight: 600;
+  color: ${props => props.theme.palette.darkestGray};
 
-  & > svg {
-    position: relative;
-    top: -0.1em;
+  & svg {
     margin-left: 0.2em;
   }
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
 import { LoopListItem, LoopListItemLeftSide, LoopListItemRightSide, LoopName } from './LoopsBottomSheet-styled';
-import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
 
 import OfflineIcon from 'calcite-ui-icons-react/OfflineIcon';
 
@@ -16,11 +16,7 @@ class LoopsBottomSheet extends PureComponent {
         overlay={false}
         topShadow={false}
         shadowTip={false}
-        bodyStyle={{
-          borderTopLeftRadius: '1.5rem',
-          borderTopRightRadius: '1.5rem',
-          boxShadow: open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none'
-        }}
+        bodyStyle={getBottomSheetBodyStyle(open)}
       >
         <BottomSheetContainer>
           <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>

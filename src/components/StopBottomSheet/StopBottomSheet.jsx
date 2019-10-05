@@ -1,28 +1,44 @@
 import React, { Component } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import { BottomSheetTitle } from '../../utils/commonElements';
-import { StopBottomSheetContainer } from './StopBottomSheet-styled';
+import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import { StopBottomSheetContentWrapper, StopImage, StopImagePlaceholder } from './StopBottomSheet-styled';
 
 class StopBottomSheet extends Component {
+  state = {
+    imageExpanded: false
+  };
+
+  toggleImageExpanded = () => {
+    this.setState(prevState => ({
+      imageExpanded: !prevState.imageExpanded
+    }));
+  };
+
   render() {
-    const { name } = this.props.stop.properties;
+    const { open, stop, onBottomSheetChange } = this.props;
+    const { name, imageURL } = stop.properties;
     return (
       <SwipeableBottomSheet
-        open={this.props.open}
-        onChange={this.props.onBottomSheetChange}
+        open={open}
+        onChange={onBottomSheetChange}
         overlay={false}
         topShadow={false}
         shadowTip={false}
-        bodyStyle={{
-          borderTopLeftRadius: '1.5rem',
-          borderTopRightRadius: '1.5rem',
-          boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
-        }}
+        bodyStyle={getBottomSheetBodyStyle(open)}
       >
-        <StopBottomSheetContainer>
+        <BottomSheetContainer>
           <BottomSheetTitle>{name}</BottomSheetTitle>
-        </StopBottomSheetContainer>
+          <StopBottomSheetContentWrapper>
+            {imageURL ? (
+              <StopImage src={imageURL} imageExpanded={this.state.imageExpanded} onClick={this.toggleImageExpanded} />
+            ) : (
+              <StopImagePlaceholder imageExpanded={this.state.imageExpanded} onClick={this.toggleImageExpanded}>
+                ?
+              </StopImagePlaceholder>
+            )}
+          </StopBottomSheetContentWrapper>
+        </BottomSheetContainer>
       </SwipeableBottomSheet>
     );
   }
@@ -32,9 +48,9 @@ StopBottomSheet.defaultProps = {
   open: false,
   stop: {
     properties: {
-      name: '',
-    },
-  },
+      name: ''
+    }
+  }
 };
 
 export default StopBottomSheet;

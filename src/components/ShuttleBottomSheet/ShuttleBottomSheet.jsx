@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import { BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
 
 class ShuttleBottomSheet extends Component {
   render() {
-    const { loopDisplayName } = this.props.shuttle.properties;
+    const { loopDisplayName, open, onBottomSheetChange } = this.props.shuttle.properties;
     return (
       <SwipeableBottomSheet
-        open={this.props.open}
-        onChange={this.props.onBottomSheetChange}
+        open={open}
+        onChange={onBottomSheetChange}
         overlay={false}
         topShadow={false}
         shadowTip={false}
-        bodyStyle={{
-          borderTopLeftRadius: '1.5rem',
-          borderTopRightRadius: '1.5rem',
-          boxShadow: this.props.open ? 'rgba(0, 0, 0, 0.157) 0px -4px 5px' : 'none',
-        }}
+        bodyStyle={getBottomSheetBodyStyle(open)}
       >
         <BottomSheetContainer>
           <BottomSheetTitle>{`${loopDisplayName} Shuttle`}</BottomSheetTitle>
@@ -31,9 +27,9 @@ ShuttleBottomSheet.defaultProps = {
   open: false,
   shuttle: {
     properties: {
-      loopDisplayName: '',
-    },
-  },
+      loopDisplayName: ''
+    }
+  }
 };
 
 export default ShuttleBottomSheet;

@@ -4,13 +4,14 @@ import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
 import CustomMapController from './CustomMapController';
+import { StyledGeolocateControl, StyledNavigationControl } from './Map-styled';
 
 // App components
 import StopMarker from '../StopMarker';
 import ShuttleMarker from './ShuttleMarker';
 
 // Third-party components (buttons, icons, etc.)
-import ReactMapGL, { GeolocateControl } from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 
 // JSON
 
@@ -82,6 +83,7 @@ class Map extends Component {
     const {
       viewport,
       mapOptions,
+      mapContainerRef,
       shuttles,
       loops,
       stops,
@@ -94,7 +96,7 @@ class Map extends Component {
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     return (
-      <div ref={this.props.mapContainerRef} style={{ flex: 1 }}>
+      <div ref={mapContainerRef} style={{ flex: 1 }}>
         <ReactMapGL
           {...viewport}
           mapStyle={this.state.mapStyle}
@@ -107,15 +109,8 @@ class Map extends Component {
           width="100%"
           height="100%"
         >
-          <GeolocateControl
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '10px'
-            }}
-            positionOptions={{ enableHighAccuracy: true }}
-            trackUserLocation
-          />
+          <StyledGeolocateControl positionOptions={{ enableHighAccuracy: true }} trackUserLocation />
+          <StyledNavigationControl showCompass showZoom />
           <StopMarkerLayer
             stops={stops}
             selectedStop={selectedStop}

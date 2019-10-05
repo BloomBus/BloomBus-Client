@@ -1,21 +1,32 @@
 import styled from 'styled-components';
+import { unitCalc } from 'calcite-react/utils/helpers';
 
-export const StopBottomSheetContainer = styled.div`
-  height: 100%;
-  width: 100%;
+export const StopBottomSheetContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  padding: ${props => unitCalc(props.theme.baseline, 3, '/')};
+  box-sizing: border-box;
+`;
+
+export const StopImage = styled.img`
+  font-size: 3em;
+  height: ${props => props.imageExpanded ? '200px' : '100px'};
+  width: ${props => props.imageExpanded ? '200px' : '100px'};
+  border-radius: ${props => unitCalc(props.theme.baseline, 4, '/')};
+  transition: all 0.15s;
+`;
+
+export const StopImagePlaceholder = styled.div`
+  background-color: #333;
+  color: ${props => props.theme.palette.offWhite};
+  font-size: ${props => props.imageExpanded ? '6rem' : '3rem'};
+  height: ${props => props.imageExpanded ? '200px' : '100px'};
+  width: ${props => props.imageExpanded ? '200px' : '100px'};
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  &::after {
-    width: 26px;
-    height: 4px;
-    border-radius: 2px;
-    position: absolute;
-    left: calc(50% - 13px);
-    top: 5px;
-    background-color: #dbdbdb;
-    content: '';
-  }
+  border-radius: ${props => unitCalc(props.theme.baseline, 4, '/')};
+  transition: all 0.15s;
 `;
