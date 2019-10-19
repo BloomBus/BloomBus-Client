@@ -32,7 +32,7 @@ export const LoopListItem = styled.button`
   outline: none;
   border: none;
   border-top: 2px solid #f1f1f1;
-  padding: 0.85em;
+  padding: 1em;
 
   &:active {
     background-color: #f1f1f1;
@@ -53,8 +53,8 @@ export const LoopListItemRightSide = styled.div`
 `;
 
 export const LoopName = styled.span`
-  font-size: 1.3em;
-  font-weight: 600;
+  font-size: 1.8em;
+  font-weight: bold;
   align-self: flex-start;
   color: #ffffff;
   color: ${props => props.color || 'inherit'};

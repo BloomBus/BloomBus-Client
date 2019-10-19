@@ -16,18 +16,18 @@ import HandleVerticalIcon from 'calcite-ui-icons-react/HandleVerticalIcon';
 
 class OverflowMenu extends Component {
   state = {
-    open: false,
+    open: false
   };
 
   toggleMenu = () => {
     this.setState(prevState => ({
-      open: !prevState.open,
+      open: !prevState.open
     }));
   };
 
   closeMenu = () => {
     this.setState({
-      open: false,
+      open: false
     });
   };
 
@@ -39,10 +39,10 @@ class OverflowMenu extends Component {
           open={this.state.open}
           onRequestClose={this.closeMenu}
           targetContainerStyles={{
-            display: 'flex',
+            display: 'flex'
           }}
         >
-          <StyledMenu>
+          <StyledMenu large>
             <MenuItem onClick={() => window.open('https://intranet.bloomu.edu/documents/police/BusSchedule.pdf')}>
               Shuttle Schedule
             </MenuItem>
@@ -52,9 +52,7 @@ class OverflowMenu extends Component {
             <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/feedback')}>
               Feedback
             </MenuItem>
-            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/issue')}>
-              Report an Issue
-            </MenuItem>
+            <MenuItem onClick={() => window.open('mailto:bloombus@huskies.bloomu.edu')}>Report an Issue</MenuItem>
             <MenuItem onClick={() => this.props.history.push('/about')}>About</MenuItem>
           </StyledMenu>
         </Popover>
