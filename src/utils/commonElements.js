@@ -15,6 +15,7 @@ export const BottomSheetContainer = styled.div`
   justify-content: center;
   z-index: 500;
   font-family: ${props => props.theme.type.avenirFamily};
+  font-size: 1.3rem;
 
   &::after {
     width: 2rem;

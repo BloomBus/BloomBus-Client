@@ -4,7 +4,7 @@ import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 import { LoopListItem, LoopListItemLeftSide, LoopListItemRightSide, LoopName } from './LoopsBottomSheet-styled';
 import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
 
-import OfflineIcon from 'calcite-ui-icons-react/OfflineIcon';
+import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
 
 class LoopsBottomSheet extends PureComponent {
   render() {
@@ -22,7 +22,7 @@ class LoopsBottomSheet extends PureComponent {
           <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>
           {loops.map(loop => {
             const noShuttlesAvailable =
-              shuttles &&
+              !shuttles ||
               Object.values(shuttles).filter(shuttle => shuttle.properties.loopKey === loop.properties.key).length ===
                 0;
             return (
@@ -30,7 +30,7 @@ class LoopsBottomSheet extends PureComponent {
                 <LoopListItemLeftSide>
                   <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
                 </LoopListItemLeftSide>
-                <LoopListItemRightSide>{noShuttlesAvailable ? <OfflineIcon size={20} /> : null}</LoopListItemRightSide>
+                <LoopListItemRightSide>{noShuttlesAvailable ? <MoonIcon size={25} /> : null}</LoopListItemRightSide>
               </LoopListItem>
             );
           })}

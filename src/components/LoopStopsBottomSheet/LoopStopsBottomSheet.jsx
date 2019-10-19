@@ -27,7 +27,7 @@ class LoopStopsBottomSheet extends PureComponent {
             return (
               <LoopStopsListItem key={stop.properties.name} tabIndex="0" onClick={() => onStopSelect(stopKey)}>
                 <LoopStopsListItemLeftSide>
-                  <NextStopIcon />
+                  <NextStopIcon width="40" height="40" />
                   <LoopStopsName color={stop.properties.color}>{stop.properties.name}</LoopStopsName>
                 </LoopStopsListItemLeftSide>
                 {/* <ETALabel number={eta} /> */}

@@ -118,7 +118,6 @@ class Home extends Component {
   };
 
   onShuttleSelect = shuttleKey => {
-    debugger;
     const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
     this.setState(prevState => ({
       selectedShuttle: shuttleKey,
