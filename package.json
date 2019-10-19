@@ -8,7 +8,7 @@
     "ajv": "^6.10.2",
     "ajv-keywords": "^3.4.0",
     "calcite-react": "^0.40.0",
-    "calcite-ui-icons-react": "^0.7.2",
+    "calcite-ui-icons-react": "^0.10.0",
     "express-sslify": "^1.2.0",
     "firebase": "^6.3.1",
     "immutable": "^4.0.0-rc.12",
