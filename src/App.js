@@ -23,7 +23,7 @@ class App extends Component {
       <BrowserRouter>
         <CalciteThemeProvider>
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route path="/" component={Home} />
             <Route path="/about" component={About} />
             <Redirect to="/" />
           </Switch>
