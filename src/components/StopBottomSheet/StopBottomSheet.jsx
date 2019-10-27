@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
 import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
@@ -16,16 +17,18 @@ class StopBottomSheet extends Component {
   };
 
   render() {
-    const { open, stop, onBottomSheetChange } = this.props;
-    const { name, imageURL } = stop.properties;
+    const { match, stops, onBottomSheetChange } = this.props;
+    const { stopKey } = match.params;
+    const { name, imageURL } = stops[stopKey].properties;
+
     return (
       <SwipeableBottomSheet
-        open={open}
+        open={true}
         onChange={onBottomSheetChange}
         overlay={false}
         topShadow={false}
         shadowTip={false}
-        bodyStyle={getBottomSheetBodyStyle(open)}
+        bodyStyle={getBottomSheetBodyStyle()}
       >
         <BottomSheetContainer>
           <BottomSheetTitle>{name}</BottomSheetTitle>
@@ -45,12 +48,7 @@ class StopBottomSheet extends Component {
 }
 
 StopBottomSheet.defaultProps = {
-  open: false,
-  stop: {
-    properties: {
-      name: ''
-    }
-  }
+  open: false
 };
 
-export default StopBottomSheet;
+export default withRouter(StopBottomSheet);

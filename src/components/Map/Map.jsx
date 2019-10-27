@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
@@ -17,23 +18,22 @@ import ReactMapGL from 'react-map-gl';
 
 // CSS
 
-const StopMarkerLayer = React.memo(props =>
-  Object.keys(props.stops).map(stopKey => {
-    const stop = props.stops[stopKey];
-    const selected = props.selectedStop === stopKey;
-    const disabled = props.selectedLoopStops.length > 0 && !props.selectedLoopStops.includes(stopKey);
+const StopMarkerLayer = ({ stops, selectedStop, selectedLoopStops, onStopSelect, isInteracting }) =>
+  stops &&
+  Object.entries(stops).map(([stopKey, stop]) => {
+    const selected = selectedStop === stopKey;
+    const disabled = selectedLoopStops.length > 0 && !selectedLoopStops.includes(stopKey);
     return (
       <StopMarker
         key={stopKey}
         stop={stop}
         selected={selected}
         disabled={disabled}
-        onStopSelect={props.onStopSelect}
-        isInteracting={props.isInteracting}
+        onStopSelect={onStopSelect}
+        isInteracting={isInteracting}
       />
     );
-  })
-);
+  });
 
 class Map extends Component {
   state = {
@@ -81,20 +81,23 @@ class Map extends Component {
 
   render() {
     const {
+      match,
       viewport,
       mapOptions,
       mapContainerRef,
       shuttles,
       loops,
       stops,
-      selectedStop,
-      selectedLoopStops,
+      loopStops,
       onViewportChange,
       onMapClick,
       onStopSelect,
       onShuttleSelect
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
+    const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;
+    const selectedLoopStops = loopStops[selectedLoopKey] || [];
+
     return (
       <div ref={mapContainerRef} style={{ flex: 1 }}>
         <ReactMapGL
@@ -115,24 +118,25 @@ class Map extends Component {
           </MapControlsWrapper>
           <StopMarkerLayer
             stops={stops}
-            selectedStop={selectedStop}
+            selectedStop={selectedStopKey}
             selectedLoopStops={selectedLoopStops}
             onStopSelect={onStopSelect}
             isInteracting={this.state.isInteracting}
           />
-          {Object.keys(shuttles).map(shuttleKey => {
-            const shuttle = shuttles[shuttleKey];
-            return (
-              <ShuttleMarker
-                shuttle={shuttle}
-                key={shuttleKey}
-                shuttleKey={shuttleKey} // must explicitly pass as separate prop from `key`
-                loops={loops}
-                isInteracting={this.state.isInteracting}
-                onShuttleSelect={onShuttleSelect}
-              />
-            );
-          })}
+          {shuttles &&
+            Object.keys(shuttles).map(shuttleKey => {
+              const shuttle = shuttles[shuttleKey];
+              return (
+                <ShuttleMarker
+                  shuttle={shuttle}
+                  key={shuttleKey}
+                  shuttleKey={shuttleKey} // must explicitly pass as separate prop from `key`
+                  loops={loops}
+                  isInteracting={this.state.isInteracting}
+                  onShuttleSelect={onShuttleSelect}
+                />
+              );
+            })}
         </ReactMapGL>
       </div>
     );
@@ -140,9 +144,7 @@ class Map extends Component {
 }
 
 Map.defaultProps = {
-  stops: {},
-  shuttles: {},
   mapOptions: {}
 };
 
-export default Map;
+export default withRouter(Map);
