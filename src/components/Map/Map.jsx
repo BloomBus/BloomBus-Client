@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
 import CustomMapController from './CustomMapController';
-import { StyledGeolocateControl, StyledNavigationControl } from './Map-styled';
+import { MapControlsWrapper, StyledGeolocateControl, StyledNavigationControl } from './Map-styled';
 
 // App components
 import StopMarker from '../StopMarker';
@@ -109,8 +109,10 @@ class Map extends Component {
           width="100%"
           height="100%"
         >
-          <StyledGeolocateControl positionOptions={{ enableHighAccuracy: true }} trackUserLocation />
-          <StyledNavigationControl showCompass showZoom />
+          <MapControlsWrapper>
+            <StyledGeolocateControl trackUserLocation positionOptions={{ enableHighAccuracy: true }} />
+            <StyledNavigationControl showCompass showZoom />
+          </MapControlsWrapper>
           <StopMarkerLayer
             stops={stops}
             selectedStop={selectedStop}
