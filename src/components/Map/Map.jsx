@@ -96,7 +96,7 @@ class Map extends Component {
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;
-    const selectedLoopStops = (loopStops && loopStops[selectedLoopKey]) || [];
+    const selectedLoopStops = loopStops[selectedLoopKey] || [];
 
     return (
       <div ref={mapContainerRef} style={{ flex: 1 }}>
@@ -142,8 +142,6 @@ class Map extends Component {
 }
 
 Map.defaultProps = {
-  stops: {},
-  shuttles: {},
   mapOptions: {}
 };
 

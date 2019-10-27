@@ -251,26 +251,31 @@ class Home extends Component {
             <OverflowMenu />
           </RightHeader>
         </AppHeader>
-        <Map
-          mapContainerRef={this.mapContainerRef}
-          loops={this.state.loops}
-          stops={this.state.stops}
-          loopStops={this.state.loopStops}
-          shuttles={this.state.shuttles}
-          updateMapDimensions={this.updateMapDimensions}
-          mapOptions={this.constants.mapOptions}
-          viewport={this.state.viewport}
-          onViewportChange={this.onViewportChange}
-          onMapClick={this.onMapClick}
-          onStopSelect={this.onStopSelect}
-          onShuttleSelect={this.onShuttleSelect}
-        />
+        <Route path={['/stop/:stopKey', '/loop/:loopKey', '/']}>
+          <Map
+            mapContainerRef={this.mapContainerRef}
+            loops={this.state.loops}
+            stops={this.state.stops}
+            loopStops={this.state.loopStops}
+            shuttles={this.state.shuttles}
+            updateMapDimensions={this.updateMapDimensions}
+            mapOptions={this.constants.mapOptions}
+            viewport={this.state.viewport}
+            onViewportChange={this.onViewportChange}
+            onMapClick={this.onMapClick}
+            onStopSelect={this.onStopSelect}
+            onShuttleSelect={this.onShuttleSelect}
+          />
+        </Route>
         <BrowserView>
           <Sidebar
             loops={this.state.loops}
             stops={this.state.stops}
             loopStops={this.state.loopStops}
+            shuttles={this.state.shuttles}
             onLoopSelect={this.onLoopSelect}
+            onStopSelect={this.onStopSelect}
+            onShuttleSelect={this.onShuttleSelect}
           />
         </BrowserView>
         <MobileView>

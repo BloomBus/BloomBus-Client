@@ -13,7 +13,7 @@ import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from 
 // import ETALabel from '../ETALabel/ETALabel';
 
 // Third-party components (buttons, icons, etc.)
-import NextStopIcon from '../NextStopIcon/NextStopIcon';
+import NextStopIcon from '../NextStopIcon';
 
 // JSON
 
