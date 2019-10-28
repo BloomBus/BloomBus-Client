@@ -2,8 +2,8 @@ import React from 'react';
 
 import { NextStopSVG } from './LoopsBottomSheet-styled';
 
-const NextStopIcon = () => (
-  <NextStopSVG>
+const NextStopIcon = props => (
+  <NextStopSVG {...props}>
     <path
       fillRule="evenodd"
       strokeLinejoin="round"

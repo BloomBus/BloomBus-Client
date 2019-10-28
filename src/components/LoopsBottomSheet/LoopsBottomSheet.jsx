@@ -8,15 +8,15 @@ import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
 
 class LoopsBottomSheet extends PureComponent {
   render() {
-    const { open, loops, shuttles, onBottomSheetChange, onLoopSelect } = this.props;
+    const { loops, shuttles, onBottomSheetChange, onLoopSelect } = this.props;
     return (
       <SwipeableBottomSheet
-        open={open}
+        open={true}
         onChange={onBottomSheetChange}
         overlay={false}
         topShadow={false}
         shadowTip={false}
-        bodyStyle={getBottomSheetBodyStyle(open)}
+        bodyStyle={getBottomSheetBodyStyle()}
       >
         <BottomSheetContainer>
           <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>

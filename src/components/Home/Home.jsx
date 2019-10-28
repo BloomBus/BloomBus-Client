@@ -5,14 +5,15 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import lineString from 'turf-linestring';
 import bbox from '@turf/bbox';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { withRouter } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 // Local helpers/utils/modules
 import { getLoop } from '../../utils/functions';
 import firebase from '../../utils/firebase';
 
 // Component specific modules (Component-styled, etc.)
-import { StyledHeaderLogoLabel } from './Home-styled';
+import { StyledHeaderLogoLabel, StyledLoaderWrapper } from './Home-styled';
+import { LeftHeader, CenterHeader, RightHeader } from '../AppHeader/AppHeader-styled';
 
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
@@ -25,7 +26,7 @@ import AppHeader from '../AppHeader';
 import OverflowMenu from '../OverflowMenu';
 
 // Third-party components (buttons, icons, etc.)
-import { LeftHeader, CenterHeader, RightHeader } from '../AppHeader/AppHeader-styled';
+import Loader from 'calcite-react/Loader';
 import LogoBusIcon from './LogoBusIcon';
 
 // JSON
@@ -34,14 +35,11 @@ import LogoBusIcon from './LogoBusIcon';
 
 class Home extends Component {
   state = {
-    loops: undefined,
-    stops: undefined,
-    shuttles: undefined,
-    loopStops: undefined,
-    selectedLoop: '',
-    selectedStop: '',
-    selectedLoopStops: [],
-    selectedShuttle: '',
+    isLoading: true,
+    loops: null,
+    stops: null,
+    shuttles: null,
+    loopStops: null,
     viewport: {
       width: '100%',
       height: '100%',
@@ -50,48 +48,64 @@ class Home extends Component {
       zoom: 14,
       pitch: 0,
       tilt: 0
-    },
-    openBottomSheet: 'loops'
+    }
   };
 
   mapContainerRef = React.createRef();
 
   componentDidMount() {
+    this.initFirebaseListeners();
+    this.props.history.push('/loops');
+  }
+
+  initFirebaseListeners = () => {
+    const promises = [];
+
     const constantsRef = firebase.database().ref('constants');
-    constantsRef.once('value', constantsSnapshot => {
-      this.constants = constantsSnapshot.val();
-    });
+    promises.push(
+      constantsRef.once('value', constantsSnapshot => {
+        this.constants = constantsSnapshot.val();
+      })
+    );
 
     const stopsRef = firebase.database().ref('stops');
-    stopsRef.once('value', stopsSnapshot => {
-      this.setState({
-        stops: stopsSnapshot.val()
-      });
-    });
+    promises.push(
+      stopsRef.once('value', stopsSnapshot => {
+        this.setState({
+          stops: stopsSnapshot.val()
+        });
+      })
+    );
 
     const loopsRef = firebase.database().ref('loops');
-    loopsRef.once('value', loopsSnapshot => {
-      const loops = loopsSnapshot.val().features;
-      this.setState({
-        loops
-      });
-    });
+    promises.push(
+      loopsRef.once('value', loopsSnapshot => {
+        const loops = loopsSnapshot.val().features;
+        this.setState({
+          loops
+        });
+      })
+    );
 
     const loopStopsRef = firebase.database().ref('loop-stops');
-    loopStopsRef.once('value', loopStopsSnapshot => {
-      this.setState({
-        loopStops: loopStopsSnapshot.val()
-      });
+    promises.push(
+      loopStopsRef.once('value', loopStopsSnapshot => {
+        this.setState({
+          loopStops: loopStopsSnapshot.val()
+        });
+      })
+    );
+
+    Promise.all(promises).then(res => {
+      this.setState({ isLoading: false });
     });
 
     const shuttlesRef = firebase.database().ref('shuttles');
-
     shuttlesRef.on('value', shuttlesSnapshot => {
       shuttlesSnapshot.forEach(shuttleSnapshot => {
         this.handleNewValue(shuttleSnapshot);
       });
     });
-
     shuttlesRef.on('child_removed', shuttleSnapshot => {
       this.setState(prevState => {
         const tempState = prevState;
@@ -99,38 +113,44 @@ class Home extends Component {
         return tempState;
       });
     });
-  }
+  };
 
   onStopSelect = stopKey => {
     const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
-    this.setState(prevState => ({
-      selectedStop: stopKey,
-      openBottomSheet: 'stop',
-      viewport: {
-        ...prevState.viewport,
-        longitude,
-        latitude,
-        zoom: 16,
-        transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200
+    this.setState(
+      prevState => ({
+        viewport: {
+          ...prevState.viewport,
+          longitude,
+          latitude,
+          zoom: 16,
+          transitionInterpolator: new LinearInterpolator(),
+          transitionDuration: 200
+        }
+      }),
+      () => {
+        this.props.history.push(`/stop/${stopKey}`);
       }
-    }));
+    );
   };
 
   onShuttleSelect = shuttleKey => {
     const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
-    this.setState(prevState => ({
-      selectedShuttle: shuttleKey,
-      openBottomSheet: 'shuttle',
-      viewport: {
-        ...prevState.viewport,
-        longitude,
-        latitude,
-        zoom: 16,
-        transitionInterpolator: new LinearInterpolator(),
-        transitionDuration: 200
+    this.setState(
+      prevState => ({
+        viewport: {
+          ...prevState.viewport,
+          longitude,
+          latitude,
+          zoom: 16,
+          transitionInterpolator: new LinearInterpolator(),
+          transitionDuration: 200
+        }
+      }),
+      () => {
+        this.props.history.push(`/shuttle/${shuttleKey}`);
       }
-    }));
+    );
   };
 
   onLoopSelect = loopKey => {
@@ -152,11 +172,9 @@ class Home extends Component {
         zoom,
         transitionInterpolator: new FlyToInterpolator(),
         transitionDuration: 500
-      },
-      selectedLoop: loopKey,
-      selectedLoopStops: prevState.loopStops[loopKey],
-      openBottomSheet: 'loop-stops'
+      }
     }));
+    this.props.history.push(`/loop/${loopKey}`);
   };
 
   onViewportChange = viewport => {
@@ -178,22 +196,17 @@ class Home extends Component {
   };
 
   onMapClick = pointerEvent => {
-    this.setState(prevState => ({
-      openBottomSheet: prevState.openBottomSheet ? '' : 'loops',
-      selectedStop: '',
-      selectedLoop: '',
-      selectedLoopStops: [],
-      selectedShuttle: ''
-    }));
+    const { pathname } = this.props.location;
+    this.props.history.push(pathname !== '/' ? '/' : '/loops');
   };
 
+  // Fires when a bottomsheet opens/closes
   onBottomSheetChange = isOpen => {
     if (isOpen) return;
-    this.setState({
-      openBottomSheet: ''
-    });
+    this.props.history.push('/');
   };
 
+  // Process a shuttle update
   handleNewValue = shuttleSnapshot => {
     const shuttle = shuttleSnapshot.val();
     this.setState(prevState => ({
@@ -203,9 +216,10 @@ class Home extends Component {
       }
     }));
     // Track selected shuttle
-    if (this.state.selectedShuttle) {
+    const { shuttleID } = this.props.match.params;
+    if (shuttleID) {
       // Get selected shuttle by its UUID
-      const selectedShuttle = this.state.shuttles[this.state.selectedShuttle];
+      const selectedShuttle = this.state.shuttles[shuttleID];
       this.setState(prevState => {
         const [longitude, latitude] = selectedShuttle.geometry.coordinates;
         const newViewport = {
@@ -221,7 +235,11 @@ class Home extends Component {
   };
 
   render() {
-    return this.state.loops && this.state.loopStops && this.state.stops ? (
+    return this.state.isLoading ? (
+      <StyledLoaderWrapper>
+        <Loader text="Loading..." />
+      </StyledLoaderWrapper>
+    ) : (
       <>
         <AppHeader>
           <LeftHeader />
@@ -233,61 +251,64 @@ class Home extends Component {
             <OverflowMenu />
           </RightHeader>
         </AppHeader>
-        <Map
-          mapContainerRef={this.mapContainerRef}
-          loops={this.state.loops}
-          stops={this.state.stops}
-          shuttles={this.state.shuttles}
-          selectedStop={this.state.selectedStop}
-          selectedLoopStops={this.state.selectedLoopStops}
-          updateMapDimensions={this.updateMapDimensions}
-          mapOptions={this.constants.mapOptions}
-          onViewportChange={this.onViewportChange}
-          onMapClick={this.onMapClick}
-          onStopSelect={this.onStopSelect}
-          onShuttleSelect={this.onShuttleSelect}
-          viewport={this.state.viewport}
-        />
+        <Route path={['/stop/:stopKey', '/loop/:loopKey', '/']}>
+          <Map
+            mapContainerRef={this.mapContainerRef}
+            loops={this.state.loops}
+            stops={this.state.stops}
+            loopStops={this.state.loopStops}
+            shuttles={this.state.shuttles}
+            updateMapDimensions={this.updateMapDimensions}
+            mapOptions={this.constants.mapOptions}
+            viewport={this.state.viewport}
+            onViewportChange={this.onViewportChange}
+            onMapClick={this.onMapClick}
+            onStopSelect={this.onStopSelect}
+            onShuttleSelect={this.onShuttleSelect}
+          />
+        </Route>
         <BrowserView>
           <Sidebar
             loops={this.state.loops}
             stops={this.state.stops}
             loopStops={this.state.loopStops}
+            shuttles={this.state.shuttles}
             onLoopSelect={this.onLoopSelect}
+            onStopSelect={this.onStopSelect}
+            onShuttleSelect={this.onShuttleSelect}
           />
         </BrowserView>
         <MobileView>
-          <LoopsBottomSheet
-            open={this.state.openBottomSheet === 'loops'}
-            onBottomSheetChange={this.onBottomSheetChange}
-            loops={this.state.loops}
-            stops={this.state.stops}
-            shuttles={this.state.shuttles}
-            onLoopSelect={this.onLoopSelect}
-          />
-          <LoopStopsBottomSheet
-            open={this.state.openBottomSheet === 'loop-stops'}
-            onBottomSheetChange={this.onBottomSheetChange}
-            selectedLoop={this.state.selectedLoop}
-            selectedLoopStops={this.state.selectedLoopStops}
-            stops={this.state.stops}
-            onStopSelect={this.onStopSelect}
-          />
-          <StopBottomSheet
-            open={this.state.openBottomSheet === 'stop'}
-            onBottomSheetChange={this.onBottomSheetChange}
-            stop={this.state.stops[this.state.selectedStop]}
-          />
-          {this.state.selectedShuttle && (
-            <ShuttleBottomSheet
-              open={this.state.openBottomSheet === 'shuttle'}
-              onBottomSheetChange={this.onBottomSheetChange}
-              shuttle={this.state.shuttles[this.state.selectedShuttle]}
-            />
-          )}
+          <Switch>
+            <Route exact path="/loops">
+              {this.state.loops ? (
+                <LoopsBottomSheet
+                  loops={this.state.loops}
+                  stops={this.state.stops}
+                  shuttles={this.state.shuttles}
+                  onLoopSelect={this.onLoopSelect}
+                  onBottomSheetChange={this.onBottomSheetChange}
+                />
+              ) : null}
+            </Route>
+            <Route path="/loop/:loopKey">
+              <LoopStopsBottomSheet
+                loopStops={this.state.loopStops}
+                stops={this.state.stops}
+                onStopSelect={this.onStopSelect}
+                onBottomSheetChange={this.onBottomSheetChange}
+              />
+            </Route>
+            <Route path="/stop/:stopKey">
+              <StopBottomSheet stops={this.state.stops} onBottomSheetChange={this.onBottomSheetChange} />
+            </Route>
+            <Route path="/shuttle/:shuttleID">
+              <ShuttleBottomSheet shuttles={this.state.shuttles} onBottomSheetChange={this.onBottomSheetChange} />
+            </Route>
+          </Switch>
         </MobileView>
       </>
-    ) : null;
+    );
   }
 }
 
