@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 // Component specific modules (Component-styled, etc.)
 import {
   StopBottomSheetContentWrapper,
-  StopBottomSheetTitle,
   StopImage,
   StopImagePlaceholder,
   ImageLoaderWrapper
