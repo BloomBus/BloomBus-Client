@@ -1,15 +1,32 @@
+// Framework and third-party non-ui
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
+// Local helpers/utils/modules
+
+// Component specific modules (Component-styled, etc.)
+import {
+  StopBottomSheetContentWrapper,
+  StopImage,
+  StopImagePlaceholder,
+  ImageLoaderWrapper
+} from './StopBottomSheet-styled';
+
+// App components
 import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
-import { StopBottomSheetContentWrapper, StopImage, StopImagePlaceholder } from './StopBottomSheet-styled';
+
+// Third-party components (buttons, icons, etc.)
+import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
+import Loader from 'calcite-react/Loader';
+
+// JSON
+
+// CSS
 
 class StopBottomSheet extends Component {
   state = {
     imageExpanded: false
   };
-
   toggleImageExpanded = () => {
     this.setState(prevState => ({
       imageExpanded: !prevState.imageExpanded
@@ -34,7 +51,16 @@ class StopBottomSheet extends Component {
           <BottomSheetTitle>{name}</BottomSheetTitle>
           <StopBottomSheetContentWrapper>
             {imageURL ? (
-              <StopImage src={imageURL} imageExpanded={this.state.imageExpanded} onClick={this.toggleImageExpanded} />
+              <StopImage
+                src={imageURL}
+                loader={
+                  <ImageLoaderWrapper>
+                    <Loader sizeRatio={0.5} />
+                  </ImageLoaderWrapper>
+                }
+                imageExpanded={this.state.imageExpanded}
+                onClick={this.toggleImageExpanded}
+              />
             ) : (
               <StopImagePlaceholder imageExpanded={this.state.imageExpanded} onClick={this.toggleImageExpanded}>
                 ?
