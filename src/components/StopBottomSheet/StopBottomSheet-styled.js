@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Img from 'react-image';
 import { unitCalc } from 'calcite-react/utils/helpers';
 
 export const StopBottomSheetContentWrapper = styled.div`
@@ -10,7 +11,15 @@ export const StopBottomSheetContentWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-export const StopImage = styled.img`
+export const ImageLoaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100px;
+`;
+
+export const StopImage = styled(Img)`
   font-size: 3em;
   height: ${props => props.imageExpanded ? '200px' : '100px'};
   width: ${props => props.imageExpanded ? '200px' : '100px'};

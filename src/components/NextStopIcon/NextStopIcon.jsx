@@ -2,8 +2,8 @@ import React from 'react';
 
 import { NextStopSVG } from './NextStopIcon-styled';
 
-const NextStopIcon = () => (
-  <NextStopSVG viewBox="0 0 30 20">
+const NextStopIcon = props => (
+  <NextStopSVG viewBox="0 0 30 20" {...props}>
     <path
       fillRule="evenodd"
       strokeLinejoin="round"
