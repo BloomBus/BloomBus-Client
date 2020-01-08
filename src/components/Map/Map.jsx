@@ -92,7 +92,8 @@ class Map extends Component {
       onViewportChange,
       onMapClick,
       onStopSelect,
-      onShuttleSelect
+      onShuttleSelect,
+      onGeolocate
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;
@@ -113,7 +114,12 @@ class Map extends Component {
           height="100%"
         >
           <MapControlsWrapper>
-            <StyledGeolocateControl trackUserLocation positionOptions={{ enableHighAccuracy: true }} />
+            <StyledGeolocateControl
+              trackUserLocation
+              showUserLocation
+              positionOptions={{ enableHighAccuracy: true }}
+              onGeolocate={onGeolocate}
+            />
             <StyledNavigationControl showCompass showZoom />
           </MapControlsWrapper>
           <StopMarkerLayer
