@@ -1,3 +1,5 @@
+/* globals GeolocationCoordinates */
+
 // Framework and third-party non-ui
 import React, { Component } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
@@ -27,6 +29,9 @@ import OverflowMenu from '../OverflowMenu';
 
 // Third-party components (buttons, icons, etc.)
 import Loader from 'calcite-react/Loader';
+import Modal from 'calcite-react/Modal';
+import Button from 'calcite-react/Button';
+import { CalciteP } from 'calcite-react/Elements';
 import LogoBusIcon from './LogoBusIcon';
 
 // JSON
@@ -48,7 +53,8 @@ class Home extends Component {
       zoom: 14,
       pitch: 0,
       tilt: 0
-    }
+    },
+    showOutOfBoundsModal: false
   };
 
   mapContainerRef = React.createRef();
@@ -160,9 +166,15 @@ class Home extends Component {
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
     // construct a viewport instance from the current state
     const newViewport = new WebMercatorViewport(this.state.viewport);
-    const { longitude, latitude, zoom } = newViewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
-      padding: 40
-    });
+    const { longitude, latitude, zoom } = newViewport.fitBounds(
+      [
+        [minLng, minLat],
+        [maxLng, maxLat]
+      ],
+      {
+        padding: 40
+      }
+    );
 
     this.setState(prevState => ({
       viewport: {
@@ -198,6 +210,21 @@ class Home extends Component {
   onMapClick = pointerEvent => {
     const { pathname } = this.props.location;
     this.props.history.push(pathname !== '/' ? '/' : '/loops');
+  };
+
+  onGeolocate = data => {
+    if (data.hasOwnProperty('coords') && data.coords instanceof GeolocationCoordinates) {
+      const { nwBound, seBound } = this.constants.mapOptions;
+      const { latitude, longitude } = data.coords;
+      const outOfBounds =
+        latitude > nwBound.latitude ||
+        longitude < nwBound.longitude ||
+        latitude < seBound.latitude ||
+        longitude > seBound.longitude;
+      this.setState({
+        showOutOfBoundsModal: outOfBounds
+      });
+    }
   };
 
   // Fires when a bottomsheet opens/closes
@@ -265,6 +292,7 @@ class Home extends Component {
             onMapClick={this.onMapClick}
             onStopSelect={this.onStopSelect}
             onShuttleSelect={this.onShuttleSelect}
+            onGeolocate={this.onGeolocate}
           />
         </Route>
         <BrowserView>
@@ -307,6 +335,23 @@ class Home extends Component {
             </Route>
           </Switch>
         </MobileView>
+        <Modal
+          open={this.state.showOutOfBoundsModal}
+          onRequestClose={() => this.setState({ showOutOfBoundsModal: false })}
+          appElement={document.body}
+          title="Out of Boundaries"
+          actions={[
+            <Button key="dismiss" onClick={() => this.setState({ showOutOfBoundsModal: false })}>
+              Dismiss
+            </Button>
+          ]}
+        >
+          <CalciteP>
+            Sorry, your current location is outside of the region supported by this app. Please deactivate the location
+            tracking button.
+          </CalciteP>
+        </Modal>
+        )
       </>
     );
   }
