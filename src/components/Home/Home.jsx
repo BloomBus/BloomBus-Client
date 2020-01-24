@@ -20,7 +20,7 @@ import { LeftHeader, CenterHeader, RightHeader } from '../AppHeader/AppHeader-st
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
 import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
-import StopBottomSheet from '../StopBottomSheet';
+import StopInfoCard from '../StopInfoCard';
 import ShuttleBottomSheet from '../ShuttleBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
@@ -328,7 +328,7 @@ class Home extends Component {
               />
             </Route>
             <Route path="/stop/:stopKey">
-              <StopBottomSheet stops={this.state.stops} onBottomSheetChange={this.onBottomSheetChange} />
+              <StopInfoCard stops={this.state.stops} />
             </Route>
             <Route path="/shuttle/:shuttleID">
               <ShuttleBottomSheet shuttles={this.state.shuttles} onBottomSheetChange={this.onBottomSheetChange} />
