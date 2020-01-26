@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import Img from 'react-image';
 import { unitCalc } from 'calcite-react/utils/helpers';
 
-import Card, { CardTitle, CardContent, CardImage } from 'calcite-react/Card';
+import Card, { CardImage } from 'calcite-react/Card';
 
 export const StyledStopInfoCard = styled(Card).attrs({
   wide: true
@@ -10,8 +9,8 @@ export const StyledStopInfoCard = styled(Card).attrs({
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  width: 400px;
-  max-width: calc(600vw - 10px);
+  width: 30em;
+  max-width: calc(100vw - 20px);
   padding: ${props => unitCalc(props.theme.baseline, 3, '/')};
   box-sizing: border-box;
   position: absolute;
@@ -32,12 +31,12 @@ export const ImageLoaderWrapper = styled.div`
   justify-content: center;
 `;
 
-export const StopImage = styled(Img)`
-  font-size: 3em;
-  height: 100px;
-  width: 100px;
-  border-radius: ${props => unitCalc(props.theme.baseline, 4, '/')};
-  transition: all 0.15s;
+export const StopImage = styled(CardImage).attrs({
+  wide: true
+})`
+  height: 130px;
+  width: 130px;
+  border-radius: ${props => props.theme.borderRadius};
 `;
 
 export const StopImagePlaceholder = styled.div`
@@ -51,4 +50,17 @@ export const StopImagePlaceholder = styled.div`
   justify-content: center;
   border-radius: ${props => unitCalc(props.theme.baseline, 4, '/')};
   transition: all 0.15s;
+`;
+
+export const LoopBadge = styled.span`
+  background-color: ${props => props.color};
+  border-radius: 0.9em;
+  padding: 0.25em 0.7em;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+  color: white;
+`;
+
+export const DistanceLabel = styled.span`
+  font-size: 0.9em;
 `;

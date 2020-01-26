@@ -4,8 +4,7 @@
 import React, { Component } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
-import lineString from 'turf-linestring';
-import bbox from '@turf/bbox';
+import { bbox, lineString } from '@turf/turf';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
@@ -15,7 +14,11 @@ import firebase from '../../utils/firebase';
 
 // Component specific modules (Component-styled, etc.)
 import { StyledHeaderLogoLabel, StyledLoaderWrapper } from './Home-styled';
-import { LeftHeader, CenterHeader, RightHeader } from '../AppHeader/AppHeader-styled';
+import {
+  LeftHeader,
+  CenterHeader,
+  RightHeader
+} from '../AppHeader/AppHeader-styled';
 
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
@@ -122,7 +125,9 @@ class Home extends Component {
   };
 
   onStopSelect = stopKey => {
-    const [longitude, latitude] = this.state.stops[stopKey].geometry.coordinates;
+    const [longitude, latitude] = this.state.stops[
+      stopKey
+    ].geometry.coordinates;
     this.setState(
       prevState => ({
         viewport: {
@@ -141,7 +146,9 @@ class Home extends Component {
   };
 
   onShuttleSelect = shuttleKey => {
-    const [longitude, latitude] = this.state.shuttles[shuttleKey].geometry.coordinates;
+    const [longitude, latitude] = this.state.shuttles[
+      shuttleKey
+    ].geometry.coordinates;
     this.setState(
       prevState => ({
         viewport: {
@@ -213,7 +220,10 @@ class Home extends Component {
   };
 
   onGeolocate = data => {
-    if (data.hasOwnProperty('coords') && data.coords instanceof GeolocationCoordinates) {
+    if (
+      data.hasOwnProperty('coords') &&
+      data.coords instanceof GeolocationCoordinates
+    ) {
       const { nwBound, seBound } = this.constants.mapOptions;
       const { latitude, longitude } = data.coords;
       const outOfBounds =
@@ -222,6 +232,7 @@ class Home extends Component {
         latitude < seBound.latitude ||
         longitude > seBound.longitude;
       this.setState({
+        userLocation: [longitude, latitude],
         showOutOfBoundsModal: outOfBounds
       });
     }
@@ -328,10 +339,18 @@ class Home extends Component {
               />
             </Route>
             <Route path="/stop/:stopKey">
-              <StopInfoCard stops={this.state.stops} />
+              <StopInfoCard
+                stops={this.state.stops}
+                loopStops={this.state.loopStops}
+                loops={this.state.loops}
+                userLocation={this.state.userLocation}
+              />
             </Route>
             <Route path="/shuttle/:shuttleID">
-              <ShuttleBottomSheet shuttles={this.state.shuttles} onBottomSheetChange={this.onBottomSheetChange} />
+              <ShuttleBottomSheet
+                shuttles={this.state.shuttles}
+                onBottomSheetChange={this.onBottomSheetChange}
+              />
             </Route>
           </Switch>
         </MobileView>
@@ -341,14 +360,17 @@ class Home extends Component {
           appElement={document.body}
           title="Out of Boundaries"
           actions={[
-            <Button key="dismiss" onClick={() => this.setState({ showOutOfBoundsModal: false })}>
+            <Button
+              key="dismiss"
+              onClick={() => this.setState({ showOutOfBoundsModal: false })}
+            >
               Dismiss
             </Button>
           ]}
         >
           <CalciteP>
-            Sorry, your current location is outside of the region supported by this app. Please deactivate the location
-            tracking button.
+            Sorry, your current location is outside of the region supported by
+            this app. Please deactivate the location tracking button.
           </CalciteP>
         </Modal>
         )
