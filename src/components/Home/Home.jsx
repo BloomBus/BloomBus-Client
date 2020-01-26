@@ -4,8 +4,7 @@
 import React, { Component } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
-import lineString from 'turf-linestring';
-import bbox from '@turf/bbox';
+import { bbox, lineString } from '@turf/turf';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
@@ -24,7 +23,7 @@ import {
 // App components
 import LoopsBottomSheet from '../LoopsBottomSheet';
 import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
-import StopBottomSheet from '../StopBottomSheet';
+import StopInfoCard from '../StopInfoCard';
 import ShuttleBottomSheet from '../ShuttleBottomSheet';
 import Map from '../Map';
 import Sidebar from '../Sidebar';
@@ -233,6 +232,7 @@ class Home extends Component {
         latitude < seBound.latitude ||
         longitude > seBound.longitude;
       this.setState({
+        userLocation: [longitude, latitude],
         showOutOfBoundsModal: outOfBounds
       });
     }
@@ -339,9 +339,11 @@ class Home extends Component {
               />
             </Route>
             <Route path="/stop/:stopKey">
-              <StopBottomSheet
+              <StopInfoCard
                 stops={this.state.stops}
-                onBottomSheetChange={this.onBottomSheetChange}
+                loopStops={this.state.loopStops}
+                loops={this.state.loops}
+                userLocation={this.state.userLocation}
               />
             </Route>
             <Route path="/shuttle/:shuttleID">
