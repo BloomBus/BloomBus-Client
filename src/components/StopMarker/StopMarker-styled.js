@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export const StopMarkerContainer = styled.div.attrs(props => ({
   style: {
     width: props.selected ? '66px' : '42px',
-    height: props.selected ? '66px' : '42px',
-  },
+    height: props.selected ? '66px' : '42px'
+  }
 }))`
   transform: translate(-50%, -70%);
   transition-duration: 0.1s;

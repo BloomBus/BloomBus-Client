@@ -7,8 +7,8 @@ import { getLoop } from '../../utils/functions';
 
 const ShuttleMarkerContainer = styled.div.attrs(props => ({
   style: {
-    transform: `translate(-50%, -50%) rotate(${props.bearing + 90}deg)`,
-  },
+    transform: `translate(-50%, -50%) rotate(${props.bearing + 90}deg)`
+  }
 }))`
   width: 30px;
   height: 30px;
@@ -24,7 +24,11 @@ const ShuttleMarkerContainer = styled.div.attrs(props => ({
 class ShuttleMarker extends Component {
   render() {
     const {
-      shuttleKey, shuttle, loops, isInteracting, onShuttleSelect,
+      shuttleKey,
+      shuttle,
+      loops,
+      isInteracting,
+      onShuttleSelect
     } = this.props;
     const [longitude, latitude] = shuttle.geometry.coordinates;
     const { bearing, loopKey } = shuttle.properties;
@@ -34,9 +38,14 @@ class ShuttleMarker extends Component {
       <Marker
         longitude={longitude}
         latitude={latitude}
-        className={`shuttle-marker ${isInteracting ? '' : 'shuttle-marker--not-interacting'}`}
+        className={`shuttle-marker ${
+          isInteracting ? '' : 'shuttle-marker--not-interacting'
+        }`}
       >
-        <ShuttleMarkerContainer bearing={bearing} onClick={() => onShuttleSelect(shuttleKey)}>
+        <ShuttleMarkerContainer
+          bearing={bearing}
+          onClick={() => onShuttleSelect(shuttleKey)}
+        >
           <svg viewBox="0 0 42 42" height="40" width="40">
             <path
               fill={fill.toHex8String()}
@@ -62,7 +71,7 @@ class ShuttleMarker extends Component {
 }
 
 ShuttleMarker.defaultProps = {
-  isInteracting: false,
+  isInteracting: false
 };
 
 export default ShuttleMarker;

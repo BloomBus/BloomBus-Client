@@ -20,8 +20,7 @@ export const StyledHeader = styled.header`
   border-bottom: 1px solid #ddd;
 `;
 
-export const StyledHeaderTitle = styled.label`
-`;
+export const StyledHeaderTitle = styled.label``;
 
 export const LeftHeader = styled.div`
   display: flex;
@@ -42,5 +41,5 @@ export const RightHeader = styled.div`
 `;
 
 export const HeaderBackButtonContainer = styled.div`
-  display: flex
+  display: flex;
 `;

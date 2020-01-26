@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 
 // Local helpers/utils/modules
-import { getContributionAreaEmoji, getContributionAreaLabel } from '../../utils/functions';
+import {
+  getContributionAreaEmoji,
+  getContributionAreaLabel
+} from '../../utils/functions';
 
 // Inspired by https://allcontributors.org/
 
@@ -11,7 +14,7 @@ import {
   ContributorsContainer,
   ContributorCard,
   ContributorName,
-  ContributionsContainer,
+  ContributionsContainer
 } from './ContributorList-styled';
 
 // App components
@@ -27,22 +30,29 @@ class ContributorList extends Component {
   render() {
     return (
       <ContributorsContainer>
-        {contributors.map(({
-          name, avatar, contributionAreas, contributions,
-        }) => (
-          <ContributorCard key={name}>
-            <img alt="Avatar" src={avatar} width="100px" style={{ borderRadius: '50%' }} />
-            <ContributorName>{name}</ContributorName>
-            <div>
-              {contributionAreas.map(area => (
-                <span key={area} title={getContributionAreaLabel(area)}>
-                  {getContributionAreaEmoji(area)}
-                </span>
-              ))}
-            </div>
-            <ContributionsContainer>{contributions.join(', ')}</ContributionsContainer>
-          </ContributorCard>
-        ))}
+        {contributors.map(
+          ({ name, avatar, contributionAreas, contributions }) => (
+            <ContributorCard key={name}>
+              <img
+                alt="Avatar"
+                src={avatar}
+                width="100px"
+                style={{ borderRadius: '50%' }}
+              />
+              <ContributorName>{name}</ContributorName>
+              <div>
+                {contributionAreas.map(area => (
+                  <span key={area} title={getContributionAreaLabel(area)}>
+                    {getContributionAreaEmoji(area)}
+                  </span>
+                ))}
+              </div>
+              <ContributionsContainer>
+                {contributions.join(', ')}
+              </ContributionsContainer>
+            </ContributorCard>
+          )
+        )}
       </ContributorsContainer>
     );
   }

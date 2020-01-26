@@ -3,7 +3,11 @@
     "name": "Dan Pany",
     "avatar": "https://firebasestorage.googleapis.com/v0/b/bloombus-163620.appspot.com/o/avatars%2Fdanpany.jpg?alt=media&token=dc3700c9-82ab-44a6-9307-f45d55c98ada",
     "contributionAreas": ["research", "hardware", "networking"],
-    "contributions": ["Research", "Arduino Development", "ZigBee Radio Networking"],
+    "contributions": [
+      "Research",
+      "Arduino Development",
+      "ZigBee Radio Networking"
+    ],
     "timespan": "Aug. 2019 - "
   },
   {
@@ -15,7 +19,14 @@
   {
     "name": "John Gibson",
     "avatar": "https://firebasestorage.googleapis.com/v0/b/bloombus-163620.appspot.com/o/avatars%2Fjohngibson.jpeg?alt=media&token=95235a74-1033-42f7-a49c-03e4d9fb6611",
-    "contributionAreas": ["web", "mobile", "database", "design", "doc", "infra"],
+    "contributionAreas": [
+      "web",
+      "mobile",
+      "database",
+      "design",
+      "doc",
+      "infra"
+    ],
     "contributions": [
       "Web Development",
       "Mobile Development",
