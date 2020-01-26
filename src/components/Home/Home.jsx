@@ -373,7 +373,6 @@ class Home extends Component {
             this app. Please deactivate the location tracking button.
           </CalciteP>
         </Modal>
-        )
       </>
     );
   }
