@@ -27,7 +27,7 @@ export const LoopListItem = styled.button`
   width: 100%;
 
   font-family: ${props => props.theme.type.avenirFamily};
-  
+
   background-color: #ffffff;
   outline: none;
   border: none;

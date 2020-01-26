@@ -9,7 +9,12 @@ import { SidebarContainer, LoopActivityWrapper } from './Sidebar-styled';
 // App components
 
 // Third-party components (buttons, icons, etc.)
-import List, { ListItem, ListHeader, ListItemTitle, ListItemSubtitle } from 'calcite-react/List';
+import List, {
+  ListItem,
+  ListHeader,
+  ListItemTitle,
+  ListItemSubtitle
+} from 'calcite-react/List';
 import ChevronUpIcon from 'calcite-ui-icons-react/ChevronUpIcon';
 import ChevronDownIcon from 'calcite-ui-icons-react/ChevronDownIcon';
 import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
@@ -43,25 +48,44 @@ class Sidebar extends PureComponent {
   };
 
   render() {
-    const { loops, stops, loopStops, shuttles, onStopSelect, onShuttleSelect } = this.props;
+    const {
+      loops,
+      stops,
+      loopStops,
+      shuttles,
+      onStopSelect,
+      onShuttleSelect
+    } = this.props;
     return (
       <SidebarContainer>
         <ListHeader>Shuttle Loops</ListHeader>
         {loops.map((loop, i) => {
-          const currentLoopStops = loopStops[loop.properties.key].map(stopKey => stops[stopKey]);
+          const currentLoopStops = loopStops[loop.properties.key].map(
+            stopKey => stops[stopKey]
+          );
           const currentLoopShuttles =
             shuttles &&
             Object.entries(shuttles).filter(
-              ([shuttleID, shuttle]) => shuttle.properties.loopKey === loop.properties.key
+              ([shuttleID, shuttle]) =>
+                shuttle.properties.loopKey === loop.properties.key
             );
-          const noShuttlesAvailable = !currentLoopShuttles || currentLoopShuttles.length === 0;
+          const noShuttlesAvailable =
+            !currentLoopShuttles || currentLoopShuttles.length === 0;
 
           const open = this.state.openListIndexes.includes(i);
           return (
             <Fragment key={loop.properties.key}>
               <ListItem
-                leftNode={<CircleIcon size="20" color={loop.properties.color} />}
-                rightNode={open ? <ChevronUpIcon size="24" /> : <ChevronDownIcon size="24" />}
+                leftNode={
+                  <CircleIcon size="20" color={loop.properties.color} />
+                }
+                rightNode={
+                  open ? (
+                    <ChevronUpIcon size="24" />
+                  ) : (
+                    <ChevronDownIcon size="24" />
+                  )
+                }
                 onClick={() => this.toggleList(i)}
               >
                 <ListItemTitle>{loop.properties.name}</ListItemTitle>
@@ -96,7 +120,10 @@ class Sidebar extends PureComponent {
                   </ListItem>
                 ) : (
                   currentLoopShuttles.map(([shuttleID, shuttle], i) => (
-                    <ListItem key={shuttleID} onClick={() => onShuttleSelect(shuttleID)}>
+                    <ListItem
+                      key={shuttleID}
+                      onClick={() => onShuttleSelect(shuttleID)}
+                    >
                       <ListItemTitle>{`#${i + 1}`}</ListItemTitle>
                     </ListItem>
                   ))

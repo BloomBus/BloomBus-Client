@@ -1,8 +1,17 @@
 import React, { PureComponent } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import { LoopListItem, LoopListItemLeftSide, LoopListItemRightSide, LoopName } from './LoopsBottomSheet-styled';
-import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import {
+  LoopListItem,
+  LoopListItemLeftSide,
+  LoopListItemRightSide,
+  LoopName
+} from './LoopsBottomSheet-styled';
+import {
+  getBottomSheetBodyStyle,
+  BottomSheetContainer,
+  BottomSheetTitle
+} from '../../utils/commonElements';
 
 import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
 
@@ -23,14 +32,23 @@ class LoopsBottomSheet extends PureComponent {
           {loops.map(loop => {
             const noShuttlesAvailable =
               !shuttles ||
-              Object.values(shuttles).filter(shuttle => shuttle.properties.loopKey === loop.properties.key).length ===
-                0;
+              Object.values(shuttles).filter(
+                shuttle => shuttle.properties.loopKey === loop.properties.key
+              ).length === 0;
             return (
-              <LoopListItem key={loop.properties.name} tabIndex="0" onClick={() => onLoopSelect(loop.properties.key)}>
+              <LoopListItem
+                key={loop.properties.name}
+                tabIndex="0"
+                onClick={() => onLoopSelect(loop.properties.key)}
+              >
                 <LoopListItemLeftSide>
-                  <LoopName color={loop.properties.color}>{loop.properties.name}</LoopName>
+                  <LoopName color={loop.properties.color}>
+                    {loop.properties.name}
+                  </LoopName>
                 </LoopListItemLeftSide>
-                <LoopListItemRightSide>{noShuttlesAvailable ? <MoonIcon size={25} /> : null}</LoopListItemRightSide>
+                <LoopListItemRightSide>
+                  {noShuttlesAvailable ? <MoonIcon size={25} /> : null}
+                </LoopListItemRightSide>
               </LoopListItem>
             );
           })}

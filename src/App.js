@@ -24,7 +24,16 @@ class App extends Component {
         <CalciteThemeProvider>
           <Switch>
             <Route path="/about" component={About} />
-            <Route path={["/loops", "/stop/:stopKey", '/loop/:loopKey', '/shuttle/:shuttleID', '/']} component={Home} />
+            <Route
+              path={[
+                '/loops',
+                '/stop/:stopKey',
+                '/loop/:loopKey',
+                '/shuttle/:shuttleID',
+                '/'
+              ]}
+              component={Home}
+            />
             <Redirect to="/" />
           </Switch>
         </CalciteThemeProvider>

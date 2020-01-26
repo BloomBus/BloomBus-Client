@@ -5,9 +5,7 @@ import { StopMarkerContainer } from './StopMarker-styled';
 
 class StopMarker extends PureComponent {
   render() {
-    const {
-      stop, selected, disabled, onStopSelect,
-    } = this.props;
+    const { stop, selected, disabled, onStopSelect } = this.props;
     const fill = selected ? '#3cd3ab' : '#33a3f4';
     const [longitude, latitude] = stop.geometry.coordinates;
     return (
@@ -16,7 +14,10 @@ class StopMarker extends PureComponent {
         latitude={latitude}
         className={`stop-marker ${selected ? 'stop-marker--selected' : ''}`}
       >
-        <StopMarkerContainer selected={selected} onClick={() => !disabled && onStopSelect(stop.properties.stopKey)}>
+        <StopMarkerContainer
+          selected={selected}
+          onClick={() => !disabled && onStopSelect(stop.properties.stopKey)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fillRule="evenodd"
@@ -27,7 +28,13 @@ class StopMarker extends PureComponent {
             viewBox="0 0 93 93"
             style={disabled ? { filter: 'opacity(0.3) saturate(0.75)' } : null}
           >
-            <ellipse cx="46.08" cy="83.54" fill="url(#_Radial1)" rx="32.32" ry="8.62" />
+            <ellipse
+              cx="46.08"
+              cy="83.54"
+              fill="url(#_Radial1)"
+              rx="32.32"
+              ry="8.62"
+            />
             <circle cx="46.05" cy="80.25" r="5.34" fill={fill} />
             <path fill={fill} d="M40.64 24.38h10.75v55.88H40.64z" />
             <circle cx="46.05" cy="32.39" r="27.57" fill={fill} />
@@ -46,7 +53,15 @@ class StopMarker extends PureComponent {
                 fill={fill}
                 d="M58.3 22.25c0-1.3-1.06-2.35-2.36-2.35H35.88a2.36 2.36 0 0 0-2.35 2.35V41.1c0 1.3 1.05 2.36 2.35 2.36h20.06c1.3 0 2.36-1.06 2.36-2.36V22.25z"
               />
-              <ellipse cx="45.95" cy="22.27" fill="#fff" stroke={fill} strokeWidth="2.15" rx="11.28" ry="4.07" />
+              <ellipse
+                cx="45.95"
+                cy="22.27"
+                fill="#fff"
+                stroke={fill}
+                strokeWidth="2.15"
+                rx="11.28"
+                ry="4.07"
+              />
               <path
                 fill={fill}
                 d="M60.44 25.73c0-1.23-1-2.23-2.23-2.23H33.69c-1.23 0-2.23 1-2.23 2.23v4.47c0 1.23 1 2.23 2.23 2.23H58.2c1.23 0 2.23-1 2.23-2.23v-4.47z"
@@ -92,7 +107,7 @@ class StopMarker extends PureComponent {
 
 StopMarker.defaultProps = {
   selected: false,
-  isInteracting: false,
+  isInteracting: false
 };
 
 export default StopMarker;

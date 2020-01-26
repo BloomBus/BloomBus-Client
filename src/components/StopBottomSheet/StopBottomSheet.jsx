@@ -13,7 +13,11 @@ import {
 } from './StopBottomSheet-styled';
 
 // App components
-import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import {
+  getBottomSheetBodyStyle,
+  BottomSheetContainer,
+  BottomSheetTitle
+} from '../../utils/commonElements';
 
 // Third-party components (buttons, icons, etc.)
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
@@ -62,7 +66,10 @@ class StopBottomSheet extends Component {
                 onClick={this.toggleImageExpanded}
               />
             ) : (
-              <StopImagePlaceholder imageExpanded={this.state.imageExpanded} onClick={this.toggleImageExpanded}>
+              <StopImagePlaceholder
+                imageExpanded={this.state.imageExpanded}
+                onClick={this.toggleImageExpanded}
+              >
                 ?
               </StopImagePlaceholder>
             )}

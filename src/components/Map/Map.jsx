@@ -5,7 +5,11 @@ import { fromJS } from 'immutable';
 
 // Component specific modules (Component-styled, etc.)
 import CustomMapController from './CustomMapController';
-import { MapControlsWrapper, StyledGeolocateControl, StyledNavigationControl } from './Map-styled';
+import {
+  MapControlsWrapper,
+  StyledGeolocateControl,
+  StyledNavigationControl
+} from './Map-styled';
 
 // App components
 import StopMarker from '../StopMarker';
@@ -18,11 +22,18 @@ import ReactMapGL from 'react-map-gl';
 
 // CSS
 
-const StopMarkerLayer = ({ stops, selectedStop, selectedLoopStops, onStopSelect, isInteracting }) =>
+const StopMarkerLayer = ({
+  stops,
+  selectedStop,
+  selectedLoopStops,
+  onStopSelect,
+  isInteracting
+}) =>
   stops &&
   Object.entries(stops).map(([stopKey, stop]) => {
     const selected = selectedStop === stopKey;
-    const disabled = selectedLoopStops.length > 0 && !selectedLoopStops.includes(stopKey);
+    const disabled =
+      selectedLoopStops.length > 0 && !selectedLoopStops.includes(stopKey);
     return (
       <StopMarker
         key={stopKey}

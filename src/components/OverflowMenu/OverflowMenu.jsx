@@ -43,17 +43,37 @@ class OverflowMenu extends Component {
           }}
         >
           <StyledMenu large>
-            <MenuItem onClick={() => window.open('https://intranet.bloomu.edu/documents/police/BusSchedule.pdf')}>
+            <MenuItem
+              onClick={() =>
+                window.open(
+                  'https://intranet.bloomu.edu/documents/police/BusSchedule.pdf'
+                )
+              }
+            >
               Shuttle Schedule
             </MenuItem>
-            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/alerts')}>
+            <MenuItem
+              disabled
+              subtitle="WIP"
+              onClick={() => this.props.history.push('/alerts')}
+            >
               Status Alerts
             </MenuItem>
-            <MenuItem disabled subtitle="WIP" onClick={() => this.props.history.push('/feedback')}>
+            <MenuItem
+              disabled
+              subtitle="WIP"
+              onClick={() => this.props.history.push('/feedback')}
+            >
               Feedback
             </MenuItem>
-            <MenuItem onClick={() => window.open('mailto:bloombus@huskies.bloomu.edu')}>Report an Issue</MenuItem>
-            <MenuItem onClick={() => this.props.history.push('/about')}>About</MenuItem>
+            <MenuItem
+              onClick={() => window.open('mailto:bloombus@huskies.bloomu.edu')}
+            >
+              Report an Issue
+            </MenuItem>
+            <MenuItem onClick={() => this.props.history.push('/about')}>
+              About
+            </MenuItem>
           </StyledMenu>
         </Popover>
       </OverflowMenuContainer>

@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
-import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import {
+  getBottomSheetBodyStyle,
+  BottomSheetContainer,
+  BottomSheetTitle
+} from '../../utils/commonElements';
 
 class ShuttleBottomSheet extends Component {
   render() {

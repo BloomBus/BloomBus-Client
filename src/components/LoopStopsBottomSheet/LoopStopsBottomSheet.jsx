@@ -6,10 +6,18 @@ import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 // Local helpers/utils/modules
 
 // Component specific modules (Component-styled, etc.)
-import { LoopStopsListItem, LoopStopsListItemLeftSide, LoopStopsName } from './LoopStopsBottomSheet-styled';
+import {
+  LoopStopsListItem,
+  LoopStopsListItemLeftSide,
+  LoopStopsName
+} from './LoopStopsBottomSheet-styled';
 
 // App components
-import { getBottomSheetBodyStyle, BottomSheetContainer, BottomSheetTitle } from '../../utils/commonElements';
+import {
+  getBottomSheetBodyStyle,
+  BottomSheetContainer,
+  BottomSheetTitle
+} from '../../utils/commonElements';
 // import ETALabel from '../ETALabel/ETALabel';
 
 // Third-party components (buttons, icons, etc.)
@@ -21,7 +29,13 @@ import NextStopIcon from '../NextStopIcon';
 
 class LoopStopsBottomSheet extends PureComponent {
   render() {
-    const { match, loopStops, stops, onStopSelect, onBottomSheetChange } = this.props;
+    const {
+      match,
+      loopStops,
+      stops,
+      onStopSelect,
+      onBottomSheetChange
+    } = this.props;
     // let eta = 1;
     const { loopKey: selectedLoop } = match.params;
     const selectedLoopStops = (loopStops && loopStops[selectedLoop]) || [];
@@ -40,10 +54,16 @@ class LoopStopsBottomSheet extends PureComponent {
             const stop = stops[stopKey];
             // eta += Math.ceil(Math.random() * 3);
             return (
-              <LoopStopsListItem key={stop.properties.name} tabIndex="0" onClick={() => onStopSelect(stopKey)}>
+              <LoopStopsListItem
+                key={stop.properties.name}
+                tabIndex="0"
+                onClick={() => onStopSelect(stopKey)}
+              >
                 <LoopStopsListItemLeftSide>
                   <NextStopIcon width="40" height="40" />
-                  <LoopStopsName color={stop.properties.color}>{stop.properties.name}</LoopStopsName>
+                  <LoopStopsName color={stop.properties.color}>
+                    {stop.properties.name}
+                  </LoopStopsName>
                 </LoopStopsListItemLeftSide>
                 {/* <ETALabel number={eta} /> */}
               </LoopStopsListItem>

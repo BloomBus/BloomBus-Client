@@ -21,8 +21,8 @@ export const ImageLoaderWrapper = styled.div`
 
 export const StopImage = styled(Img)`
   font-size: 3em;
-  height: ${props => props.imageExpanded ? '200px' : '100px'};
-  width: ${props => props.imageExpanded ? '200px' : '100px'};
+  height: ${props => (props.imageExpanded ? '200px' : '100px')};
+  width: ${props => (props.imageExpanded ? '200px' : '100px')};
   border-radius: ${props => unitCalc(props.theme.baseline, 4, '/')};
   transition: all 0.15s;
 `;
@@ -30,9 +30,9 @@ export const StopImage = styled(Img)`
 export const StopImagePlaceholder = styled.div`
   background-color: #333;
   color: ${props => props.theme.palette.offWhite};
-  font-size: ${props => props.imageExpanded ? '6rem' : '3rem'};
-  height: ${props => props.imageExpanded ? '200px' : '100px'};
-  width: ${props => props.imageExpanded ? '200px' : '100px'};
+  font-size: ${props => (props.imageExpanded ? '6rem' : '3rem')};
+  height: ${props => (props.imageExpanded ? '200px' : '100px')};
+  width: ${props => (props.imageExpanded ? '200px' : '100px')};
   display: flex;
   align-items: center;
   justify-content: center;

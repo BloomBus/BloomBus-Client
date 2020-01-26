@@ -15,8 +15,8 @@ export const ContributorCard = styled.div`
   align-content: center;
 
   border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
-  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 
   padding: 1em;
   text-align: center;
