@@ -55,7 +55,7 @@ class StopInfoCard extends PureComponent {
     const loopBadges = loopKeysThatStopHere.map(loopKey => {
       const loop = keyBy(loops, 'properties.key')[loopKey];
       return loop ? (
-        <LoopBadge color={loop.properties.color}>
+        <LoopBadge key={loopKey} color={loop.properties.color}>
           {loop.properties.name.replace('Loop', '').trim()}
         </LoopBadge>
       ) : null;
