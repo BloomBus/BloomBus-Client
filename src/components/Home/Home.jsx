@@ -1,12 +1,19 @@
 /* globals GeolocationCoordinates */
 
 // Framework and third-party non-ui
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { bbox, lineString } from '@turf/turf';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { Switch, Route, withRouter } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useHistory,
+  useLocation,
+  useParams
+} from 'react-router-dom';
+import { useObjectVal } from 'react-firebase-hooks/database';
 
 // Local helpers/utils/modules
 import { getLoop } from '../../utils/functions';
@@ -41,138 +48,99 @@ import LogoBusIcon from './LogoBusIcon';
 
 // CSS
 
-class Home extends Component {
-  state = {
-    isLoading: true,
-    loops: null,
-    stops: null,
-    shuttles: null,
-    loopStops: null,
-    viewport: {
-      width: '100%',
-      height: '100%',
-      latitude: 41.007,
-      longitude: -76.451,
-      zoom: 14,
-      pitch: 0,
-      tilt: 0
-    },
-    showOutOfBoundsModal: false
-  };
+const Home = () => {
+  // State
+  const [viewport, setViewport] = useState({
+    width: '100%',
+    height: '100%',
+    latitude: 41.007,
+    longitude: -76.451,
+    zoom: 14,
+    pitch: 0,
+    tilt: 0
+  });
+  const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
-  mapContainerRef = React.createRef();
+  const mapContainerRef = useRef();
 
-  componentDidMount() {
-    this.initFirebaseListeners();
-    this.props.history.push('/loops');
-  }
+  // Firebase values
+  const db = firebase.database();
+  const [constants, constantsLoading] = useObjectVal(db.ref('constants'));
+  const [shuttles, shuttlesLoading] = useObjectVal(db.ref('shuttles'));
+  const [stops, stopsLoading] = useObjectVal(db.ref('stops'));
+  const [loops, loopsLoading] = useObjectVal(db.ref('loops/features'));
+  const [loopStops, loopStopsLoading] = useObjectVal(db.ref('loop-stops'));
+  const isLoading =
+    constantsLoading ||
+    shuttlesLoading ||
+    stopsLoading ||
+    loopsLoading ||
+    loopStopsLoading;
 
-  initFirebaseListeners = () => {
-    const promises = [];
+  // react-router props
+  const history = useHistory();
+  const location = useLocation();
+  const params = useParams();
 
-    const constantsRef = firebase.database().ref('constants');
-    promises.push(
-      constantsRef.once('value', constantsSnapshot => {
-        this.constants = constantsSnapshot.val();
-      })
-    );
-
-    const stopsRef = firebase.database().ref('stops');
-    promises.push(
-      stopsRef.once('value', stopsSnapshot => {
-        this.setState({
-          stops: stopsSnapshot.val()
-        });
-      })
-    );
-
-    const loopsRef = firebase.database().ref('loops');
-    promises.push(
-      loopsRef.once('value', loopsSnapshot => {
-        const loops = loopsSnapshot.val().features;
-        this.setState({
-          loops
-        });
-      })
-    );
-
-    const loopStopsRef = firebase.database().ref('loop-stops');
-    promises.push(
-      loopStopsRef.once('value', loopStopsSnapshot => {
-        this.setState({
-          loopStops: loopStopsSnapshot.val()
-        });
-      })
-    );
-
-    Promise.all(promises).then(res => {
-      this.setState({ isLoading: false });
-    });
-
-    const shuttlesRef = firebase.database().ref('shuttles');
-    shuttlesRef.on('value', shuttlesSnapshot => {
-      shuttlesSnapshot.forEach(shuttleSnapshot => {
-        this.handleNewValue(shuttleSnapshot);
+  // Process a shuttle update
+  useEffect(() => {
+    // Track selected shuttle
+    const { shuttleID } = params;
+    if (shuttleID) {
+      // Get selected shuttle by its UUID
+      const selectedShuttle = shuttles[shuttleID];
+      const [longitude, latitude] = selectedShuttle.geometry.coordinates;
+      setViewport({
+        ...viewport,
+        longitude,
+        latitude,
+        transitionDuration: 1000,
+        transitionInterpolator: new LinearInterpolator()
       });
+    }
+  }, [params, shuttles, viewport]);
+
+  // Redirect to /loops on mount
+  useEffect(() => {
+    history.push('/loops');
+  }, [history]);
+
+  const onStopSelect = stopKey => {
+    const [longitude, latitude] = stops[stopKey].geometry.coordinates;
+    setViewport({
+      ...viewport,
+      longitude,
+      latitude,
+      zoom: 16,
+      transitionInterpolator: new LinearInterpolator(),
+      transitionDuration: 200
     });
-    shuttlesRef.on('child_removed', shuttleSnapshot => {
-      this.setState(prevState => {
-        const tempState = prevState;
-        delete tempState.shuttles[shuttleSnapshot.key];
-        return tempState;
-      });
+    history.push(`/stop/${stopKey}`);
+  };
+
+  const onShuttleSelect = shuttleKey => {
+    const [longitude, latitude] = shuttles[shuttleKey].geometry.coordinates;
+
+    setViewport({
+      ...viewport,
+      longitude,
+      latitude,
+      zoom: 16,
+      transitionInterpolator: new LinearInterpolator(),
+      transitionDuration: 200
     });
+
+    history.push(`/shuttle/${shuttleKey}`);
   };
 
-  onStopSelect = stopKey => {
-    const [longitude, latitude] = this.state.stops[
-      stopKey
-    ].geometry.coordinates;
-    this.setState(
-      prevState => ({
-        viewport: {
-          ...prevState.viewport,
-          longitude,
-          latitude,
-          zoom: 16,
-          transitionInterpolator: new LinearInterpolator(),
-          transitionDuration: 200
-        }
-      }),
-      () => {
-        this.props.history.push(`/stop/${stopKey}`);
-      }
-    );
-  };
-
-  onShuttleSelect = shuttleKey => {
-    const [longitude, latitude] = this.state.shuttles[
-      shuttleKey
-    ].geometry.coordinates;
-    this.setState(
-      prevState => ({
-        viewport: {
-          ...prevState.viewport,
-          longitude,
-          latitude,
-          zoom: 16,
-          transitionInterpolator: new LinearInterpolator(),
-          transitionDuration: 200
-        }
-      }),
-      () => {
-        this.props.history.push(`/shuttle/${shuttleKey}`);
-      }
-    );
-  };
-
-  onLoopSelect = loopKey => {
-    const loop = getLoop(loopKey, this.state.loops);
+  const onLoopSelect = loopKey => {
+    const loop = getLoop(loopKey, loops);
     if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
     // construct a viewport instance from the current state
-    const newViewport = new WebMercatorViewport(this.state.viewport);
+    const newViewport = new WebMercatorViewport(viewport);
     const { longitude, latitude, zoom } = newViewport.fitBounds(
       [
         [minLng, minLat],
@@ -183,22 +151,23 @@ class Home extends Component {
       }
     );
 
-    this.setState(prevState => ({
-      viewport: {
-        ...prevState.viewport,
-        longitude,
-        latitude,
-        zoom,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionDuration: 500
-      }
-    }));
-    this.props.history.push(`/loop/${loopKey}`);
+    setViewport({
+      ...viewport,
+      longitude,
+      latitude,
+      zoom,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionDuration: 500
+    });
+
+    history.push(`/loop/${loopKey}`);
   };
 
-  onViewportChange = viewport => {
-    const newViewport = viewport;
-    const { nwBound, seBound } = this.constants.mapOptions;
+  const onViewportChange = viewport => {
+    const newViewport = {
+      ...viewport
+    };
+    const { nwBound, seBound } = constants.mapOptions;
     // Clamp viewport bounds
     if (viewport.longitude < nwBound.longitude) {
       newViewport.longitude = nwBound.longitude;
@@ -211,171 +180,136 @@ class Home extends Component {
       newViewport.latitude = seBound.latitude;
     }
 
-    this.setState({ viewport: newViewport });
+    setViewport(newViewport);
   };
 
-  onMapClick = pointerEvent => {
-    const { pathname } = this.props.location;
-    this.props.history.push(pathname !== '/' ? '/' : '/loops');
+  const onMapClick = pointerEvent => {
+    const { pathname } = location;
+    history.push(pathname !== '/' ? '/' : '/loops');
   };
 
-  onGeolocate = data => {
+  const onGeolocate = data => {
     if (
       data.hasOwnProperty('coords') &&
       data.coords instanceof GeolocationCoordinates
     ) {
-      const { nwBound, seBound } = this.constants.mapOptions;
+      const { nwBound, seBound } = constants.mapOptions;
       const { latitude, longitude } = data.coords;
       const outOfBounds =
         latitude > nwBound.latitude ||
         longitude < nwBound.longitude ||
         latitude < seBound.latitude ||
         longitude > seBound.longitude;
-      this.setState({
-        userLocation: [longitude, latitude],
-        showOutOfBoundsModal: outOfBounds
-      });
+
+      setUserLocation([longitude, latitude]);
+      setShowOutOfBoundsModal(outOfBounds);
     }
   };
 
   // Fires when a bottomsheet opens/closes
-  onBottomSheetChange = isOpen => {
+  const onBottomSheetChange = isOpen => {
     if (isOpen) return;
-    this.props.history.push('/');
+    history.push('/');
   };
 
-  // Process a shuttle update
-  handleNewValue = shuttleSnapshot => {
-    const shuttle = shuttleSnapshot.val();
-    this.setState(prevState => ({
-      shuttles: {
-        ...prevState.shuttles,
-        [shuttleSnapshot.key]: shuttle
-      }
-    }));
-    // Track selected shuttle
-    const { shuttleID } = this.props.match.params;
-    if (shuttleID) {
-      // Get selected shuttle by its UUID
-      const selectedShuttle = this.state.shuttles[shuttleID];
-      this.setState(prevState => {
-        const [longitude, latitude] = selectedShuttle.geometry.coordinates;
-        const newViewport = {
-          ...prevState.viewport,
-          longitude,
-          latitude,
-          transitionDuration: 1000,
-          transitionInterpolator: new LinearInterpolator()
-        };
-        return { viewport: newViewport };
-      });
-    }
-  };
+  return isLoading ? (
+    <StyledLoaderWrapper>
+      <Loader text="Loading..." />
+    </StyledLoaderWrapper>
+  ) : (
+    <>
+      <AppHeader>
+        <LeftHeader />
+        <CenterHeader>
+          <StyledHeaderLogoLabel>BloomBus</StyledHeaderLogoLabel>
+          <LogoBusIcon />
+        </CenterHeader>
+        <RightHeader>
+          <OverflowMenu />
+        </RightHeader>
+      </AppHeader>
+      <Route path={['/stop/:stopKey', '/loop/:loopKey', '/']}>
+        <Map
+          mapContainerRef={mapContainerRef}
+          loops={loops}
+          stops={stops}
+          loopStops={loopStops}
+          shuttles={shuttles}
+          mapOptions={constants.mapOptions}
+          viewport={viewport}
+          onViewportChange={onViewportChange}
+          onMapClick={onMapClick}
+          onStopSelect={onStopSelect}
+          onShuttleSelect={onShuttleSelect}
+          onGeolocate={onGeolocate}
+        />
+      </Route>
+      <BrowserView>
+        <Sidebar
+          loops={loops}
+          stops={stops}
+          loopStops={loopStops}
+          shuttles={shuttles}
+          onLoopSelect={onLoopSelect}
+          onStopSelect={onStopSelect}
+          onShuttleSelect={onShuttleSelect}
+        />
+      </BrowserView>
+      <MobileView>
+        <Switch>
+          <Route exact path="/loops">
+            {loops && (
+              <LoopsBottomSheet
+                loops={loops}
+                stops={stops}
+                shuttles={shuttles}
+                onLoopSelect={onLoopSelect}
+                onBottomSheetChange={onBottomSheetChange}
+              />
+            )}
+          </Route>
+          <Route path="/loop/:loopKey">
+            <LoopStopsBottomSheet
+              loopStops={loopStops}
+              stops={stops}
+              onStopSelect={onStopSelect}
+              onBottomSheetChange={onBottomSheetChange}
+            />
+          </Route>
+          <Route path="/stop/:stopKey">
+            <StopInfoCard
+              stops={stops}
+              loopStops={loopStops}
+              loops={loops}
+              userLocation={userLocation}
+            />
+          </Route>
+          <Route path="/shuttle/:shuttleID">
+            <ShuttleBottomSheet
+              shuttles={shuttles}
+              onBottomSheetChange={onBottomSheetChange}
+            />
+          </Route>
+        </Switch>
+      </MobileView>
+      <Modal
+        open={showOutOfBoundsModal}
+        onRequestClose={() => setShowOutOfBoundsModal(false)}
+        appElement={document.body}
+        title="Out of Boundaries"
+        actions={[
+          <Button key="dismiss" onClick={() => setShowOutOfBoundsModal(false)}>
+            Dismiss
+          </Button>
+        ]}
+      >
+        <CalciteP>
+          Sorry, your current location is outside of the region supported by
+          this app. Please deactivate the location tracking button.
+        </CalciteP>
+      </Modal>
+    </>
+  );
+};
 
-  render() {
-    return this.state.isLoading ? (
-      <StyledLoaderWrapper>
-        <Loader text="Loading..." />
-      </StyledLoaderWrapper>
-    ) : (
-      <>
-        <AppHeader>
-          <LeftHeader />
-          <CenterHeader>
-            <StyledHeaderLogoLabel>BloomBus</StyledHeaderLogoLabel>
-            <LogoBusIcon />
-          </CenterHeader>
-          <RightHeader>
-            <OverflowMenu />
-          </RightHeader>
-        </AppHeader>
-        <Route path={['/stop/:stopKey', '/loop/:loopKey', '/']}>
-          <Map
-            mapContainerRef={this.mapContainerRef}
-            loops={this.state.loops}
-            stops={this.state.stops}
-            loopStops={this.state.loopStops}
-            shuttles={this.state.shuttles}
-            updateMapDimensions={this.updateMapDimensions}
-            mapOptions={this.constants.mapOptions}
-            viewport={this.state.viewport}
-            onViewportChange={this.onViewportChange}
-            onMapClick={this.onMapClick}
-            onStopSelect={this.onStopSelect}
-            onShuttleSelect={this.onShuttleSelect}
-            onGeolocate={this.onGeolocate}
-          />
-        </Route>
-        <BrowserView>
-          <Sidebar
-            loops={this.state.loops}
-            stops={this.state.stops}
-            loopStops={this.state.loopStops}
-            shuttles={this.state.shuttles}
-            onLoopSelect={this.onLoopSelect}
-            onStopSelect={this.onStopSelect}
-            onShuttleSelect={this.onShuttleSelect}
-          />
-        </BrowserView>
-        <MobileView>
-          <Switch>
-            <Route exact path="/loops">
-              {this.state.loops ? (
-                <LoopsBottomSheet
-                  loops={this.state.loops}
-                  stops={this.state.stops}
-                  shuttles={this.state.shuttles}
-                  onLoopSelect={this.onLoopSelect}
-                  onBottomSheetChange={this.onBottomSheetChange}
-                />
-              ) : null}
-            </Route>
-            <Route path="/loop/:loopKey">
-              <LoopStopsBottomSheet
-                loopStops={this.state.loopStops}
-                stops={this.state.stops}
-                onStopSelect={this.onStopSelect}
-                onBottomSheetChange={this.onBottomSheetChange}
-              />
-            </Route>
-            <Route path="/stop/:stopKey">
-              <StopInfoCard
-                stops={this.state.stops}
-                loopStops={this.state.loopStops}
-                loops={this.state.loops}
-                userLocation={this.state.userLocation}
-              />
-            </Route>
-            <Route path="/shuttle/:shuttleID">
-              <ShuttleBottomSheet
-                shuttles={this.state.shuttles}
-                onBottomSheetChange={this.onBottomSheetChange}
-              />
-            </Route>
-          </Switch>
-        </MobileView>
-        <Modal
-          open={this.state.showOutOfBoundsModal}
-          onRequestClose={() => this.setState({ showOutOfBoundsModal: false })}
-          appElement={document.body}
-          title="Out of Boundaries"
-          actions={[
-            <Button
-              key="dismiss"
-              onClick={() => this.setState({ showOutOfBoundsModal: false })}
-            >
-              Dismiss
-            </Button>
-          ]}
-        >
-          <CalciteP>
-            Sorry, your current location is outside of the region supported by
-            this app. Please deactivate the location tracking button.
-          </CalciteP>
-        </Modal>
-      </>
-    );
-  }
-}
-
-export default withRouter(Home);
+export default Home;

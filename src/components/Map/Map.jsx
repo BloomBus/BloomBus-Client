@@ -30,21 +30,18 @@ const StopMarkerLayer = ({
   isInteracting
 }) =>
   stops &&
-  Object.entries(stops).map(([stopKey, stop]) => {
-    const selected = selectedStop === stopKey;
-    const disabled =
-      selectedLoopStops.length > 0 && !selectedLoopStops.includes(stopKey);
-    return (
-      <StopMarker
-        key={stopKey}
-        stop={stop}
-        selected={selected}
-        disabled={disabled}
-        onStopSelect={onStopSelect}
-        isInteracting={isInteracting}
-      />
-    );
-  });
+  Object.entries(stops).map(([stopKey, stop]) => (
+    <StopMarker
+      key={stopKey}
+      stop={stop}
+      selected={selectedStop === stopKey}
+      disabled={
+        selectedLoopStops.length > 0 && !selectedLoopStops.includes(stopKey)
+      }
+      onStopSelect={onStopSelect}
+      isInteracting={isInteracting}
+    />
+  ));
 
 class Map extends Component {
   state = {
@@ -108,7 +105,7 @@ class Map extends Component {
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;
-    const selectedLoopStops = loopStops[selectedLoopKey] || [];
+    const selectedLoopStops = loopStops[selectedLoopKey] ?? [];
 
     return (
       <div ref={mapContainerRef} style={{ flex: 1 }}>
@@ -141,19 +138,16 @@ class Map extends Component {
             isInteracting={this.state.isInteracting}
           />
           {shuttles &&
-            Object.keys(shuttles).map(shuttleKey => {
-              const shuttle = shuttles[shuttleKey];
-              return (
-                <ShuttleMarker
-                  shuttle={shuttle}
-                  key={shuttleKey}
-                  shuttleKey={shuttleKey} // must explicitly pass as separate prop from `key`
-                  loops={loops}
-                  isInteracting={this.state.isInteracting}
-                  onShuttleSelect={onShuttleSelect}
-                />
-              );
-            })}
+            Object.entries(shuttles).map(([shuttleKey, shuttle]) => (
+              <ShuttleMarker
+                shuttle={shuttle}
+                key={shuttleKey}
+                shuttleKey={shuttleKey} // must explicitly pass as separate prop from `key`
+                loops={loops}
+                isInteracting={this.state.isInteracting}
+                onShuttleSelect={onShuttleSelect}
+              />
+            ))}
         </ReactMapGL>
       </div>
     );
