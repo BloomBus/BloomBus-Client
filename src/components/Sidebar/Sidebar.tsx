@@ -9,6 +9,7 @@ import { SidebarContainer, LoopActivityWrapper } from './Sidebar-styled';
 
 // App components, types
 import { Loop, LoopStops, Shuttles, StopKey, Stops } from 'types';
+import NextStopIcon from 'components/NextStopIcon';
 
 // Third-party components (buttons, icons, etc.)
 import List, {
@@ -20,7 +21,6 @@ import List, {
 import ChevronUpIcon from 'calcite-ui-icons-react/ChevronUpIcon';
 import ChevronDownIcon from 'calcite-ui-icons-react/ChevronDownIcon';
 import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
-import NextStopIcon from '../NextStopIcon';
 
 interface CircleIconProps {
   size: number;

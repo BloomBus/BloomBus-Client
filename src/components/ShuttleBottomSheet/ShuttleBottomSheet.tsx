@@ -6,7 +6,7 @@ import {
   bottomSheetBodyStyle,
   BottomSheetContainer,
   BottomSheetTitle
-} from '../../utils/commonElements';
+} from 'utils/commonElements';
 
 import { Shuttles } from 'types';
 

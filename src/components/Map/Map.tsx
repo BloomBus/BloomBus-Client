@@ -21,7 +21,7 @@ import {
   StopKey,
   Stops
 } from 'types';
-import StopMarker from '../StopMarker';
+import StopMarker from 'components/StopMarker';
 import ShuttleMarker from './ShuttleMarker';
 
 // Third-party components (buttons, icons, etc.)
@@ -128,7 +128,11 @@ const Map: React.FC<MapProps> = ({
     isPanning,
     isDragging,
     isZooming
-  }: ExtraState) => {
+  }: {
+    isPanning: boolean;
+    isDragging: boolean;
+    isZooming: boolean;
+  }) => {
     setIsInteracting(!!(isPanning || isDragging || isZooming));
   };
 

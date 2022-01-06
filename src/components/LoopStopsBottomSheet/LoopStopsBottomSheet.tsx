@@ -18,9 +18,9 @@ import {
   bottomSheetBodyStyle,
   BottomSheetContainer,
   BottomSheetTitle
-} from '../../utils/commonElements';
-import NextStopIcon from '../NextStopIcon';
-// import ETALabel from '../ETALabel/ETALabel';
+} from 'utils/commonElements';
+import NextStopIcon from 'components/NextStopIcon';
+// import ETALabel from 'components/ETALabel/ETALabel';
 
 // Third-party components (buttons, icons, etc.)
 

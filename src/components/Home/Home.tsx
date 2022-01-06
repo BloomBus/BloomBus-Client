@@ -28,7 +28,7 @@ import {
   LeftHeader,
   CenterHeader,
   RightHeader
-} from '../AppHeader/AppHeader-styled';
+} from 'components/AppHeader/AppHeader-styled';
 
 // App components, types
 import {
@@ -40,14 +40,14 @@ import {
   StopKey,
   Stops
 } from 'types';
-import LoopsBottomSheet from '../LoopsBottomSheet';
-import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
-import StopInfoCard from '../StopInfoCard';
-import ShuttleBottomSheet from '../ShuttleBottomSheet';
-import Map from '../Map';
-import Sidebar from '../Sidebar';
-import AppHeader from '../AppHeader';
-import OverflowMenu from '../OverflowMenu';
+import LoopsBottomSheet from 'components/LoopsBottomSheet';
+import LoopStopsBottomSheet from 'components/LoopStopsBottomSheet';
+import StopInfoCard from 'components/StopInfoCard';
+import ShuttleBottomSheet from 'components/ShuttleBottomSheet';
+import Map from 'components/Map';
+import Sidebar from 'components/Sidebar';
+import AppHeader from 'components/AppHeader';
+import OverflowMenu from 'components/OverflowMenu';
 
 // Third-party components (buttons, icons, etc.)
 import Loader from 'calcite-react/Loader';
@@ -172,7 +172,7 @@ const Home = () => {
   };
 
   const onViewportChange = (newViewport: ViewportProps) => {
-    if (!constants) throw Error();
+    if (!constants || !newViewport.latitude || !newViewport.longitude) return;
     const { nwBound, seBound } = constants.mapOptions;
     // Clamp viewport bounds
     if (newViewport.longitude < nwBound.longitude) {

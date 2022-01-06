@@ -10,13 +10,13 @@ import {
   LeftHeader,
   CenterHeader,
   RightHeader
-} from '../AppHeader/AppHeader-styled';
+} from 'components/AppHeader/AppHeader-styled';
 import { StyledCalciteH4 } from './About-styled';
 
 // App components, types
-import AppHeader, { AppHeaderBackButton } from '../AppHeader';
-import Page from '../Page';
-import Contributors from '../ContributorList';
+import AppHeader, { AppHeaderBackButton } from 'components/AppHeader';
+import Page from 'components/Page';
+import Contributors from 'components/ContributorList';
 
 // Third-party components (buttons, icons, etc.)
 import { CalciteH6, CalciteA } from 'calcite-react/Elements';
