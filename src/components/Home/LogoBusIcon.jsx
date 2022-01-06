@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LogoBusIcon = props => (
+const LogoBusIcon = (props) => (
   <svg
     strokeLinecap="round"
     strokeLinejoin="round"

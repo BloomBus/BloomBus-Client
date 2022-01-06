@@ -29,11 +29,11 @@ class LoopsBottomSheet extends PureComponent {
       >
         <BottomSheetContainer>
           <BottomSheetTitle>Shuttle Loops</BottomSheetTitle>
-          {loops.map(loop => {
+          {loops.map((loop) => {
             const noShuttlesAvailable =
               !shuttles ||
               Object.values(shuttles).filter(
-                shuttle => shuttle.properties.loopKey === loop.properties.key
+                (shuttle) => shuttle.properties.loopKey === loop.properties.key
               ).length === 0;
             return (
               <LoopListItem

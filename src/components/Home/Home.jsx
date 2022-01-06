@@ -108,7 +108,7 @@ const Home = () => {
     }
   }, [shuttles]);
 
-  const onStopSelect = stopKey => {
+  const onStopSelect = (stopKey) => {
     const [longitude, latitude] = stops[stopKey].geometry.coordinates;
     setViewport({
       ...viewport,
@@ -121,7 +121,7 @@ const Home = () => {
     history.push(`/stop/${stopKey}`);
   };
 
-  const onLoopSelect = loopKey => {
+  const onLoopSelect = (loopKey) => {
     const loop = getLoop(loopKey, loops);
     if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
@@ -150,7 +150,7 @@ const Home = () => {
     history.push(`/loop/${loopKey}`);
   };
 
-  const onViewportChange = newViewport => {
+  const onViewportChange = (newViewport) => {
     const { nwBound, seBound } = constants.mapOptions;
     // Clamp viewport bounds
     if (newViewport.longitude < nwBound.longitude) {
@@ -169,12 +169,12 @@ const Home = () => {
     }
   };
 
-  const onMapClick = pointerEvent => {
+  const onMapClick = (pointerEvent) => {
     const { pathname } = location;
     history.push(pathname !== '/' ? '/' : '/loops');
   };
 
-  const onGeolocate = data => {
+  const onGeolocate = (data) => {
     if (
       data.hasOwnProperty('coords') &&
       data.coords instanceof GeolocationCoordinates
@@ -193,7 +193,7 @@ const Home = () => {
   };
 
   // Fires when a bottomsheet opens/closes
-  const onBottomSheetChange = isOpen => {
+  const onBottomSheetChange = (isOpen) => {
     if (isOpen) return;
     history.push('/');
   };

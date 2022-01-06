@@ -8,7 +8,7 @@ import CustomMapController from './CustomMapController';
 import {
   MapControlsWrapper,
   StyledGeolocateControl,
-  StyledNavigationControl,
+  StyledNavigationControl
 } from './Map-styled';
 
 // App components
@@ -27,7 +27,7 @@ const StopMarkerLayer = ({
   selectedStop,
   selectedLoopStops,
   onStopSelect,
-  isInteracting,
+  isInteracting
 }) =>
   stops &&
   Object.entries(stops).map(([stopKey, stop]) => (
@@ -46,7 +46,7 @@ const StopMarkerLayer = ({
 class Map extends PureComponent {
   state = {
     mapStyle: null,
-    isInteracting: false,
+    isInteracting: false
   };
 
   componentDidMount() {
@@ -58,8 +58,8 @@ class Map extends PureComponent {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: this.props.loops,
-          },
+            features: this.props.loops
+          }
         };
         mapStyle.layers.push({
           id: 'loops',
@@ -67,15 +67,15 @@ class Map extends PureComponent {
           source: 'loops',
           layout: {
             'line-join': 'round',
-            'line-cap': 'round',
+            'line-cap': 'round'
           },
           paint: {
             'line-width': 3,
-            'line-color': ['get', 'color'],
-          },
+            'line-color': ['get', 'color']
+          }
         });
         this.setState({
-          mapStyle: fromJS(mapStyle),
+          mapStyle: fromJS(mapStyle)
         });
       });
   }
@@ -83,7 +83,7 @@ class Map extends PureComponent {
   onInteractionStateChange = (interactionState) => {
     const { isPanning, isDragging, isZooming } = interactionState;
     this.setState({
-      isInteracting: isPanning || isDragging || isZooming,
+      isInteracting: isPanning || isDragging || isZooming
     });
   };
 
@@ -100,7 +100,7 @@ class Map extends PureComponent {
       onViewportChange,
       onMapClick,
       onStopSelect,
-      onGeolocate,
+      onGeolocate
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;

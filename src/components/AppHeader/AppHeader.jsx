@@ -12,9 +12,9 @@ import { StyledHeader, HeaderBackButtonContainer } from './AppHeader-styled';
 // Third-party components (buttons, icons, etc.)
 import ArrowLeftIcon from 'calcite-ui-icons-react/ArrowLeftIcon';
 
-const AppHeader = props => <StyledHeader {...props} />;
+const AppHeader = (props) => <StyledHeader {...props} />;
 
-export const AppHeaderBackButton = withRouter(props => (
+export const AppHeaderBackButton = withRouter((props) => (
   <HeaderBackButtonContainer onClick={() => props.history.goBack()}>
     <ArrowLeftIcon />
   </HeaderBackButtonContainer>

@@ -20,7 +20,7 @@ class OverflowMenu extends Component {
   };
 
   toggleMenu = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       open: !prevState.open
     }));
   };

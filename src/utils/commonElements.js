@@ -16,7 +16,7 @@ export const BottomSheetContainer = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 500;
-  font-family: ${props => props.theme.type.avenirFamily};
+  font-family: ${(props) => props.theme.type.avenirFamily};
   font-size: 1.3rem;
 
   &::after {
@@ -26,7 +26,7 @@ export const BottomSheetContainer = styled.div`
     position: absolute;
     left: calc(50% - 1rem);
     top: 8px;
-    background-color: ${props => props.theme.palette.lighterGray};
+    background-color: ${(props) => props.theme.palette.lighterGray};
     content: '';
   }
 `;
@@ -38,6 +38,6 @@ export const BottomSheetTitle = styled.div`
   height: 1.8em;
   margin-top: 1em;
   text-transform: uppercase;
-  font-family: ${props => props.theme.type.avenirFamily};
+  font-family: ${(props) => props.theme.type.avenirFamily};
   font-weight: 600;
 `;

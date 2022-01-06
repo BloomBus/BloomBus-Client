@@ -26,7 +26,7 @@ export const LoopListItem = styled.button`
   align-items: center;
   width: 100%;
 
-  font-family: ${props => props.theme.type.avenirFamily};
+  font-family: ${(props) => props.theme.type.avenirFamily};
 
   background-color: #ffffff;
   outline: none;
@@ -57,7 +57,7 @@ export const LoopName = styled.span`
   font-weight: bold;
   align-self: flex-start;
   color: #ffffff;
-  color: ${props => props.color || 'inherit'};
+  color: ${(props) => props.color || 'inherit'};
 `;
 
 export const LoopNextStop = styled.span`

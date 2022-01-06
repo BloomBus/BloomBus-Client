@@ -6,7 +6,7 @@ import TinyColor from '@ctrl/tinycolor';
 
 import { getLoop } from '../../utils/functions';
 
-const ShuttleMarkerContainer = styled.div.attrs(props => ({
+const ShuttleMarkerContainer = styled.div.attrs((props) => ({
   style: {
     transform: `translate(-50%, -50%) rotate(${props.bearing + 90}deg)`
   }

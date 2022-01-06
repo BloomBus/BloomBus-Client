@@ -41,7 +41,7 @@ class ContributorList extends Component {
               />
               <ContributorName>{name}</ContributorName>
               <div>
-                {contributionAreas.map(area => (
+                {contributionAreas.map((area) => (
                   <span key={area} title={getContributionAreaLabel(area)}>
                     {getContributionAreaEmoji(area)}
                   </span>

@@ -1,5 +1,5 @@
 export function getLoop(loopKey, loops) {
-  return loops.find(loop => loop.properties.key === loopKey);
+  return loops.find((loop) => loop.properties.key === loopKey);
 }
 
 // This is beautiful

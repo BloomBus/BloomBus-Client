@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NextStopSVG } from './LoopsBottomSheet-styled';
 
-const NextStopIcon = props => (
+const NextStopIcon = (props) => (
   <NextStopSVG {...props}>
     <path
       fillRule="evenodd"

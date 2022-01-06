@@ -29,12 +29,12 @@ class StopInfoCard extends PureComponent {
   };
 
   toggleImageExpanded = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       imageExpanded: !prevState.imageExpanded
     }));
   };
 
-  getDistanceLabel = stop => {
+  getDistanceLabel = (stop) => {
     const { userLocation } = this.props;
     const from = point(userLocation);
     const to = point(stop.geometry.coordinates);
@@ -48,11 +48,11 @@ class StopInfoCard extends PureComponent {
     const stop = stops[stopKey];
     const { name, imageURL } = stop.properties;
 
-    const loopKeysThatStopHere = Object.keys(loopStops).filter(loopKey =>
+    const loopKeysThatStopHere = Object.keys(loopStops).filter((loopKey) =>
       loopStops[loopKey].includes(stopKey)
     );
 
-    const loopBadges = loopKeysThatStopHere.map(loopKey => {
+    const loopBadges = loopKeysThatStopHere.map((loopKey) => {
       const loop = keyBy(loops, 'properties.key')[loopKey];
       return loop ? (
         <LoopBadge key={loopKey} color={loop.properties.color}>

@@ -10,7 +10,7 @@ export const StyledHeader = styled.header`
   font-size: 1.3em;
   line-height: 1.7em;
   font-weight: 600;
-  color: ${props => props.theme.palette.darkestGray};
+  color: ${(props) => props.theme.palette.darkestGray};
 
   & svg {
     margin-left: 0.2em;

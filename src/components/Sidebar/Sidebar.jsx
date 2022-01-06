@@ -36,9 +36,9 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
 
   const [openListIndexes, setOpenListIndexes] = useState([0]);
 
-  const toggleList = i => {
+  const toggleList = (i) => {
     if (openListIndexes.includes(i)) {
-      setOpenListIndexes(openListIndexes.filter(item => i !== item));
+      setOpenListIndexes(openListIndexes.filter((item) => i !== item));
     } else {
       setOpenListIndexes([...openListIndexes, i]);
     }
@@ -49,7 +49,7 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
       <ListHeader>Shuttle Loops</ListHeader>
       {loops.map((loop, i) => {
         const currentLoopStops = loopStops[loop.properties.key].map(
-          stopKey => stops[stopKey]
+          (stopKey) => stops[stopKey]
         );
         const currentLoopShuttles =
           shuttles &&
@@ -89,7 +89,7 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
             </ListItem>
             <List nested tabIndex="0" open={open}>
               <ListHeader>Stops</ListHeader>
-              {currentLoopStops.map(stop => (
+              {currentLoopStops.map((stop) => (
                 <ListItem
                   key={stop.properties.stopKey}
                   leftNode={<NextStopIcon width="20" height="20" />}
