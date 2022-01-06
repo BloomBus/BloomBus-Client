@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 
-export function getBottomSheetBodyStyle() {
-  return {
-    borderTopLeftRadius: '1rem',
-    borderTopRightRadius: '1rem',
-    boxShadow: 'rgba(0, 0, 0, 0.157) 0px -4px 5px'
-  };
-}
+export const bottomSheetBodyStyle: React.CSSProperties = {
+  borderTopLeftRadius: '1rem',
+  borderTopRightRadius: '1rem',
+  boxShadow: 'rgba(0, 0, 0, 0.157) 0px -4px 5px'
+};
 
 export const BottomSheetContainer = styled.div`
   height: 100%;

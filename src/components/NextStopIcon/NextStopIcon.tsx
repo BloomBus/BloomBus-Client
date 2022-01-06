@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { NextStopSVG } from './LoopsBottomSheet-styled';
+import { NextStopSVG } from './NextStopIcon-styled';
 
-const NextStopIcon = (props) => (
-  <NextStopSVG {...props}>
+const NextStopIcon: React.FC<Omit<React.SVGProps<SVGSVGElement>, 'ref'>> = (
+  props
+) => (
+  <NextStopSVG viewBox="0 0 30 20" {...props}>
     <path
       fillRule="evenodd"
       strokeLinejoin="round"

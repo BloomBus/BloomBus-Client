@@ -9,10 +9,11 @@ export default class CustomMapController extends MapController {
     this.events = ['geolocate'];
   }
 
-  handleEvent(event) {
+  handleEvent(event: $TSFixMe) {
     switch (event.type) {
       case 'geolocate':
-        this.alert('geolocate emitted');
+        console.log(event);
+        // this.alert('geolocate emitted');
         break;
       default:
     }

@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import CalciteThemeProvider from 'calcite-react/CalciteThemeProvider';
 

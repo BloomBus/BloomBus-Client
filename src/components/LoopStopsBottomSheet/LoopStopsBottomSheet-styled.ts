@@ -24,11 +24,11 @@ export const LoopStopsListItemLeftSide = styled.div`
 `;
 
 export const LoopStopsName = styled.span`
-  font-family: ${(props) => props.theme.type.avenirFamily};
+  font-family: ${({ theme }) => theme.type.avenirFamily};
   font-size: 1.8em;
   font-weight: 600;
   align-self: flex-start;
   color: #ffffff;
-  color: ${(props) => props.color || 'inherit'};
+  color: ${({ color }) => color || 'inherit'};
   margin-left: 0.3em;
 `;

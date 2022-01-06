@@ -350,13 +350,13 @@ declare module 'calcite-react/Label/Label-styled' {
 }
 
 declare module 'calcite-react/List' {
-  type ListProps = {
+  interface ListProps extends React.HTMLProps<HTMLAsideElement> {
     minimal?: boolean;
     multiSelect?: boolean;
     nested?: boolean;
     open?: boolean;
     style?: React.CSSProperties;
-  };
+  }
   export default class List extends React.Component<ListProps> {}
 
   interface ListItemProps extends React.HTMLProps<HTMLDivElement> {
@@ -399,6 +399,10 @@ declare module 'calcite-react/Loader' {
 declare module 'calcite-react/Menu' {
   interface MenuProps extends React.HTMLProps<HTMLDivElement> {
     style?: React.CSSProperties;
+    extraSmall?: boolean;
+    small?: boolean;
+    large?: boolean;
+    extraLarge?: boolean;
   }
   export default class Menu extends React.Component<MenuProps> {}
 

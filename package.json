@@ -13,7 +13,6 @@
     "firebase": "^6.6.2",
     "immutable": "^4.0.0-rc.12",
     "mapbox-gl": "^1.8.0",
-    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-device-detect": "^1.11.14",
     "react-dom": "^16.12.0",
@@ -22,14 +21,19 @@
     "react-map-gl": "^5.2.3",
     "react-pose": "^4.0.10",
     "react-router-dom": "^5.1.2",
-    "react-swipeable-bottom-sheet": "^1.1.1",
+    "react-swipeable-bottom-sheet": "^1.1.2",
     "shallowequal": "^1.1.0",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.3.3",
     "viewport-mercator-project": "^6.2.3"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.8",
+    "@types/jest": "^27.4.0",
+    "@types/lodash": "^4.14.178",
+    "@types/react-dom": "^17.0.11",
     "@types/react-map-gl": "^5.2.0",
     "@types/react-router-dom": "^5.1.2",
+    "@types/styled-components": "^5.1.19",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
@@ -37,7 +41,7 @@
     "eslint-plugin-react": "^7.18.3",
     "react-scripts": "^3.4.0",
     "source-map-explorer": "^2.3.1",
-    "typescript": "^3.8.2"
+    "typescript": "^4.5.4"
   },
   "scripts": {
     "start": "react-scripts start",

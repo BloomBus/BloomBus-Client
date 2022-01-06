@@ -4,13 +4,19 @@ import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 import TinyColor from '@ctrl/tinycolor';
 
-import { getLoop } from '../../utils/functions';
+import { getLoopByKey } from 'utils/helpers';
+import { Loop, Shuttle } from 'types';
 
-const ShuttleMarkerContainer = styled.div.attrs((props) => ({
-  style: {
-    transform: `translate(-50%, -50%) rotate(${props.bearing + 90}deg)`
-  }
-}))`
+interface ShuttleMarkerContainerProps {
+  bearing: number;
+}
+const ShuttleMarkerContainer = styled.div.attrs<ShuttleMarkerContainerProps>(
+  ({ bearing }) => ({
+    style: {
+      transform: `translate(-50%, -50%) rotate(${bearing + 90}deg)`
+    }
+  })
+)<ShuttleMarkerContainerProps>`
   width: 30px;
   height: 30px;
   display: flex;
@@ -22,13 +28,26 @@ const ShuttleMarkerContainer = styled.div.attrs((props) => ({
   }
 `;
 
-const ShuttleMarker = ({ shuttleKey, shuttle, loops, isInteracting }) => {
+interface ShuttleMarkerProps {
+  shuttleKey: string;
+  shuttle: Shuttle;
+  loops: Loop[];
+  isInteracting: boolean;
+}
+const ShuttleMarker: React.FC<ShuttleMarkerProps> = ({
+  shuttleKey,
+  shuttle,
+  loops,
+  isInteracting
+}) => {
   const [longitude, latitude] = shuttle.geometry.coordinates;
   const { bearing, loopKey } = shuttle.properties;
 
   const history = useHistory();
 
-  const fill = TinyColor(getLoop(loopKey, loops).properties.color);
+  const loop = getLoopByKey(loopKey, loops);
+  if (!loop) throw Error();
+  const fill = TinyColor(loop.properties.color);
   const darker = fill.darken(30);
 
   return (
@@ -64,10 +83,6 @@ const ShuttleMarker = ({ shuttleKey, shuttle, loops, isInteracting }) => {
       </ShuttleMarkerContainer>
     </Marker>
   );
-};
-
-ShuttleMarker.defaultProps = {
-  isInteracting: false
 };
 
 export default ShuttleMarker;

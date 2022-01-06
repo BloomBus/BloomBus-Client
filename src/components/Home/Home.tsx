@@ -1,10 +1,12 @@
-/* globals GeolocationCoordinates */
-
 // Framework and third-party non-ui
 import React, { useEffect, useRef, useState } from 'react';
-import { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';
+import {
+  FlyToInterpolator,
+  LinearInterpolator,
+  ViewportProps
+} from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
-import { bbox, lineString } from '@turf/turf';
+import { bbox, lineString, Position } from '@turf/turf';
 import { BrowserView, MobileView } from 'react-device-detect';
 import {
   Switch,
@@ -17,8 +19,8 @@ import { useObjectVal } from 'react-firebase-hooks/database';
 import { isEqual } from 'lodash';
 
 // Local helpers/utils/modules
-import { getLoop } from '../../utils/functions';
-import firebase from '../../utils/firebase';
+import { getLoopByKey } from 'utils/helpers';
+import firebase from 'utils/firebase';
 
 // Component specific modules (Component-styled, etc.)
 import { StyledHeaderLogoLabel, StyledLoaderWrapper } from './Home-styled';
@@ -28,7 +30,16 @@ import {
   RightHeader
 } from '../AppHeader/AppHeader-styled';
 
-// App components
+// App components, types
+import {
+  Constants,
+  Loop,
+  LoopKey,
+  LoopStops,
+  Shuttles,
+  StopKey,
+  Stops
+} from 'types';
 import LoopsBottomSheet from '../LoopsBottomSheet';
 import LoopStopsBottomSheet from '../LoopStopsBottomSheet';
 import StopInfoCard from '../StopInfoCard';
@@ -45,13 +56,9 @@ import Button from 'calcite-react/Button';
 import { CalciteP } from 'calcite-react/Elements';
 import LogoBusIcon from './LogoBusIcon';
 
-// JSON
-
-// CSS
-
 const initialViewport = {
-  width: '100%',
-  height: '100%',
+  width: 100,
+  height: 100,
   latitude: 41.007,
   longitude: -76.451,
   zoom: 14,
@@ -63,35 +70,47 @@ const db = firebase.database();
 
 const Home = () => {
   // State
-  const [viewport, setViewport] = useState(initialViewport);
+  const [viewport, setViewport] =
+    useState<Partial<ViewportProps>>(initialViewport);
   const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState<Position | null>(null);
 
-  const mapContainerRef = useRef();
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   // Firebase values
-  const [constants, constantsLoading] = useObjectVal(db.ref('constants'));
-  const [shuttles, shuttlesLoading] = useObjectVal(db.ref('shuttles'));
-  const [stops, stopsLoading] = useObjectVal(db.ref('stops'));
-  const [loops, loopsLoading] = useObjectVal(db.ref('loops/features'));
-  const [loopStops, loopStopsLoading] = useObjectVal(db.ref('loop-stops'));
+  const [constants, constantsLoading] = useObjectVal<Constants>(
+    db.ref('constants')
+  );
+  const [shuttles, shuttlesLoading] = useObjectVal<Shuttles>(
+    db.ref('shuttles')
+  );
+  const [stops, stopsLoading] = useObjectVal<Stops>(db.ref('stops'));
+  const [loops, loopsLoading] = useObjectVal<Loop[]>(db.ref('loops/features'));
+  const [loopStops, loopStopsLoading] = useObjectVal<LoopStops>(
+    db.ref('loop-stops')
+  );
+
   const isLoading =
     constantsLoading ||
+    !constants ||
     shuttlesLoading ||
     stopsLoading ||
+    !stops ||
     loopsLoading ||
-    loopStopsLoading;
+    !loops ||
+    loopStopsLoading ||
+    !loopStops;
 
   // react-router props
   const history = useHistory();
   const location = useLocation();
-  const params = useParams();
+  const params = useParams<{ shuttleID: string }>();
 
   //Process a shuttle update
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // Track selected shuttle
-    if (shuttlesLoading) return;
+    if (shuttlesLoading || !shuttles) return;
     const { shuttleID } = params;
     if (shuttleID) {
       // Get selected shuttle by its UUID
@@ -108,7 +127,8 @@ const Home = () => {
     }
   }, [shuttles]);
 
-  const onStopSelect = (stopKey) => {
+  const onStopSelect = (stopKey: StopKey) => {
+    if (!stops) return;
     const [longitude, latitude] = stops[stopKey].geometry.coordinates;
     setViewport({
       ...viewport,
@@ -121,8 +141,9 @@ const Home = () => {
     history.push(`/stop/${stopKey}`);
   };
 
-  const onLoopSelect = (loopKey) => {
-    const loop = getLoop(loopKey, loops);
+  const onLoopSelect = (loopKey: LoopKey) => {
+    if (!loops) throw Error();
+    const loop = getLoopByKey(loopKey, loops);
     if (loop === undefined) return;
     const line = lineString(loop.geometry.coordinates);
     const [minLng, minLat, maxLng, maxLat] = bbox(line);
@@ -150,7 +171,8 @@ const Home = () => {
     history.push(`/loop/${loopKey}`);
   };
 
-  const onViewportChange = (newViewport) => {
+  const onViewportChange = (newViewport: ViewportProps) => {
+    if (!constants) throw Error();
     const { nwBound, seBound } = constants.mapOptions;
     // Clamp viewport bounds
     if (newViewport.longitude < nwBound.longitude) {
@@ -169,32 +191,28 @@ const Home = () => {
     }
   };
 
-  const onMapClick = (pointerEvent) => {
+  const onMapClick = () => {
     const { pathname } = location;
     history.push(pathname !== '/' ? '/' : '/loops');
   };
 
-  const onGeolocate = (data) => {
-    if (
-      data.hasOwnProperty('coords') &&
-      data.coords instanceof GeolocationCoordinates
-    ) {
-      const { nwBound, seBound } = constants.mapOptions;
-      const { latitude, longitude } = data.coords;
-      const outOfBounds =
-        latitude > nwBound.latitude ||
-        longitude < nwBound.longitude ||
-        latitude < seBound.latitude ||
-        longitude > seBound.longitude;
+  const onGeolocate = (position: GeolocationPosition) => {
+    if (!constants) throw Error();
+    const { nwBound, seBound } = constants.mapOptions;
+    const { latitude, longitude } = position.coords;
+    const outOfBounds =
+      latitude > nwBound.latitude ||
+      longitude < nwBound.longitude ||
+      latitude < seBound.latitude ||
+      longitude > seBound.longitude;
 
-      setUserLocation([longitude, latitude]);
-      setShowOutOfBoundsModal(outOfBounds);
-    }
+    setUserLocation([longitude, latitude]);
+    setShowOutOfBoundsModal(outOfBounds);
   };
 
   // Fires when a bottomsheet opens/closes
-  const onBottomSheetChange = (isOpen) => {
-    if (isOpen) return;
+  const onBottomSheetChange = (open: boolean) => {
+    if (open) return;
     history.push('/');
   };
 
@@ -216,17 +234,17 @@ const Home = () => {
       </AppHeader>
       <Route path={['/stop/:stopKey', '/loop/:loopKey', '/']}>
         <Map
-          mapContainerRef={mapContainerRef}
           loops={loops}
-          stops={stops}
           loopStops={loopStops}
-          shuttles={shuttles}
+          mapContainerRef={mapContainerRef}
           mapOptions={constants.mapOptions}
+          shuttles={shuttles}
+          stops={stops}
           viewport={viewport}
-          onViewportChange={onViewportChange}
+          onGeolocate={onGeolocate}
           onMapClick={onMapClick}
           onStopSelect={onStopSelect}
-          onGeolocate={onGeolocate}
+          onViewportChange={onViewportChange}
         />
       </Route>
       <BrowserView>
@@ -235,7 +253,6 @@ const Home = () => {
           stops={stops}
           loopStops={loopStops}
           shuttles={shuttles}
-          onLoopSelect={onLoopSelect}
           onStopSelect={onStopSelect}
         />
       </BrowserView>
@@ -245,7 +262,6 @@ const Home = () => {
             {loops && (
               <LoopsBottomSheet
                 loops={loops}
-                stops={stops}
                 shuttles={shuttles}
                 onLoopSelect={onLoopSelect}
                 onBottomSheetChange={onBottomSheetChange}
@@ -270,7 +286,7 @@ const Home = () => {
           </Route>
           <Route path="/shuttle/:shuttleID">
             <ShuttleBottomSheet
-              shuttles={shuttles}
+              shuttles={shuttles!}
               onBottomSheetChange={onBottomSheetChange}
             />
           </Route>

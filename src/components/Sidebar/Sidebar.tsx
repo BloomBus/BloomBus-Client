@@ -7,7 +7,8 @@ import { useHistory } from 'react-router-dom';
 // Component specific modules (Component-styled, etc.)
 import { SidebarContainer, LoopActivityWrapper } from './Sidebar-styled';
 
-// App components
+// App components, types
+import { Loop, LoopStops, Shuttles, StopKey, Stops } from 'types';
 
 // Third-party components (buttons, icons, etc.)
 import List, {
@@ -21,22 +22,35 @@ import ChevronDownIcon from 'calcite-ui-icons-react/ChevronDownIcon';
 import MoonIcon from 'calcite-ui-icons-react/MoonIcon';
 import NextStopIcon from '../NextStopIcon';
 
-// JSON
-
-// CSS
-
-const CircleIcon = ({ size, color }) => (
+interface CircleIconProps {
+  size: number;
+  color: string;
+}
+const CircleIcon: React.FC<CircleIconProps> = ({ size, color }) => (
   <svg width={size} height={size} xmlns="http://www.w3.org/2000/svg">
     <circle cx={size / 2} cy={size / 2} r={size / 2} fill={color} />
   </svg>
 );
 
-const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
+interface SidebarProps {
+  loops: Loop[];
+  stops: Stops;
+  loopStops: LoopStops;
+  shuttles?: Shuttles;
+  onStopSelect: (key: StopKey) => void;
+}
+const Sidebar: React.FC<SidebarProps> = ({
+  loops,
+  stops,
+  loopStops,
+  shuttles,
+  onStopSelect
+}) => {
   const history = useHistory();
 
   const [openListIndexes, setOpenListIndexes] = useState([0]);
 
-  const toggleList = (i) => {
+  const toggleList = (i: number) => {
     if (openListIndexes.includes(i)) {
       setOpenListIndexes(openListIndexes.filter((item) => i !== item));
     } else {
@@ -47,15 +61,14 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
   return (
     <SidebarContainer>
       <ListHeader>Shuttle Loops</ListHeader>
-      {loops.map(({ properties: { key, color, name }}, i) => {
+      {loops.map(({ properties: { key, color, name } }, i) => {
         const currentLoopStops = loopStops[key].map(
           (stopKey) => stops[stopKey]
         );
         const currentLoopShuttles =
           shuttles &&
           Object.entries(shuttles).filter(
-            ([shuttleID, shuttle]) =>
-              shuttle.properties.loopKey === key
+            ([shuttleID, shuttle]) => shuttle.properties.loopKey === key
           );
         const noShuttlesAvailable =
           !currentLoopShuttles || currentLoopShuttles.length === 0;
@@ -65,12 +78,12 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
         return (
           <Fragment key={key}>
             <ListItem
-              leftNode={<CircleIcon size="20" color={color} />}
+              leftNode={<CircleIcon size={20} color={color} />}
               rightNode={
                 open ? (
-                  <ChevronUpIcon size="24" />
+                  <ChevronUpIcon size={24} />
                 ) : (
-                  <ChevronDownIcon size="24" />
+                  <ChevronDownIcon size={24} />
                 )
               }
               onClick={() => toggleList(i)}
@@ -87,9 +100,9 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
                 )}
               </ListItemSubtitle>
             </ListItem>
-            <List nested tabIndex="0" open={open}>
+            <List nested tabIndex={0} open={open}>
               <ListHeader>Stops</ListHeader>
-              {currentLoopStops.map(({ properties: { stopKey, name }}) => (
+              {currentLoopStops.map(({ properties: { stopKey, name } }) => (
                 <ListItem
                   key={stopKey}
                   leftNode={<NextStopIcon width="20" height="20" />}
@@ -99,7 +112,7 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
                 </ListItem>
               ))}
             </List>
-            <List nested tabIndex="0" open={open}>
+            <List nested tabIndex={0} open={open}>
               <ListHeader>Shuttles</ListHeader>
               {noShuttlesAvailable ? (
                 <ListItem>
