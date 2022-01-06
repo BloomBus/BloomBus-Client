@@ -47,15 +47,15 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
   return (
     <SidebarContainer>
       <ListHeader>Shuttle Loops</ListHeader>
-      {loops.map((loop, i) => {
-        const currentLoopStops = loopStops[loop.properties.key].map(
+      {loops.map(({ properties: { key, color, name }}, i) => {
+        const currentLoopStops = loopStops[key].map(
           (stopKey) => stops[stopKey]
         );
         const currentLoopShuttles =
           shuttles &&
           Object.entries(shuttles).filter(
             ([shuttleID, shuttle]) =>
-              shuttle.properties.loopKey === loop.properties.key
+              shuttle.properties.loopKey === key
           );
         const noShuttlesAvailable =
           !currentLoopShuttles || currentLoopShuttles.length === 0;
@@ -63,9 +63,9 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
         const open = openListIndexes.includes(i);
 
         return (
-          <Fragment key={loop.properties.key}>
+          <Fragment key={key}>
             <ListItem
-              leftNode={<CircleIcon size="20" color={loop.properties.color} />}
+              leftNode={<CircleIcon size="20" color={color} />}
               rightNode={
                 open ? (
                   <ChevronUpIcon size="24" />
@@ -75,7 +75,7 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
               }
               onClick={() => toggleList(i)}
             >
-              <ListItemTitle>{loop.properties.name}</ListItemTitle>
+              <ListItemTitle>{name}</ListItemTitle>
               <ListItemSubtitle>
                 {noShuttlesAvailable ? (
                   <LoopActivityWrapper>
@@ -89,13 +89,13 @@ const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
             </ListItem>
             <List nested tabIndex="0" open={open}>
               <ListHeader>Stops</ListHeader>
-              {currentLoopStops.map((stop) => (
+              {currentLoopStops.map(({ properties: { stopKey, name }}) => (
                 <ListItem
-                  key={stop.properties.stopKey}
+                  key={stopKey}
                   leftNode={<NextStopIcon width="20" height="20" />}
-                  onClick={() => onStopSelect(stop.properties.stopKey)}
+                  onClick={() => onStopSelect(stopKey)}
                 >
-                  <ListItemTitle>{stop.properties.name}</ListItemTitle>
+                  <ListItemTitle>{name}</ListItemTitle>
                 </ListItem>
               ))}
             </List>
