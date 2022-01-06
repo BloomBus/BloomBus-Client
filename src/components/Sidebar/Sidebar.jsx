@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // Local helpers/utils/modules
 
@@ -30,111 +31,96 @@ const CircleIcon = ({ size, color }) => (
   </svg>
 );
 
-class Sidebar extends PureComponent {
-  state = {
-    openListIndexes: [0]
-  };
+const Sidebar = ({ loops, stops, loopStops, shuttles, onStopSelect }) => {
+  const history = useHistory();
 
-  toggleList = i => {
-    if (this.state.openListIndexes.includes(i)) {
-      this.setState(prevState => ({
-        openListIndexes: prevState.openListIndexes.filter(item => i !== item)
-      }));
+  const [openListIndexes, setOpenListIndexes] = useState([0]);
+
+  const toggleList = i => {
+    if (openListIndexes.includes(i)) {
+      setOpenListIndexes(openListIndexes.filter(item => i !== item));
     } else {
-      this.setState(prevState => ({
-        openListIndexes: [...prevState.openListIndexes, i]
-      }));
+      setOpenListIndexes([...openListIndexes, i]);
     }
   };
 
-  render() {
-    const {
-      loops,
-      stops,
-      loopStops,
-      shuttles,
-      onStopSelect,
-      onShuttleSelect
-    } = this.props;
-    return (
-      <SidebarContainer>
-        <ListHeader>Shuttle Loops</ListHeader>
-        {loops.map((loop, i) => {
-          const currentLoopStops = loopStops[loop.properties.key].map(
-            stopKey => stops[stopKey]
+  return (
+    <SidebarContainer>
+      <ListHeader>Shuttle Loops</ListHeader>
+      {loops.map((loop, i) => {
+        const currentLoopStops = loopStops[loop.properties.key].map(
+          stopKey => stops[stopKey]
+        );
+        const currentLoopShuttles =
+          shuttles &&
+          Object.entries(shuttles).filter(
+            ([shuttleID, shuttle]) =>
+              shuttle.properties.loopKey === loop.properties.key
           );
-          const currentLoopShuttles =
-            shuttles &&
-            Object.entries(shuttles).filter(
-              ([shuttleID, shuttle]) =>
-                shuttle.properties.loopKey === loop.properties.key
-            );
-          const noShuttlesAvailable =
-            !currentLoopShuttles || currentLoopShuttles.length === 0;
+        const noShuttlesAvailable =
+          !currentLoopShuttles || currentLoopShuttles.length === 0;
 
-          const open = this.state.openListIndexes.includes(i);
-          return (
-            <Fragment key={loop.properties.key}>
-              <ListItem
-                leftNode={
-                  <CircleIcon size="20" color={loop.properties.color} />
-                }
-                rightNode={
-                  open ? (
-                    <ChevronUpIcon size="24" />
-                  ) : (
-                    <ChevronDownIcon size="24" />
-                  )
-                }
-                onClick={() => this.toggleList(i)}
-              >
-                <ListItemTitle>{loop.properties.name}</ListItemTitle>
-                <ListItemSubtitle>
-                  {noShuttlesAvailable ? (
-                    <LoopActivityWrapper>
-                      <MoonIcon size={16} />
-                      Inactive
-                    </LoopActivityWrapper>
-                  ) : (
-                    'Active'
-                  )}
-                </ListItemSubtitle>
-              </ListItem>
-              <List nested tabIndex="0" open={open}>
-                <ListHeader>Stops</ListHeader>
-                {currentLoopStops.map(stop => (
-                  <ListItem
-                    key={stop.properties.stopKey}
-                    leftNode={<NextStopIcon width="20" height="20" />}
-                    onClick={() => onStopSelect(stop.properties.stopKey)}
-                  >
-                    <ListItemTitle>{stop.properties.name}</ListItemTitle>
-                  </ListItem>
-                ))}
-              </List>
-              <List nested tabIndex="0" open={open}>
-                <ListHeader>Shuttles</ListHeader>
-                {noShuttlesAvailable ? (
-                  <ListItem>
-                    <ListItemTitle>No active shuttles</ListItemTitle>
-                  </ListItem>
+        const open = openListIndexes.includes(i);
+
+        return (
+          <Fragment key={loop.properties.key}>
+            <ListItem
+              leftNode={<CircleIcon size="20" color={loop.properties.color} />}
+              rightNode={
+                open ? (
+                  <ChevronUpIcon size="24" />
                 ) : (
-                  currentLoopShuttles.map(([shuttleID, shuttle], i) => (
-                    <ListItem
-                      key={shuttleID}
-                      onClick={() => onShuttleSelect(shuttleID)}
-                    >
-                      <ListItemTitle>{`#${i + 1}`}</ListItemTitle>
-                    </ListItem>
-                  ))
+                  <ChevronDownIcon size="24" />
+                )
+              }
+              onClick={() => toggleList(i)}
+            >
+              <ListItemTitle>{loop.properties.name}</ListItemTitle>
+              <ListItemSubtitle>
+                {noShuttlesAvailable ? (
+                  <LoopActivityWrapper>
+                    <MoonIcon size={16} />
+                    Inactive
+                  </LoopActivityWrapper>
+                ) : (
+                  'Active'
                 )}
-              </List>
-            </Fragment>
-          );
-        })}
-      </SidebarContainer>
-    );
-  }
-}
+              </ListItemSubtitle>
+            </ListItem>
+            <List nested tabIndex="0" open={open}>
+              <ListHeader>Stops</ListHeader>
+              {currentLoopStops.map(stop => (
+                <ListItem
+                  key={stop.properties.stopKey}
+                  leftNode={<NextStopIcon width="20" height="20" />}
+                  onClick={() => onStopSelect(stop.properties.stopKey)}
+                >
+                  <ListItemTitle>{stop.properties.name}</ListItemTitle>
+                </ListItem>
+              ))}
+            </List>
+            <List nested tabIndex="0" open={open}>
+              <ListHeader>Shuttles</ListHeader>
+              {noShuttlesAvailable ? (
+                <ListItem>
+                  <ListItemTitle>No active shuttles</ListItemTitle>
+                </ListItem>
+              ) : (
+                currentLoopShuttles.map(([shuttleID, shuttle], i) => (
+                  <ListItem
+                    key={shuttleID}
+                    onClick={() => history.push(`/shuttle/${shuttleID}`)}
+                  >
+                    <ListItemTitle>{`#${i + 1}`}</ListItemTitle>
+                  </ListItem>
+                ))
+              )}
+            </List>
+          </Fragment>
+        );
+      })}
+    </SidebarContainer>
+  );
+};
 
 export default Sidebar;

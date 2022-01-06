@@ -1,5 +1,5 @@
 // Framework and third-party non-ui
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
 import { fromJS } from 'immutable';
 
@@ -8,7 +8,7 @@ import CustomMapController from './CustomMapController';
 import {
   MapControlsWrapper,
   StyledGeolocateControl,
-  StyledNavigationControl
+  StyledNavigationControl,
 } from './Map-styled';
 
 // App components
@@ -27,7 +27,7 @@ const StopMarkerLayer = ({
   selectedStop,
   selectedLoopStops,
   onStopSelect,
-  isInteracting
+  isInteracting,
 }) =>
   stops &&
   Object.entries(stops).map(([stopKey, stop]) => (
@@ -43,23 +43,23 @@ const StopMarkerLayer = ({
     />
   ));
 
-class Map extends Component {
+class Map extends PureComponent {
   state = {
     mapStyle: null,
-    isInteracting: false
+    isInteracting: false,
   };
 
   componentDidMount() {
     fetch(process.env.REACT_APP_MAPSTYLE_URL)
-      .then(res => res.json())
-      .then(json => {
+      .then((res) => res.json())
+      .then((json) => {
         const mapStyle = json;
         mapStyle.sources.loops = {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: this.props.loops
-          }
+            features: this.props.loops,
+          },
         };
         mapStyle.layers.push({
           id: 'loops',
@@ -67,23 +67,23 @@ class Map extends Component {
           source: 'loops',
           layout: {
             'line-join': 'round',
-            'line-cap': 'round'
+            'line-cap': 'round',
           },
           paint: {
             'line-width': 3,
-            'line-color': ['get', 'color']
-          }
+            'line-color': ['get', 'color'],
+          },
         });
         this.setState({
-          mapStyle: fromJS(mapStyle)
+          mapStyle: fromJS(mapStyle),
         });
       });
   }
 
-  onInteractionStateChange = interactionState => {
+  onInteractionStateChange = (interactionState) => {
     const { isPanning, isDragging, isZooming } = interactionState;
     this.setState({
-      isInteracting: isPanning || isDragging || isZooming
+      isInteracting: isPanning || isDragging || isZooming,
     });
   };
 
@@ -100,8 +100,7 @@ class Map extends Component {
       onViewportChange,
       onMapClick,
       onStopSelect,
-      onShuttleSelect,
-      onGeolocate
+      onGeolocate,
     } = this.props;
     const { maxZoom, minZoom } = mapOptions;
     const { stopKey: selectedStopKey, loopKey: selectedLoopKey } = match.params;
@@ -145,7 +144,6 @@ class Map extends Component {
                 shuttleKey={shuttleKey} // must explicitly pass as separate prop from `key`
                 loops={loops}
                 isInteracting={this.state.isInteracting}
-                onShuttleSelect={onShuttleSelect}
               />
             ))}
         </ReactMapGL>

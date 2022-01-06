@@ -14,6 +14,7 @@ import {
   useParams
 } from 'react-router-dom';
 import { useObjectVal } from 'react-firebase-hooks/database';
+import { isEqual } from 'lodash';
 
 // Local helpers/utils/modules
 import { getLoop } from '../../utils/functions';
@@ -48,24 +49,27 @@ import LogoBusIcon from './LogoBusIcon';
 
 // CSS
 
+const initialViewport = {
+  width: '100%',
+  height: '100%',
+  latitude: 41.007,
+  longitude: -76.451,
+  zoom: 14,
+  pitch: 0,
+  tilt: 0
+};
+
+const db = firebase.database();
+
 const Home = () => {
   // State
-  const [viewport, setViewport] = useState({
-    width: '100%',
-    height: '100%',
-    latitude: 41.007,
-    longitude: -76.451,
-    zoom: 14,
-    pitch: 0,
-    tilt: 0
-  });
+  const [viewport, setViewport] = useState(initialViewport);
   const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
 
   const mapContainerRef = useRef();
 
   // Firebase values
-  const db = firebase.database();
   const [constants, constantsLoading] = useObjectVal(db.ref('constants'));
   const [shuttles, shuttlesLoading] = useObjectVal(db.ref('shuttles'));
   const [stops, stopsLoading] = useObjectVal(db.ref('stops'));
@@ -83,13 +87,16 @@ const Home = () => {
   const location = useLocation();
   const params = useParams();
 
-  // Process a shuttle update
+  //Process a shuttle update
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // Track selected shuttle
+    if (shuttlesLoading) return;
     const { shuttleID } = params;
     if (shuttleID) {
       // Get selected shuttle by its UUID
       const selectedShuttle = shuttles[shuttleID];
+      if (!selectedShuttle) return;
       const [longitude, latitude] = selectedShuttle.geometry.coordinates;
       setViewport({
         ...viewport,
@@ -99,12 +106,7 @@ const Home = () => {
         transitionInterpolator: new LinearInterpolator()
       });
     }
-  }, [params, shuttles, viewport]);
-
-  // Redirect to /loops on mount
-  useEffect(() => {
-    history.push('/loops');
-  }, [history]);
+  }, [shuttles]);
 
   const onStopSelect = stopKey => {
     const [longitude, latitude] = stops[stopKey].geometry.coordinates;
@@ -117,21 +119,6 @@ const Home = () => {
       transitionDuration: 200
     });
     history.push(`/stop/${stopKey}`);
-  };
-
-  const onShuttleSelect = shuttleKey => {
-    const [longitude, latitude] = shuttles[shuttleKey].geometry.coordinates;
-
-    setViewport({
-      ...viewport,
-      longitude,
-      latitude,
-      zoom: 16,
-      transitionInterpolator: new LinearInterpolator(),
-      transitionDuration: 200
-    });
-
-    history.push(`/shuttle/${shuttleKey}`);
   };
 
   const onLoopSelect = loopKey => {
@@ -163,24 +150,23 @@ const Home = () => {
     history.push(`/loop/${loopKey}`);
   };
 
-  const onViewportChange = viewport => {
-    const newViewport = {
-      ...viewport
-    };
+  const onViewportChange = newViewport => {
     const { nwBound, seBound } = constants.mapOptions;
     // Clamp viewport bounds
-    if (viewport.longitude < nwBound.longitude) {
+    if (newViewport.longitude < nwBound.longitude) {
       newViewport.longitude = nwBound.longitude;
-    } else if (viewport.longitude > seBound.longitude) {
+    } else if (newViewport.longitude > seBound.longitude) {
       newViewport.longitude = seBound.longitude;
     }
-    if (viewport.latitude > nwBound.latitude) {
+    if (newViewport.latitude > nwBound.latitude) {
       newViewport.latitude = nwBound.latitude;
-    } else if (viewport.latitude < seBound.latitude) {
+    } else if (newViewport.latitude < seBound.latitude) {
       newViewport.latitude = seBound.latitude;
     }
 
-    setViewport(newViewport);
+    if (!isEqual(viewport, newViewport)) {
+      setViewport(newViewport);
+    }
   };
 
   const onMapClick = pointerEvent => {
@@ -240,7 +226,6 @@ const Home = () => {
           onViewportChange={onViewportChange}
           onMapClick={onMapClick}
           onStopSelect={onStopSelect}
-          onShuttleSelect={onShuttleSelect}
           onGeolocate={onGeolocate}
         />
       </Route>
@@ -252,7 +237,6 @@ const Home = () => {
           shuttles={shuttles}
           onLoopSelect={onLoopSelect}
           onStopSelect={onStopSelect}
-          onShuttleSelect={onShuttleSelect}
         />
       </BrowserView>
       <MobileView>
