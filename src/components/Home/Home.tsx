@@ -17,10 +17,11 @@ import {
 } from 'react-router-dom';
 import { useObjectVal } from 'react-firebase-hooks/database';
 import { isEqual } from 'lodash';
+import firebaseApp from 'utils/firebase';
+import { getDatabase, ref } from 'firebase/database';
 
 // Local helpers/utils/modules
 import { getLoopByKey } from 'utils/helpers';
-import firebase from 'utils/firebase';
 
 // Component specific modules (Component-styled, etc.)
 import { StyledHeaderLogoLabel, StyledLoaderWrapper } from './Home-styled';
@@ -66,7 +67,7 @@ const initialViewport = {
   tilt: 0
 };
 
-const db = firebase.database();
+const db = getDatabase(firebaseApp);
 
 const Home = () => {
   // State
@@ -79,15 +80,15 @@ const Home = () => {
 
   // Firebase values
   const [constants, constantsLoading] = useObjectVal<Constants>(
-    db.ref('constants')
+    ref(db, 'constants')
   );
   const [shuttles, shuttlesLoading] = useObjectVal<Shuttles>(
-    db.ref('shuttles')
+    ref(db, 'shuttles')
   );
-  const [stops, stopsLoading] = useObjectVal<Stops>(db.ref('stops'));
-  const [loops, loopsLoading] = useObjectVal<Loop[]>(db.ref('loops/features'));
+  const [stops, stopsLoading] = useObjectVal<Stops>(ref(db, 'stops'));
+  const [loops, loopsLoading] = useObjectVal<Loop[]>(ref(db, 'loops/features'));
   const [loopStops, loopStopsLoading] = useObjectVal<LoopStops>(
-    db.ref('loop-stops')
+    ref(db, 'loop-stops')
   );
 
   const isLoading =
@@ -107,7 +108,6 @@ const Home = () => {
   const params = useParams<{ shuttleID: string }>();
 
   //Process a shuttle update
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // Track selected shuttle
     if (shuttlesLoading || !shuttles) return;
