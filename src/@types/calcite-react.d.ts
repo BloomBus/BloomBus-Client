@@ -486,7 +486,7 @@ declare module 'calcite-react/Popover' {
     targetEl?: React.ReactNode;
     targetContainerStyles?: React.CSSProperties;
     positionFixed?: boolean;
-    onRequestClose: () => void;
+    onRequestClose?: () => void;
     style?: React.CSSProperties;
   };
   export default class Popover extends React.Component<PopoverProps> {}

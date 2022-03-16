@@ -56,6 +56,7 @@ import Modal from 'calcite-react/Modal';
 import Button from 'calcite-react/Button';
 import { CalciteP } from 'calcite-react/Elements';
 import LogoBusIcon from './LogoBusIcon';
+import { CalciteShell } from '@esri/calcite-components-react';
 
 const initialViewport = {
   width: 100,
@@ -212,8 +213,7 @@ const Home = () => {
 
   // Fires when a bottomsheet opens/closes
   const onBottomSheetChange = (open: boolean) => {
-    if (open) return;
-    history.push('/');
+    if (!open) history.push('/');
   };
 
   return isLoading ? (
@@ -221,7 +221,7 @@ const Home = () => {
       <Loader text="Loading..." />
     </StyledLoaderWrapper>
   ) : (
-    <>
+    <CalciteShell>
       <AppHeader>
         <LeftHeader />
         <CenterHeader>
@@ -308,7 +308,7 @@ const Home = () => {
           this app. Please deactivate the location tracking button.
         </CalciteP>
       </Modal>
-    </>
+    </CalciteShell>
   );
 };
 

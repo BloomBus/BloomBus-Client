@@ -25,7 +25,7 @@ import StopMarker from 'components/StopMarker';
 import ShuttleMarker from './ShuttleMarker';
 
 // Third-party components (buttons, icons, etc.)
-import ReactMapGL, { ExtraState, ViewportProps } from 'react-map-gl';
+import ReactMapGL, { ViewportProps } from 'react-map-gl';
 
 interface StopMarkerLayerProps {
   isInteracting: boolean;
@@ -141,6 +141,9 @@ const Map: React.FC<MapProps> = ({
 
   const selectedLoopStops = loopStops[selectedLoopKey] ?? [];
 
+  // Overrides position set by style attribute from mapbox-gl
+  const mapControlStyle = { position: 'block' };
+
   return (
     <div ref={mapContainerRef} style={{ flex: 1 }}>
       <ReactMapGL
@@ -160,9 +163,14 @@ const Map: React.FC<MapProps> = ({
             trackUserLocation
             showUserLocation
             positionOptions={{ enableHighAccuracy: true }}
-            onGeolocate={onGeolocate as any}
+            onGeolocate={onGeolocate}
+            style={mapControlStyle}
           />
-          <StyledNavigationControl showCompass showZoom />
+          <StyledNavigationControl
+            showCompass
+            showZoom
+            style={mapControlStyle}
+          />
         </MapControlsWrapper>
         <StopMarkerLayer
           stops={stops}
